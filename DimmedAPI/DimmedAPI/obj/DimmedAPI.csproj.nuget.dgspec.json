@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\dimmed\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj": {}
+    "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj": {}
   },
   "projects": {
-    "D:\\dimmed\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj": {
+    "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\dimmed\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj",
+        "projectUniqueName": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj",
         "projectName": "DimmedAPI",
-        "projectPath": "D:\\dimmed\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj",
+        "projectPath": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "D:\\dimmed\\DimmedAPI\\DimmedAPI\\obj\\",
+        "outputPath": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

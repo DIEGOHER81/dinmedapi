@@ -29,7 +29,12 @@ namespace DimmedAPI
 
         public DbSet<ClienteLead> ClienteLead { get; set; }
 
-
+        public DbSet<QuotationMaster> QuotationMaster { get; set; }
+        public DbSet<QuotationDetail> QuotationDetail { get; set; }
+        public DbSet<QuotationType> QuotationType { get; set; }
+        public DbSet<CommercialCondition> CommercialCondition { get; set; }
+        public DbSet<CustomerType> CustomerType { get; set; }
+        public DbSet<Employee> Employee { get; set; }
 
     }
 }

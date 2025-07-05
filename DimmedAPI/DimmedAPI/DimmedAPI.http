@@ -1,0 +1,6 @@
+@DimmedAPI_HostAddress = http://localhost:5064
+
+GET {{DimmedAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

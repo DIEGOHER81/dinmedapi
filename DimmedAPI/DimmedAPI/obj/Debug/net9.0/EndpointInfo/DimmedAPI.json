@@ -1,0 +1,5032 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "DimmedAPI",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/Branch": {
+      "get": {
+        "tags": [
+          "Branch"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Branch"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Branch"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Branch"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Branch"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Branch"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Branch"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Branch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branch"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branch"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branch"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Branch/{id}": {
+      "get": {
+        "tags": [
+          "Branch"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branch"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branch"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branch"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Branch"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Branch"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Branch"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Branch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Branch"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Branch/location-codes": {
+      "get": {
+        "tags": [
+          "Branch"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Branch/by-location-code/{locationCode}": {
+      "get": {
+        "tags": [
+          "Branch"
+        ],
+        "parameters": [
+          {
+            "name": "locationCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branch"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branch"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Branch"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Branch/VerificarConfiguracionCompania": {
+      "get": {
+        "tags": [
+          "Branch"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CancelDetails/ObtenerDetallesdeCancelacion": {
+      "get": {
+        "tags": [
+          "CancelDetails"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CancelDetails"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CancelDetails"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CancelDetails"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/CancelDetails/VerificarConfiguracionCompania": {
+      "get": {
+        "tags": [
+          "CancelDetails"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CancellationReasonController/ObtenerMotivosCancelacion": {
+      "get": {
+        "tags": [
+          "CancellationReasons"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CancellationReasons"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CancellationReasons"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CancellationReasons"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/CancellationReasonController/VerificarConfiguracionCompania": {
+      "get": {
+        "tags": [
+          "CancellationReasons"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ClienteLead": {
+      "get": {
+        "tags": [
+          "ClienteLead"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClienteLead"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClienteLead"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClienteLead"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ClienteLead"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClienteLead"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClienteLead"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClienteLead"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteLead"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteLead"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteLead"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ClienteLead/{id}": {
+      "get": {
+        "tags": [
+          "ClienteLead"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteLead"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteLead"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteLead"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ClienteLead"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClienteLead"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClienteLead"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClienteLead"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ClienteLead"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ClienteLead/por-identificacion": {
+      "get": {
+        "tags": [
+          "ClienteLead"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "numeroIdentificacion",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteLead"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteLead"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteLead"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ClienteLead/buscar": {
+      "get": {
+        "tags": [
+          "ClienteLead"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "razonSocial",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "representanteComercial",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClienteLead"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClienteLead"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClienteLead"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ClienteLead/estadisticas": {
+      "get": {
+        "tags": [
+          "ClienteLead"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ClienteLead/VerificarConfiguracionCompania": {
+      "get": {
+        "tags": [
+          "ClienteLead"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/companies/ObtenerCompanies": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Companies"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Companies"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Companies"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/companies/ObtenerCompanyPorCodigo": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Companies"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Companies"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Companies"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/companies/VerificarConfiguracionCompania": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/companies/{id}": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Companies"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Companies"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Companies"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Company"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Companies"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Companies"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Companies"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Company"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/companies": {
+      "post": {
+        "tags": [
+          "Company"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Companies"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Companies"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Companies"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/customers/ObtenerClientes": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/customers/test": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/customers/ping": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/CustomerAPI/sincronizar": {
+      "post": {
+        "tags": [
+          "CustomerAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerBCDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerBCDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerBCDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CustomerAPI/sincronizar-todos": {
+      "post": {
+        "tags": [
+          "CustomerAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CustomerAPI/consultar-bc": {
+      "get": {
+        "tags": [
+          "CustomerAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "systemIdBc",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CustomerAPI/sincronizar-uno": {
+      "post": {
+        "tags": [
+          "CustomerAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "no",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CustomerAPI/verificar-configuracion": {
+      "get": {
+        "tags": [
+          "CustomerAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CustomerContact/sync/{companyCode}": {
+      "get": {
+        "tags": [
+          "CustomerContact"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "systemID",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CustomerContact/list/{companyCode}": {
+      "get": {
+        "tags": [
+          "CustomerContact"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CustomerContact/detail/{companyCode}/{id}": {
+      "get": {
+        "tags": [
+          "CustomerContact"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CustomerContact/search/{companyCode}": {
+      "get": {
+        "tags": [
+          "CustomerContact"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "searchTerm",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CustomerContact/searchByCustomerName/{companyCode}": {
+      "get": {
+        "tags": [
+          "CustomerContact"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customerName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/CustomerContact/delete/{companyCode}/{id}": {
+      "delete": {
+        "tags": [
+          "CustomerContact"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/equipment": {
+      "get": {
+        "tags": [
+          "Equipment"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Equipment"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Equipment"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Equipment"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/equipment/{id}": {
+      "get": {
+        "tags": [
+          "Equipment"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Equipment"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Equipment"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Equipment"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/equipment/by-code/{code}": {
+      "get": {
+        "tags": [
+          "Equipment"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Equipment"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Equipment"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Equipment"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EquipmentAPI/sincronizar": {
+      "post": {
+        "tags": [
+          "EquipmentAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EquipmentBCDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EquipmentBCDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EquipmentBCDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EquipmentAPI/sincronizar-todos": {
+      "post": {
+        "tags": [
+          "EquipmentAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EquipmentAPI/consultar-bc": {
+      "get": {
+        "tags": [
+          "EquipmentAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "systemIdBc",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EquipmentAPI/sincronizar-uno": {
+      "post": {
+        "tags": [
+          "EquipmentAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "systemId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EquipmentAPI/inventory/{equipmentId}": {
+      "get": {
+        "tags": [
+          "EquipmentAPI"
+        ],
+        "parameters": [
+          {
+            "name": "equipmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EquipmentAPI/inventory/code/{code}": {
+      "get": {
+        "tags": [
+          "EquipmentAPI"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EquipmentAPI/inventory/code/{code}/location/{locationCode}": {
+      "get": {
+        "tags": [
+          "EquipmentAPI"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "locationCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EquipmentAPI/exists/code/{code}": {
+      "get": {
+        "tags": [
+          "EquipmentAPI"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EquipmentAPI/list-codes": {
+      "get": {
+        "tags": [
+          "EquipmentAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EquipmentAPI/verificar-configuracion": {
+      "get": {
+        "tags": [
+          "EquipmentAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EquipmentAssemblyAPI/assembly/{equipmentCode}": {
+      "get": {
+        "tags": [
+          "EquipmentAssemblyAPI"
+        ],
+        "parameters": [
+          {
+            "name": "equipmentCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "salesPrice",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EquipmentAssemblyAPI/assembly-v2/{equipmentCode}": {
+      "get": {
+        "tags": [
+          "EquipmentAssemblyAPI"
+        ],
+        "parameters": [
+          {
+            "name": "equipmentCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "salesPrice",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EquipmentAssemblyAPI/assembly-lines/{equipmentCode}": {
+      "get": {
+        "tags": [
+          "EquipmentAssemblyAPI"
+        ],
+        "parameters": [
+          {
+            "name": "equipmentCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EquipmentAssemblyAPI/equipment-assembly/{equipmentCode}": {
+      "get": {
+        "tags": [
+          "EquipmentAssemblyAPI"
+        ],
+        "parameters": [
+          {
+            "name": "equipmentCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/insurer/ObtenerAseguradoras": {
+      "get": {
+        "tags": [
+          "Insurer"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Insurer"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Insurer"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Insurer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/insurer/ObtenerAseguradoraporCodigo/{code}": {
+      "get": {
+        "tags": [
+          "Insurer"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsurerType"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsurerType"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsurerType"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/insurer/{id}": {
+      "get": {
+        "tags": [
+          "Insurer"
+        ],
+        "operationId": "ObtenerAseguradoraporId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsurerType"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsurerType"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsurerType"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/insurer/CrearAseguradora": {
+      "post": {
+        "tags": [
+          "Insurer"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsurerCreateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsurerCreateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsurerCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/insurer/ActualizarAseguradora/{id}": {
+      "put": {
+        "tags": [
+          "Insurer"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Insurer"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Insurer"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Insurer"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/insurer": {
+      "delete": {
+        "tags": [
+          "Insurer"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/insurer/VerificarConfiguracionCompania": {
+      "get": {
+        "tags": [
+          "Insurer"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/insurertype/ObtenerTiposAseguradora": {
+      "get": {
+        "tags": [
+          "InsurerTypes"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InsurerType"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InsurerType"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InsurerType"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/insurertype/ObtenerTiposAseguradoraporCodigo/{code}": {
+      "get": {
+        "tags": [
+          "InsurerTypes"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsurerType"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsurerType"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsurerType"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/insurertype/{id}": {
+      "get": {
+        "tags": [
+          "InsurerTypes"
+        ],
+        "operationId": "ObtenerTiposAseguradoraporId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsurerType"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsurerType"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsurerType"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/insurertype/CrearTipoAseguradora": {
+      "post": {
+        "tags": [
+          "InsurerTypes"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsurerType"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsurerType"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsurerType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/insurertype/ActualizarTipoAseguradora/{id}": {
+      "put": {
+        "tags": [
+          "InsurerTypes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsurerType"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsurerType"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsurerType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/insurertype": {
+      "delete": {
+        "tags": [
+          "InsurerTypes"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/insurertype/VerificarConfiguracionCompania": {
+      "get": {
+        "tags": [
+          "InsurerTypes"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ItemsAPI/sincronizar": {
+      "post": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItemsBC"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItemsBC"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItemsBC"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ItemsAPI/sincronizar-todos": {
+      "post": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ItemsAPI/consultar-bc": {
+      "get": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ItemsAPI/sincronizar-uno": {
+      "post": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ItemsAPI/obtener-todos": {
+      "get": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ItemsAPI/obtener-locales": {
+      "get": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ItemsAPI/obtener-por-codigo": {
+      "get": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ItemsAPI/eliminar-por-codigo": {
+      "delete": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ItemsAPI/estadisticas": {
+      "get": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ItemsAPI/VerificarConfiguracionCompania": {
+      "get": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/medic/ObtenerMedicos": {
+      "get": {
+        "tags": [
+          "Medic"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medic"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medic"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medic"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/medic/ObtenerMedicoPorId/{id}": {
+      "get": {
+        "tags": [
+          "Medic"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medic"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medic"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medic"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/medic/ObtenerMedicoPorIdentificacion/{identificacion}": {
+      "get": {
+        "tags": [
+          "Medic"
+        ],
+        "parameters": [
+          {
+            "name": "identificacion",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medic"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medic"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medic"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/medic/ObtenerMedicoPorNombre/{nombre}": {
+      "get": {
+        "tags": [
+          "Medic"
+        ],
+        "parameters": [
+          {
+            "name": "nombre",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medic"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medic"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Medic"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/medic/CrearMedico": {
+      "post": {
+        "tags": [
+          "Medic"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Medic"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Medic"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Medic"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medic"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medic"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Medic"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/medic/ActualizarMedico/{id}": {
+      "put": {
+        "tags": [
+          "Medic"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Medic"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Medic"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Medic"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/medic/EliminarMedico/{id}": {
+      "delete": {
+        "tags": [
+          "Medic"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/medic/VerificarConfiguracionCompania": {
+      "get": {
+        "tags": [
+          "Medic"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Patient/basic": {
+      "get": {
+        "tags": [
+          "Patient"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Patient": {
+      "get": {
+        "tags": [
+          "Patient"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Patient"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patient"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patient"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patient"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Patient"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Patient"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Patient"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Patient/{id}": {
+      "put": {
+        "tags": [
+          "Patient"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patient"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patient"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patient"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Patient"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Patient/VerificarConfiguracionCompania": {
+      "get": {
+        "tags": [
+          "Patient"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/users/ObtenerUsuarios": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Users"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Users"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Users"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/VerificarConfiguracionCompania": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AppUser": {
+        "required": [
+          "name",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "isAdmin": {
+            "type": "boolean"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "isProcessResponsable": {
+            "type": "boolean"
+          },
+          "guid": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdIdentificationTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IdentificationTypes"
+            },
+            "nullable": true
+          },
+          "modifiedIdentificationTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IdentificationTypes"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Branch": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "systemId": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "locationCode": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "locationCodeStock": {
+            "maxLength": 3,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "userBranch": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserBranch"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CancelDetails": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "idRelation": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "cancellationReasonDescription": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CancellationReasons": {
+        "required": [
+          "description"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "cancelDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CancelDetails"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClienteLead": {
+        "required": [
+          "email",
+          "numeroIdentificacion",
+          "razonSocial",
+          "tipoIdentificacion"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tipoIdentificacion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numeroIdentificacion": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "razonSocial": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "telefono": {
+            "type": "string",
+            "nullable": true
+          },
+          "ciudad": {
+            "type": "string",
+            "nullable": true
+          },
+          "direccion": {
+            "type": "string",
+            "nullable": true
+          },
+          "representanteComercial": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "observaciones": {
+            "type": "string",
+            "nullable": true
+          },
+          "horario_LV": {
+            "type": "string",
+            "nullable": true
+          },
+          "horario_SD": {
+            "type": "string",
+            "nullable": true
+          },
+          "identificationType": {
+            "$ref": "#/components/schemas/IdentificationTypes"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Companies": {
+        "required": [
+          "bcCodigoEmpresa",
+          "bcurl",
+          "bcurlWebService",
+          "businessName",
+          "identificationNumber",
+          "sqlConnectionString"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "identificationTypeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "identificationNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "businessName": {
+            "type": "string",
+            "nullable": true
+          },
+          "tradeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mainAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "legalRepresentative": {
+            "type": "string",
+            "nullable": true
+          },
+          "contactEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "contactPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "sqlConnectionString": {
+            "type": "string",
+            "nullable": true
+          },
+          "bcurlWebService": {
+            "type": "string",
+            "nullable": true
+          },
+          "bcurl": {
+            "type": "string",
+            "nullable": true
+          },
+          "bcCodigoEmpresa": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "modifiedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "identificationType": {
+            "$ref": "#/components/schemas/IdentificationTypes"
+          },
+          "createdByUser": {
+            "$ref": "#/components/schemas/AppUser"
+          },
+          "modifiedByUser": {
+            "$ref": "#/components/schemas/AppUser"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Customer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "identification": {
+            "type": "string",
+            "nullable": true
+          },
+          "idType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "certMant": {
+            "type": "boolean"
+          },
+          "remCustomer": {
+            "type": "boolean"
+          },
+          "observations": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "systemIdBc": {
+            "type": "string",
+            "nullable": true
+          },
+          "salesZone": {
+            "type": "string",
+            "nullable": true
+          },
+          "tradeRepres": {
+            "type": "string",
+            "nullable": true
+          },
+          "noCopys": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "segment": {
+            "type": "string",
+            "nullable": true
+          },
+          "no": {
+            "type": "string",
+            "nullable": true
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortDesc": {
+            "type": "boolean"
+          },
+          "exIva": {
+            "type": "boolean"
+          },
+          "isSecondPriceList": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "secondPriceGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "insurerType": {
+            "type": "string",
+            "nullable": true
+          },
+          "isRemLot": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "lyLOpeningHours1": {
+            "type": "string",
+            "nullable": true
+          },
+          "lyLOpeningHours2": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CustomerBCDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "identification": {
+            "type": "string",
+            "nullable": true
+          },
+          "idType": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "certMant": {
+            "type": "boolean"
+          },
+          "remCustomer": {
+            "type": "boolean"
+          },
+          "observations": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "systemIdBc": {
+            "type": "string",
+            "nullable": true
+          },
+          "salesZone": {
+            "type": "string",
+            "nullable": true
+          },
+          "tradeRepres": {
+            "type": "string",
+            "nullable": true
+          },
+          "noCopys": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "segment": {
+            "type": "string",
+            "nullable": true
+          },
+          "no": {
+            "type": "string",
+            "nullable": true
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortDesc": {
+            "type": "boolean"
+          },
+          "exIva": {
+            "type": "boolean"
+          },
+          "isSecondPriceList": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "secondPriceGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "insurerType": {
+            "type": "string",
+            "nullable": true
+          },
+          "isRemLot": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "lyLOpeningHours1": {
+            "type": "string",
+            "nullable": true
+          },
+          "lyLOpeningHours2": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DbMaintenance": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEquipment": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEquipmentNavigation": {
+            "$ref": "#/components/schemas/Equipment"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestAssembly": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEntryReqDetail": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEntryReqDetailNavigation": {
+            "$ref": "#/components/schemas/EntryRequestDetails"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortDesc": {
+            "type": "string",
+            "nullable": true
+          },
+          "invima": {
+            "type": "string",
+            "nullable": true
+          },
+          "lot": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "unitPrice": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "assemblyNo": {
+            "type": "string",
+            "nullable": true
+          },
+          "entryRequestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "entryRequestDetailId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "quantityConsumed": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "expirationDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "entryRequest": {
+            "$ref": "#/components/schemas/EntryRequests"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "reservedQuantity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "location_Code_ile": {
+            "type": "string",
+            "nullable": true
+          },
+          "classification": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "lineNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "position": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "quantity_ile": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "taxCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "lowTurnover": {
+            "type": "boolean"
+          },
+          "isComponent": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "rsFechaVencimiento": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "rsClasifRegistro": {
+            "type": "string",
+            "nullable": true
+          },
+          "locationCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestDetails": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEntryReq": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEquipment": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateIni": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "idEntryReqNavigation": {
+            "$ref": "#/components/schemas/EntryRequests"
+          },
+          "idEquipmentNavigation": {
+            "$ref": "#/components/schemas/Equipment"
+          },
+          "sInformation": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "entryRequestAssembly": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntryRequestAssembly"
+            },
+            "nullable": true
+          },
+          "dateLoadState": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "traceState": {
+            "type": "string",
+            "nullable": true
+          },
+          "isComponent": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "userIdTraceState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequests": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "entryRequestDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntryRequestDetails"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Equipment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "productLine": {
+            "type": "string",
+            "nullable": true
+          },
+          "branch": {
+            "type": "string",
+            "nullable": true
+          },
+          "estimatedTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "techSpec": {
+            "type": "string",
+            "nullable": true
+          },
+          "destinationBranch": {
+            "type": "string",
+            "nullable": true
+          },
+          "loanDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "returnDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "initDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "vendor": {
+            "type": "string",
+            "nullable": true
+          },
+          "brand": {
+            "type": "string",
+            "nullable": true
+          },
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "abc": {
+            "type": "string",
+            "nullable": true
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "systemIdBC": {
+            "type": "string",
+            "nullable": true
+          },
+          "noBoxes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastPreventiveMaintenance": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastMaintenance": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "entryRequestDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntryRequestDetails"
+            },
+            "nullable": true
+          },
+          "dbMaintenance": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DbMaintenance"
+            },
+            "nullable": true
+          },
+          "alert": {
+            "type": "string",
+            "nullable": true
+          },
+          "locationCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "transferStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "traceabilityEquipment": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TraceabilityEquipment"
+            },
+            "nullable": true
+          },
+          "entryRequestAssemblies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntryRequestAssembly"
+            },
+            "nullable": true
+          },
+          "idOrder": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EquipmentBCDTO": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortName": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "productLine": {
+            "type": "string",
+            "nullable": true
+          },
+          "branch": {
+            "type": "string",
+            "nullable": true
+          },
+          "estimatedTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "techSpec": {
+            "type": "string",
+            "nullable": true
+          },
+          "destinationBranch": {
+            "type": "string",
+            "nullable": true
+          },
+          "loanDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "returnDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "initDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "vendor": {
+            "type": "string",
+            "nullable": true
+          },
+          "brand": {
+            "type": "string",
+            "nullable": true
+          },
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "abc": {
+            "type": "string",
+            "nullable": true
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "systemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "noBoxes": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "lastPreventiveMaintenance": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastMaintenance": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "alert": {
+            "type": "string",
+            "nullable": true
+          },
+          "locationCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "transferStatus": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IdentificationTypes": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "maxLength": 5,
+            "minLength": 0,
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Insurer": {
+        "required": [
+          "name",
+          "nit"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nit": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "insurerTypeId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "insurerType": {
+            "$ref": "#/components/schemas/InsurerType"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InsurerCreateDTO": {
+        "type": "object",
+        "properties": {
+          "nit": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "insurerTypeId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InsurerType": {
+        "required": [
+          "description"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ItemsBC": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceList": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortDesc": {
+            "type": "string",
+            "nullable": true
+          },
+          "invima": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Medic": {
+        "required": [
+          "email",
+          "identification",
+          "idType",
+          "name",
+          "phone"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "identification": {
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "idType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "minLength": 1,
+            "pattern": "^[0-9]{8,11}$",
+            "type": "string"
+          },
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "observations": {
+            "type": "string",
+            "nullable": true
+          },
+          "isTemporal": {
+            "type": "boolean"
+          },
+          "tradeRepres": {
+            "type": "string",
+            "nullable": true
+          },
+          "segment": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "gender": {
+            "type": "string",
+            "nullable": true
+          },
+          "speciality": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Patient": {
+        "required": [
+          "identification",
+          "idType",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "identification": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "idType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "address": {
+            "maxLength": 400,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "medicalRecord": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "gender": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "isPrecise": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Profile": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Users"
+            },
+            "nullable": true
+          },
+          "profileModules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProfileModule"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProfileModule": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idPermission": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idProfile": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "profile": {
+            "$ref": "#/components/schemas/Profile"
+          },
+          "idModule": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TraceabilityEquipment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "equipmentCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "branch": {
+            "type": "string",
+            "nullable": true
+          },
+          "traceState": {
+            "type": "string",
+            "nullable": true
+          },
+          "traceabilityDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "idOrder": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "statusOrder": {
+            "type": "string",
+            "nullable": true
+          },
+          "deliveryAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "customerName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserBranch": {
+        "required": [
+          "idBranch",
+          "idUser"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idUser": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idBranch": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/Users"
+          },
+          "branch": {
+            "$ref": "#/components/schemas/Branch"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Users": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "profileId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "charge": {
+            "type": "string",
+            "nullable": true
+          },
+          "profile": {
+            "$ref": "#/components/schemas/Profile"
+          },
+          "userBranch": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserBranch"
+            },
+            "nullable": true
+          },
+          "currentBranch": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentBranchId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "a1OqW9NFa32hA5KDFXVu+/scRCDoWH6hEzCFiAtPsMs=",
+  "Source": "DimmedAPI",
+  "BasePath": "_content/DimmedAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

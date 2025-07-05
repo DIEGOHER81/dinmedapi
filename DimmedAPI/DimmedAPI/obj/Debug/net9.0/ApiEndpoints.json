@@ -1,0 +1,2255 @@
+[
+  {
+    "ContainingType": "DimmedAPI.Controllers.BranchController",
+    "Method": "GetAllBranches",
+    "RelativePath": "api/Branch",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.Entidades.Branch, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.BranchController",
+    "Method": "CreateBranch",
+    "RelativePath": "api/Branch",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "branch",
+        "Type": "DimmedAPI.Entidades.Branch",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.Branch",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.BranchController",
+    "Method": "GetBranchById",
+    "RelativePath": "api/Branch/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.Branch",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.BranchController",
+    "Method": "UpdateBranch",
+    "RelativePath": "api/Branch/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "branch",
+        "Type": "DimmedAPI.Entidades.Branch",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.BranchController",
+    "Method": "DeleteBranch",
+    "RelativePath": "api/Branch/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.BranchController",
+    "Method": "GetBranchByLocationCode",
+    "RelativePath": "api/Branch/by-location-code/{locationCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "locationCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.Branch",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.BranchController",
+    "Method": "GetLocationCodesAndNames",
+    "RelativePath": "api/Branch/location-codes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.BranchController",
+    "Method": "VerificarConfiguracionCompania",
+    "RelativePath": "api/Branch/VerificarConfiguracionCompania",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CancelDetailsController",
+    "Method": "GetCancelDetails",
+    "RelativePath": "api/CancelDetails/ObtenerDetallesdeCancelacion",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.Entidades.CancelDetails, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CancelDetailsController",
+    "Method": "VerificarConfiguracionCompania",
+    "RelativePath": "api/CancelDetails/VerificarConfiguracionCompania",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CancellationReasonsController",
+    "Method": "GetCancellationReason",
+    "RelativePath": "api/CancellationReasonController/ObtenerMotivosCancelacion",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.Entidades.CancellationReasons, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CancellationReasonsController",
+    "Method": "VerificarConfiguracionCompania",
+    "RelativePath": "api/CancellationReasonController/VerificarConfiguracionCompania",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ClienteLeadController",
+    "Method": "GetClienteLeads",
+    "RelativePath": "api/ClienteLead",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.Entidades.ClienteLead, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ClienteLeadController",
+    "Method": "CreateClienteLead",
+    "RelativePath": "api/ClienteLead",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "clienteLead",
+        "Type": "DimmedAPI.Entidades.ClienteLead",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.ClienteLead",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ClienteLeadController",
+    "Method": "GetClienteLead",
+    "RelativePath": "api/ClienteLead/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.ClienteLead",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ClienteLeadController",
+    "Method": "UpdateClienteLead",
+    "RelativePath": "api/ClienteLead/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "clienteLead",
+        "Type": "DimmedAPI.Entidades.ClienteLead",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ClienteLeadController",
+    "Method": "DeleteClienteLead",
+    "RelativePath": "api/ClienteLead/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ClienteLeadController",
+    "Method": "BuscarClienteLeads",
+    "RelativePath": "api/ClienteLead/buscar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "razonSocial",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "representanteComercial",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.Entidades.ClienteLead, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ClienteLeadController",
+    "Method": "GetEstadisticas",
+    "RelativePath": "api/ClienteLead/estadisticas",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ClienteLeadController",
+    "Method": "GetClienteLeadPorIdentificacion",
+    "RelativePath": "api/ClienteLead/por-identificacion",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "numeroIdentificacion",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.ClienteLead",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ClienteLeadController",
+    "Method": "VerificarConfiguracionCompania",
+    "RelativePath": "api/ClienteLead/VerificarConfiguracionCompania",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CompanyController",
+    "Method": "Post",
+    "RelativePath": "api/companies",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "company",
+        "Type": "DimmedAPI.Entidades.Companies",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CompanyController",
+    "Method": "Get",
+    "RelativePath": "api/companies/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.Companies",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CompanyController",
+    "Method": "Put",
+    "RelativePath": "api/companies/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updated",
+        "Type": "DimmedAPI.Entidades.Companies",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CompanyController",
+    "Method": "Delete",
+    "RelativePath": "api/companies/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CompanyController",
+    "Method": "GetCompanies",
+    "RelativePath": "api/companies/ObtenerCompanies",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.Entidades.Companies, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CompanyController",
+    "Method": "GetCompanyByCode",
+    "RelativePath": "api/companies/ObtenerCompanyPorCodigo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.Companies",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CompanyController",
+    "Method": "VerificarConfiguracionCompania",
+    "RelativePath": "api/companies/VerificarConfiguracionCompania",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerAPIController",
+    "Method": "ConsultarBC",
+    "RelativePath": "api/CustomerAPI/consultar-bc",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "take",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "systemIdBc",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerAPIController",
+    "Method": "Sincronizar",
+    "RelativePath": "api/CustomerAPI/sincronizar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "DimmedAPI.DTOs.CustomerBCDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerAPIController",
+    "Method": "SincronizarTodos",
+    "RelativePath": "api/CustomerAPI/sincronizar-todos",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerAPIController",
+    "Method": "SincronizarUno",
+    "RelativePath": "api/CustomerAPI/sincronizar-uno",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "no",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerAPIController",
+    "Method": "VerificarConfiguracion",
+    "RelativePath": "api/CustomerAPI/verificar-configuracion",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerContactController",
+    "Method": "DeleteCustomerContact",
+    "RelativePath": "api/CustomerContact/delete/{companyCode}/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerContactController",
+    "Method": "GetCustomerContact",
+    "RelativePath": "api/CustomerContact/detail/{companyCode}/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerContactController",
+    "Method": "GetCustomerContacts",
+    "RelativePath": "api/CustomerContact/list/{companyCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerContactController",
+    "Method": "SearchCustomerContacts",
+    "RelativePath": "api/CustomerContact/search/{companyCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "searchTerm",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerContactController",
+    "Method": "SearchCustomerContactsByCustomerName",
+    "RelativePath": "api/CustomerContact/searchByCustomerName/{companyCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "customerName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerContactController",
+    "Method": "SyncCustomerContact",
+    "RelativePath": "api/CustomerContact/sync/{companyCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "method",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "systemID",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerController",
+    "Method": "GetCustomers",
+    "RelativePath": "api/customers/ObtenerClientes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.Entidades.Customer, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerController",
+    "Method": "Ping",
+    "RelativePath": "api/customers/ping",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerController",
+    "Method": "Test",
+    "RelativePath": "api/customers/test",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentController",
+    "Method": "GetAll",
+    "RelativePath": "api/equipment",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.Entidades.Equipment, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentController",
+    "Method": "GetById",
+    "RelativePath": "api/equipment/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.Equipment",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentController",
+    "Method": "GetByCode",
+    "RelativePath": "api/equipment/by-code/{code}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.Equipment",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAPIController",
+    "Method": "ConsultarBC",
+    "RelativePath": "api/EquipmentAPI/consultar-bc",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "take",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "systemIdBc",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAPIController",
+    "Method": "CheckEquipmentExists",
+    "RelativePath": "api/EquipmentAPI/exists/code/{code}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAPIController",
+    "Method": "GetInventory",
+    "RelativePath": "api/EquipmentAPI/inventory/{equipmentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "equipmentId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAPIController",
+    "Method": "GetInventoryByCode",
+    "RelativePath": "api/EquipmentAPI/inventory/code/{code}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAPIController",
+    "Method": "GetInventoryByCodeAndLocation",
+    "RelativePath": "api/EquipmentAPI/inventory/code/{code}/location/{locationCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "locationCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAPIController",
+    "Method": "ListEquipmentCodes",
+    "RelativePath": "api/EquipmentAPI/list-codes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "take",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAPIController",
+    "Method": "Sincronizar",
+    "RelativePath": "api/EquipmentAPI/sincronizar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "DimmedAPI.DTOs.EquipmentBCDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAPIController",
+    "Method": "SincronizarTodos",
+    "RelativePath": "api/EquipmentAPI/sincronizar-todos",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAPIController",
+    "Method": "SincronizarUno",
+    "RelativePath": "api/EquipmentAPI/sincronizar-uno",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "systemId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAPIController",
+    "Method": "VerificarConfiguracion",
+    "RelativePath": "api/EquipmentAPI/verificar-configuracion",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAssemblyAPIController",
+    "Method": "GetAssemblyLines",
+    "RelativePath": "api/EquipmentAssemblyAPI/assembly-lines/{equipmentCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "equipmentCode",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAssemblyAPIController",
+    "Method": "GetAssemblyV2",
+    "RelativePath": "api/EquipmentAssemblyAPI/assembly-v2/{equipmentCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "equipmentCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "salesPrice",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAssemblyAPIController",
+    "Method": "GetAssembly",
+    "RelativePath": "api/EquipmentAssemblyAPI/assembly/{equipmentCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "equipmentCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "salesPrice",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentAssemblyAPIController",
+    "Method": "GetEquipmentAssembly",
+    "RelativePath": "api/EquipmentAssemblyAPI/equipment-assembly/{equipmentCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "equipmentCode",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerController",
+    "Method": "Delete",
+    "RelativePath": "api/insurer",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerController",
+    "Method": "GetInsureTypeById",
+    "RelativePath": "api/insurer/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.InsurerType",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "ObtenerAseguradoraporId"
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerController",
+    "Method": "Put",
+    "RelativePath": "api/insurer/ActualizarAseguradora/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updatedInsurer",
+        "Type": "DimmedAPI.Entidades.Insurer",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerController",
+    "Method": "Post",
+    "RelativePath": "api/insurer/CrearAseguradora",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "DimmedAPI.DTOs.InsurerCreateDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerController",
+    "Method": "GetIdentificactionbyCode",
+    "RelativePath": "api/insurer/ObtenerAseguradoraporCodigo/{code}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.InsurerType",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerController",
+    "Method": "GetInsurers",
+    "RelativePath": "api/insurer/ObtenerAseguradoras",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.Entidades.Insurer, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerController",
+    "Method": "VerificarConfiguracionCompania",
+    "RelativePath": "api/insurer/VerificarConfiguracionCompania",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerTypesController",
+    "Method": "Delete",
+    "RelativePath": "api/insurertype",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerTypesController",
+    "Method": "GetInsureTypeById",
+    "RelativePath": "api/insurertype/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.InsurerType",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "ObtenerTiposAseguradoraporId"
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerTypesController",
+    "Method": "Put",
+    "RelativePath": "api/insurertype/ActualizarTipoAseguradora/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updatedInsurerType",
+        "Type": "DimmedAPI.Entidades.InsurerType",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerTypesController",
+    "Method": "Post",
+    "RelativePath": "api/insurertype/CrearTipoAseguradora",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "_insurerType",
+        "Type": "DimmedAPI.Entidades.InsurerType",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerTypesController",
+    "Method": "Get",
+    "RelativePath": "api/insurertype/ObtenerTiposAseguradora",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DimmedAPI.Entidades.InsurerType, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerTypesController",
+    "Method": "GetIdentificactionbyCode",
+    "RelativePath": "api/insurertype/ObtenerTiposAseguradoraporCodigo/{code}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.InsurerType",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.InsurerTypesController",
+    "Method": "VerificarConfiguracionCompania",
+    "RelativePath": "api/insurertype/VerificarConfiguracionCompania",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "ConsultarBC",
+    "RelativePath": "api/ItemsAPI/consultar-bc",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "take",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "EliminarPorCodigo",
+    "RelativePath": "api/ItemsAPI/eliminar-por-codigo",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "ObtenerEstadisticas",
+    "RelativePath": "api/ItemsAPI/estadisticas",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "ObtenerLocales",
+    "RelativePath": "api/ItemsAPI/obtener-locales",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "ObtenerPorCodigo",
+    "RelativePath": "api/ItemsAPI/obtener-por-codigo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "ObtenerTodos",
+    "RelativePath": "api/ItemsAPI/obtener-todos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "Sincronizar",
+    "RelativePath": "api/ItemsAPI/sincronizar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "DimmedAPI.Entidades.ItemsBC",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "SincronizarTodos",
+    "RelativePath": "api/ItemsAPI/sincronizar-todos",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "SincronizarUno",
+    "RelativePath": "api/ItemsAPI/sincronizar-uno",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "VerificarConfiguracionCompania",
+    "RelativePath": "api/ItemsAPI/VerificarConfiguracionCompania",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.MedicController",
+    "Method": "UpdateMedic",
+    "RelativePath": "api/medic/ActualizarMedico/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "medic",
+        "Type": "DimmedAPI.Entidades.Medic",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.MedicController",
+    "Method": "CreateMedic",
+    "RelativePath": "api/medic/CrearMedico",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "medic",
+        "Type": "DimmedAPI.Entidades.Medic",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.Medic",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.MedicController",
+    "Method": "DeleteMedic",
+    "RelativePath": "api/medic/EliminarMedico/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.MedicController",
+    "Method": "GetMedicById",
+    "RelativePath": "api/medic/ObtenerMedicoPorId/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.Medic",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.MedicController",
+    "Method": "GetMedicByIdentificacion",
+    "RelativePath": "api/medic/ObtenerMedicoPorIdentificacion/{identificacion}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "identificacion",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.Medic",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.MedicController",
+    "Method": "GetMedicByNombre",
+    "RelativePath": "api/medic/ObtenerMedicoPorNombre/{nombre}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nombre",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.Entidades.Medic, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.MedicController",
+    "Method": "GetMedic",
+    "RelativePath": "api/medic/ObtenerMedicos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.Entidades.Medic, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.MedicController",
+    "Method": "VerificarConfiguracionCompania",
+    "RelativePath": "api/medic/VerificarConfiguracionCompania",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.PatientController",
+    "Method": "GetAllPatients",
+    "RelativePath": "api/Patient",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.PatientController",
+    "Method": "CreatePatient",
+    "RelativePath": "api/Patient",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "patient",
+        "Type": "DimmedAPI.Entidades.Patient",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.Patient",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.PatientController",
+    "Method": "UpdatePatient",
+    "RelativePath": "api/Patient/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "patient",
+        "Type": "DimmedAPI.Entidades.Patient",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.PatientController",
+    "Method": "DeletePatient",
+    "RelativePath": "api/Patient/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.PatientController",
+    "Method": "GetBasicPatients",
+    "RelativePath": "api/Patient/basic",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.PatientController",
+    "Method": "VerificarConfiguracionCompania",
+    "RelativePath": "api/Patient/VerificarConfiguracionCompania",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.UserController",
+    "Method": "GetUsers",
+    "RelativePath": "api/users/ObtenerUsuarios",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.Entidades.Users, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.UserController",
+    "Method": "VerificarConfiguracionCompania",
+    "RelativePath": "api/users/VerificarConfiguracionCompania",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

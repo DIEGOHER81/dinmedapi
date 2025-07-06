@@ -3,6 +3,7 @@ using DimmedAPI.Entidades;
 using DimmedAPI.Services;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using DimmedAPI.DTOs;
 
 namespace DimmedAPI.Controllers
@@ -228,6 +229,44 @@ namespace DimmedAPI.Controllers
                 // Obtener el contexto de la base de datos específica de la compañía
                 using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
                 
+                // Validar que las entidades relacionadas existan
+                var branch = await companyContext.Branches.FindAsync(quotationDto.FK_idBranch);
+                if (branch == null)
+                {
+                    return BadRequest($"No se encontró la sucursal con ID {quotationDto.FK_idBranch}");
+                }
+
+                var customerType = await companyContext.CustomerType.FindAsync(quotationDto.FK_idCustomerType);
+                if (customerType == null)
+                {
+                    return BadRequest($"No se encontró el tipo de cliente con ID {quotationDto.FK_idCustomerType}");
+                }
+
+                var employee = await companyContext.Employee.FindAsync(quotationDto.FK_idEmployee);
+                if (employee == null)
+                {
+                    return BadRequest($"No se encontró el empleado con ID {quotationDto.FK_idEmployee}");
+                }
+
+                // Validar entidades opcionales si se proporcionan
+                if (quotationDto.FK_QuotationTypeId.HasValue)
+                {
+                    var quotationType = await companyContext.QuotationType.FindAsync(quotationDto.FK_QuotationTypeId.Value);
+                    if (quotationType == null)
+                    {
+                        return BadRequest($"No se encontró el tipo de cotización con ID {quotationDto.FK_QuotationTypeId.Value}");
+                    }
+                }
+
+                if (quotationDto.FK_CommercialConditionId.HasValue)
+                {
+                    var commercialCondition = await companyContext.CommercialCondition.FindAsync(quotationDto.FK_CommercialConditionId.Value);
+                    if (commercialCondition == null)
+                    {
+                        return BadRequest($"No se encontró la condición comercial con ID {quotationDto.FK_CommercialConditionId.Value}");
+                    }
+                }
+                
                 // Mapear DTO a entidad
                 var quotation = new QuotationMaster
                 {
@@ -255,6 +294,30 @@ namespace DimmedAPI.Controllers
             catch (ArgumentException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch (DbUpdateException dbEx)
+            {
+                // Proporcionar información más detallada sobre errores de base de datos
+                var innerException = dbEx.InnerException;
+                var errorMessage = "Error al guardar en la base de datos";
+                
+                if (innerException != null)
+                {
+                    if (innerException.Message.Contains("FK_"))
+                    {
+                        errorMessage = "Error de clave foránea: Verifique que todos los IDs de entidades relacionadas existan";
+                    }
+                    else if (innerException.Message.Contains("constraint"))
+                    {
+                        errorMessage = "Error de restricción: Verifique que los datos cumplan con las restricciones de la base de datos";
+                    }
+                    else
+                    {
+                        errorMessage = $"Error de base de datos: {innerException.Message}";
+                    }
+                }
+                
+                return StatusCode(500, errorMessage);
             }
             catch (Exception ex)
             {
@@ -285,6 +348,44 @@ namespace DimmedAPI.Controllers
                 if (existingQuotation == null)
                 {
                     return NotFound($"No se encontró la cotización con ID {id}");
+                }
+
+                // Validar que las entidades relacionadas existan
+                var branch = await companyContext.Branches.FindAsync(quotationDto.FK_idBranch);
+                if (branch == null)
+                {
+                    return BadRequest($"No se encontró la sucursal con ID {quotationDto.FK_idBranch}");
+                }
+
+                var customerType = await companyContext.CustomerType.FindAsync(quotationDto.FK_idCustomerType);
+                if (customerType == null)
+                {
+                    return BadRequest($"No se encontró el tipo de cliente con ID {quotationDto.FK_idCustomerType}");
+                }
+
+                var employee = await companyContext.Employee.FindAsync(quotationDto.FK_idEmployee);
+                if (employee == null)
+                {
+                    return BadRequest($"No se encontró el empleado con ID {quotationDto.FK_idEmployee}");
+                }
+
+                // Validar entidades opcionales si se proporcionan
+                if (quotationDto.FK_QuotationTypeId.HasValue)
+                {
+                    var quotationType = await companyContext.QuotationType.FindAsync(quotationDto.FK_QuotationTypeId.Value);
+                    if (quotationType == null)
+                    {
+                        return BadRequest($"No se encontró el tipo de cotización con ID {quotationDto.FK_QuotationTypeId.Value}");
+                    }
+                }
+
+                if (quotationDto.FK_CommercialConditionId.HasValue)
+                {
+                    var commercialCondition = await companyContext.CommercialCondition.FindAsync(quotationDto.FK_CommercialConditionId.Value);
+                    if (commercialCondition == null)
+                    {
+                        return BadRequest($"No se encontró la condición comercial con ID {quotationDto.FK_CommercialConditionId.Value}");
+                    }
                 }
 
                 // Actualizar propiedades
@@ -533,6 +634,7 @@ namespace DimmedAPI.Controllers
                     PaymentTerm = quotation.PaymentTerm,
                     FK_CommercialConditionId = quotation.FK_CommercialConditionId,
                     TotalizingQuotation = quotation.TotalizingQuotation,
+                    Total = quotation.Total,
                     EquipmentRemains = quotation.EquipmentRemains,
                     MonthlyConsumption = quotation.MonthlyConsumption,
                     Branch = quotation.Branch != null ? new BranchInfo
@@ -586,6 +688,93 @@ namespace DimmedAPI.Controllers
                 };
 
                 return Ok(response);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
+        // GET: api/QuotationMaster/available-employees
+        [HttpGet("available-employees")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<ActionResult<IEnumerable<object>>> GetAvailableEmployees([FromQuery] string companyCode)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                
+                var employees = await companyContext.Employee
+                    .Select(e => new
+                    {
+                        e.Id,
+                        e.Code,
+                        e.Name,
+                        e.Charge,
+                        e.Branch
+                    })
+                    .ToListAsync();
+
+                return Ok(employees);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
+        // GET: api/QuotationMaster/available-entities
+        [HttpGet("available-entities")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<ActionResult<object>> GetAvailableEntities([FromQuery] string companyCode)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                
+                var result = new
+                {
+                    Branches = await companyContext.Branches
+                        .Select(b => new { b.Id, b.Name })
+                        .ToListAsync(),
+                    CustomerTypes = await companyContext.CustomerType
+                        .Where(ct => ct.IsActive)
+                        .Select(ct => new { ct.Id, ct.Description })
+                        .ToListAsync(),
+                    Employees = await companyContext.Employee
+                        .Select(e => new { e.Id, e.Code, e.Name, e.Charge, e.Branch })
+                        .ToListAsync(),
+                    QuotationTypes = await companyContext.QuotationType
+                        .Where(qt => qt.IsActive)
+                        .Select(qt => new { qt.Id, qt.Description })
+                        .ToListAsync(),
+                    CommercialConditions = await companyContext.CommercialCondition
+                        .Where(cc => cc.IsActive)
+                        .Select(cc => new { cc.Id, cc.Description })
+                        .ToListAsync()
+                };
+
+                return Ok(result);
             }
             catch (ArgumentException ex)
             {

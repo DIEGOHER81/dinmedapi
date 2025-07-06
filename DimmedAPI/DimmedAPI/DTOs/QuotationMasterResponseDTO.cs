@@ -14,6 +14,7 @@ namespace DimmedAPI.DTOs
         public int? PaymentTerm { get; set; }
         public int? FK_CommercialConditionId { get; set; }
         public bool? TotalizingQuotation { get; set; }
+        public double? Total { get; set; }
         public bool? EquipmentRemains { get; set; }
         public double? MonthlyConsumption { get; set; }
 

@@ -35,6 +35,7 @@ namespace DimmedAPI
         public DbSet<CommercialCondition> CommercialCondition { get; set; }
         public DbSet<CustomerType> CustomerType { get; set; }
         public DbSet<Employee> Employee { get; set; }
+        public DbSet<FollowUpQuotations> FollowUpQuotations { get; set; }
 
     }
 }

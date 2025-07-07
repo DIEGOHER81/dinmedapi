@@ -650,7 +650,7 @@ namespace DimmedAPI.Controllers
                         Description = quotation.CustomerType.Description,
                         IsActive = quotation.CustomerType.IsActive
                     } : null,
-                    Employee = quotation.Employee != null ? new EmployeeInfo
+                    Employee = quotation.Employee != null ? new QuotationEmployeeInfo
                     {
                         Id = quotation.Employee.Id,
                         Code = quotation.Employee.Code,

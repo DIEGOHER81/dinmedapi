@@ -3783,6 +3783,389 @@
         }
       }
     },
+    "/api/FollowUpQuotation": {
+      "get": {
+        "tags": [
+          "FollowUpQuotation"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FollowUpQuotations"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FollowUpQuotations"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FollowUpQuotations"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "FollowUpQuotation"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FollowUpQuotationCreateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FollowUpQuotationCreateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FollowUpQuotationCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowUpQuotations"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowUpQuotations"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowUpQuotations"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/FollowUpQuotation/{id}": {
+      "get": {
+        "tags": [
+          "FollowUpQuotation"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowUpQuotations"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowUpQuotations"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowUpQuotations"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "FollowUpQuotation"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FollowUpQuotationUpdateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FollowUpQuotationUpdateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FollowUpQuotationUpdateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "FollowUpQuotation"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FollowUpQuotation/by-quotation/{quotationId}": {
+      "get": {
+        "tags": [
+          "FollowUpQuotation"
+        ],
+        "parameters": [
+          {
+            "name": "quotationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FollowUpQuotations"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FollowUpQuotations"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FollowUpQuotations"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/FollowUpQuotation/by-employee/{employeeId}": {
+      "get": {
+        "tags": [
+          "FollowUpQuotation"
+        ],
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FollowUpQuotations"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FollowUpQuotations"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FollowUpQuotations"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/FollowUpQuotation/with-details/{id}": {
+      "get": {
+        "tags": [
+          "FollowUpQuotation"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowUpQuotationResponseDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowUpQuotationResponseDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowUpQuotationResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/insurer/ObtenerAseguradoras": {
       "get": {
         "tags": [
@@ -7768,36 +8151,6 @@
         },
         "additionalProperties": false
       },
-      "EmployeeInfo": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "code": {
-            "type": "string",
-            "nullable": true
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "charge": {
-            "type": "string",
-            "nullable": true
-          },
-          "phone": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "EmployeeResponseDTO": {
         "type": "object",
         "properties": {
@@ -8494,6 +8847,153 @@
         },
         "additionalProperties": false
       },
+      "FollowUpEmployeeInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "charge": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FollowUpQuotationCreateDTO": {
+        "required": [
+          "fk_IdEmployee",
+          "fk_IdQuotation",
+          "observation"
+        ],
+        "type": "object",
+        "properties": {
+          "fk_IdQuotation": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fk_IdEmployee": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "observation": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FollowUpQuotationResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fk_IdQuotation": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fk_IdEmployee": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "observation": {
+            "type": "string",
+            "nullable": true
+          },
+          "createDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "quotation": {
+            "$ref": "#/components/schemas/QuotationMasterInfo"
+          },
+          "employee": {
+            "$ref": "#/components/schemas/FollowUpEmployeeInfo"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FollowUpQuotationUpdateDTO": {
+        "required": [
+          "fk_IdEmployee",
+          "fk_IdQuotation",
+          "observation"
+        ],
+        "type": "object",
+        "properties": {
+          "fk_IdQuotation": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fk_IdEmployee": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "observation": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FollowUpQuotations": {
+        "required": [
+          "fk_IdEmployee",
+          "fk_IdQuotation",
+          "observation"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fk_IdQuotation": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fk_IdEmployee": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "observation": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "createDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "quotation": {
+            "$ref": "#/components/schemas/QuotationMaster"
+          },
+          "employee": {
+            "$ref": "#/components/schemas/Employee"
+          }
+        },
+        "additionalProperties": false
+      },
       "IdentificationTypes": {
         "required": [
           "code",
@@ -9089,6 +9589,36 @@
         },
         "additionalProperties": false
       },
+      "QuotationEmployeeInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "charge": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "QuotationMaster": {
         "required": [
           "fK_idBranch",
@@ -9248,6 +9778,79 @@
         },
         "additionalProperties": false
       },
+      "QuotationMasterInfo": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fK_idBranch": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "customerOrigin": {
+            "type": "string",
+            "nullable": true
+          },
+          "fK_idCustomerType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idCustomer": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "creationDateTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "fK_idEmployee": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fK_QuotationTypeId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "paymentTerm": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "fK_CommercialConditionId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "totalizingQuotation": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "total": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "equipmentRemains": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "monthlyConsumption": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "QuotationMasterResponseDTO": {
         "type": "object",
         "properties": {
@@ -9325,7 +9928,7 @@
             "$ref": "#/components/schemas/CustomerTypeInfo"
           },
           "employee": {
-            "$ref": "#/components/schemas/EmployeeInfo"
+            "$ref": "#/components/schemas/QuotationEmployeeInfo"
           },
           "quotationType": {
             "$ref": "#/components/schemas/QuotationTypeInfo"

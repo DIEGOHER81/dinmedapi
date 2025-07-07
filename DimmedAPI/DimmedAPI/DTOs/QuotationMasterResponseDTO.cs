@@ -21,7 +21,7 @@ namespace DimmedAPI.DTOs
         // Propiedades de navegación
         public BranchInfo? Branch { get; set; }
         public CustomerTypeInfo? CustomerType { get; set; }
-        public EmployeeInfo? Employee { get; set; }
+        public QuotationEmployeeInfo? Employee { get; set; }
         public QuotationTypeInfo? QuotationType { get; set; }
         public CommercialConditionInfo? CommercialCondition { get; set; }
         public List<QuotationDetailInfo>? Details { get; set; }
@@ -42,7 +42,7 @@ namespace DimmedAPI.DTOs
         public bool IsActive { get; set; }
     }
 
-    public class EmployeeInfo
+    public class QuotationEmployeeInfo
     {
         public int Id { get; set; }
         public string? Code { get; set; }

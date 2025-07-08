@@ -59,6 +59,34 @@ namespace DimmedAPI.Controllers
             }
         }
 
+        [HttpGet("ObtenerClientePorId")]
+        public async Task<ActionResult<Customer>> GetCustomerById([FromQuery] int id, [FromQuery] string companyCode)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return BadRequest("El código de compañía es requerido");
+                }
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                var customer = await companyContext.Customer.FirstOrDefaultAsync(c => c.Id == id);
+                if (customer == null)
+                {
+                    return NotFound($"No se encontró el cliente con Id {id}");
+                }
+                return Ok(customer);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
         [HttpGet("test")]
         public ActionResult<string> Test()
         {

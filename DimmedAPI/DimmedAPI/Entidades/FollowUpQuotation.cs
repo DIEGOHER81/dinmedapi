@@ -19,6 +19,9 @@ namespace DimmedAPI.Entidades
         public int Fk_IdEmployee { get; set; }
 
         [Required]
+        public int idconceptoseguimiento { get; set; }
+
+        [Required]
         public string Observation { get; set; } = null!;
 
         public DateTime? CreateDateTime { get; set; }

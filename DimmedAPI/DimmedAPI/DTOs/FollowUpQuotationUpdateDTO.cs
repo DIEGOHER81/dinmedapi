@@ -11,6 +11,9 @@ namespace DimmedAPI.DTOs
         public int Fk_IdEmployee { get; set; }
 
         [Required]
+        public int idconceptoseguimiento { get; set; }
+
+        [Required]
         public string Observation { get; set; } = string.Empty;
     }
 } 

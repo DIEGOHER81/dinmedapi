@@ -80,7 +80,7 @@
               "RelativeDocumentMoniker": "DimmedAPI\\Controllers\\FollowUpQuotationController.cs",
               "ToolTip": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\Controllers\\FollowUpQuotationController.cs",
               "RelativeToolTip": "DimmedAPI\\Controllers\\FollowUpQuotationController.cs",
-              "ViewState": "AgIAAF0BAAAAAAAAAAAswGUBAABTAAAAAAAAAA==",
+              "ViewState": "AgIAAF0BAAAAAAAAAAAswG0BAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-07T03:08:10.944Z",
               "EditorCaption": ""
@@ -95,8 +95,7 @@
               "RelativeToolTip": "DimmedAPI\\Entidades\\FollowUpQuotation.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAAqwB8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-07T02:55:34.248Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-07T02:55:34.248Z"
             },
             {
               "$type": "Document",
@@ -120,8 +119,7 @@
               "RelativeToolTip": "DimmedAPI\\Controllers\\EmployeeController.cs",
               "ViewState": "AgIAAAECAAAAAAAAAAAAwBUCAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-05T21:14:45.384Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-05T21:14:45.384Z"
             },
             {
               "$type": "Document",
@@ -181,8 +179,7 @@
               "RelativeToolTip": "DimmedAPI\\Entidades\\Employee.cs",
               "ViewState": "AgIAAA0AAAAAAAAAAAAUwCIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-05T17:34:35.814Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-05T17:34:35.814Z"
             },
             {
               "$type": "Document",

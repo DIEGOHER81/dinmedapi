@@ -196,6 +196,7 @@ namespace DimmedAPI.Controllers
                 {
                     Fk_IdQuotation = followUpQuotationDto.Fk_IdQuotation,
                     Fk_IdEmployee = followUpQuotationDto.Fk_IdEmployee,
+                    idconceptoseguimiento = followUpQuotationDto.idconceptoseguimiento,
                     Observation = followUpQuotationDto.Observation,
                     CreateDateTime = DateTime.Now
                 };
@@ -254,6 +255,7 @@ namespace DimmedAPI.Controllers
 
                 followUpQuotation.Fk_IdQuotation = followUpQuotationDto.Fk_IdQuotation;
                 followUpQuotation.Fk_IdEmployee = followUpQuotationDto.Fk_IdEmployee;
+                followUpQuotation.idconceptoseguimiento = followUpQuotationDto.idconceptoseguimiento;
                 followUpQuotation.Observation = followUpQuotationDto.Observation;
 
                 await companyContext.SaveChangesAsync();
@@ -341,6 +343,7 @@ namespace DimmedAPI.Controllers
                     Id = followUpQuotation.Id,
                     Fk_IdQuotation = followUpQuotation.Fk_IdQuotation,
                     Fk_IdEmployee = followUpQuotation.Fk_IdEmployee,
+                    idconceptoseguimiento = followUpQuotation.idconceptoseguimiento,
                     Observation = followUpQuotation.Observation,
                     CreateDateTime = followUpQuotation.CreateDateTime,
                     Quotation = followUpQuotation.Quotation != null ? new QuotationMasterInfo

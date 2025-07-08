@@ -5,6 +5,7 @@ namespace DimmedAPI.DTOs
         public int Id { get; set; }
         public int Fk_IdQuotation { get; set; }
         public int Fk_IdEmployee { get; set; }
+        public int idconceptoseguimiento { get; set; }
         public string Observation { get; set; } = string.Empty;
         public DateTime? CreateDateTime { get; set; }
 

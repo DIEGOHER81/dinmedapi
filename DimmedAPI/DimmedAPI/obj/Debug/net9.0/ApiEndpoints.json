@@ -1232,6 +1232,37 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.CustomerController",
+    "Method": "GetCustomerById",
+    "RelativePath": "api/customers/ObtenerClientePorId",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.Customer",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerController",
     "Method": "GetCustomers",
     "RelativePath": "api/customers/ObtenerClientes",
     "HttpMethod": "GET",

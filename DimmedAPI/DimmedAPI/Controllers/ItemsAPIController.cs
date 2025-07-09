@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace DimmedAPI.Controllers
 {
@@ -389,6 +390,112 @@ namespace DimmedAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
+        [HttpGet("itmsBCwithpricelyst")]
+        public async Task<IActionResult> GetItemsWithPriceList([FromQuery] string companyCode, [FromQuery] int? take = null)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var itemsBO = new ItemsBO(companyContext, bcConn);
+
+                var articulos = await itemsBO.getItemsWithPriceList(take);
+                return Ok(articulos);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                var detalle = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return BadRequest(new { mensaje = "Error al consultar artículos con lista de precios en BC", detalle });
+            }
+        }
+
+        [HttpPost("sincronizar-items-bc-pricelist")]
+        public async Task<IActionResult> SincronizarItemsBCWithPriceList([FromQuery] string companyCode, [FromQuery] int? take = null)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var itemsBO = new ItemsBO(companyContext, bcConn);
+
+                var resultado = await itemsBO.SincronizarItemsBCWithPriceListAsync(take);
+                return Ok(new {
+                    totalSincronizados = resultado.Count
+                });
+            }
+            catch (Exception ex)
+            {
+                var detalle = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return BadRequest(new { mensaje = "Error al sincronizar items con price list", detalle });
+            }
+        }
+
+        [HttpGet("items-bc-pricelist-local")]
+        public async Task<IActionResult> GetItemsBCWithPriceListLocal([FromQuery] string companyCode, [FromQuery] int? take = null)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                var items = companyContext.ItemsBCWithPriceList
+                    .OrderBy(i => i.Id);
+                if (take.HasValue && take.Value > 0)
+                {
+                    return Ok(await items.Take(take.Value).ToListAsync());
+                }
+                return Ok(await items.ToListAsync());
+            }
+            catch (Exception ex)
+            {
+                var detalle = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return BadRequest(new { mensaje = "Error al consultar items locales con price list", detalle });
+            }
+        }
+
+        [HttpGet("items-bc-pricelist-descriptions")]
+        public async Task<IActionResult> GetItemsBCWithPriceListDescriptions([FromQuery] string companyCode)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                var result = await companyContext.ItemsBCWithPriceList
+                    .Select(i => new { i.Description, i.UnitMeasureCode })
+                    .Distinct()
+                    .OrderBy(i => i.Description)
+                    .ToListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                var detalle = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return BadRequest(new { mensaje = "Error al consultar descripciones de items", detalle });
             }
         }
     }

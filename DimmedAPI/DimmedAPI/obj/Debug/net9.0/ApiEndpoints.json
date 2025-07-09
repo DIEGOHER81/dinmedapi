@@ -2024,6 +2024,200 @@
     ]
   },
   {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
+    "Method": "Delete",
+    "RelativePath": "api/EntryRequestComponents/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
+    "Method": "GetAssemblyLines",
+    "RelativePath": "api/EntryRequestComponents/assembly-lines",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "documentNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
+    "Method": "ConsultarBC",
+    "RelativePath": "api/EntryRequestComponents/consultar-bc",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "location",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "stock",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "salesCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
+    "Method": "GetEstadisticas",
+    "RelativePath": "api/EntryRequestComponents/estadisticas",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
+    "Method": "GetLocales",
+    "RelativePath": "api/EntryRequestComponents/locales",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
+    "Method": "GetByEntryRequest",
+    "RelativePath": "api/EntryRequestComponents/por-entryrequest",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "idEntryReq",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
+    "Method": "GetByItemNo",
+    "RelativePath": "api/EntryRequestComponents/por-itemno",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "itemNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
+    "Method": "Sincronizar",
+    "RelativePath": "api/EntryRequestComponents/sincronizar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "location",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "stock",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "salesCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
+    "Method": "VerificarConfiguracion",
+    "RelativePath": "api/EntryRequestComponents/verificar-configuracion",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "DimmedAPI.Controllers.EquipmentController",
     "Method": "GetAll",
     "RelativePath": "api/equipment",
@@ -3014,6 +3208,64 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "GetItemsBCWithPriceListDescriptions",
+    "RelativePath": "api/ItemsAPI/items-bc-pricelist-descriptions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "GetItemsBCWithPriceListLocal",
+    "RelativePath": "api/ItemsAPI/items-bc-pricelist-local",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "take",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "GetItemsWithPriceList",
+    "RelativePath": "api/ItemsAPI/itmsBCwithpricelyst",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "take",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
     "Method": "ObtenerLocales",
     "RelativePath": "api/ItemsAPI/obtener-locales",
     "HttpMethod": "GET",
@@ -3081,6 +3333,27 @@
       {
         "Name": "companyCode",
         "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "SincronizarItemsBCWithPriceList",
+    "RelativePath": "api/ItemsAPI/sincronizar-items-bc-pricelist",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "take",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       }
     ],
@@ -3487,6 +3760,48 @@
     "Method": "VerificarConfiguracionCompania",
     "RelativePath": "api/Patient/VerificarConfiguracionCompania",
     "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.PaymentTermController",
+    "Method": "GetAll",
+    "RelativePath": "api/PaymentTerm",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DimmedAPI.Entidades.PaymentTerm, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.PaymentTermController",
+    "Method": "SincronizarDesdeBC",
+    "RelativePath": "api/PaymentTerm/sincronizar-bc",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [

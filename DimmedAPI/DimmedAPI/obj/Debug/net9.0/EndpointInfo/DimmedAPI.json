@@ -3270,6 +3270,268 @@
         }
       }
     },
+    "/api/EntryRequestComponents/consultar-bc": {
+      "get": {
+        "tags": [
+          "EntryRequestComponents"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stock",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "salesCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EntryRequestComponents/sincronizar": {
+      "post": {
+        "tags": [
+          "EntryRequestComponents"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stock",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "salesCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EntryRequestComponents/locales": {
+      "get": {
+        "tags": [
+          "EntryRequestComponents"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EntryRequestComponents/por-itemno": {
+      "get": {
+        "tags": [
+          "EntryRequestComponents"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemNo",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EntryRequestComponents/por-entryrequest": {
+      "get": {
+        "tags": [
+          "EntryRequestComponents"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idEntryReq",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EntryRequestComponents/estadisticas": {
+      "get": {
+        "tags": [
+          "EntryRequestComponents"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EntryRequestComponents/{id}": {
+      "delete": {
+        "tags": [
+          "EntryRequestComponents"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EntryRequestComponents/assembly-lines": {
+      "get": {
+        "tags": [
+          "EntryRequestComponents"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "documentNo",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EntryRequestComponents/verificar-configuracion": {
+      "get": {
+        "tags": [
+          "EntryRequestComponents"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/equipment": {
       "get": {
         "tags": [
@@ -4975,6 +5237,114 @@
         }
       }
     },
+    "/api/ItemsAPI/itmsBCwithpricelyst": {
+      "get": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ItemsAPI/sincronizar-items-bc-pricelist": {
+      "post": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ItemsAPI/items-bc-pricelist-local": {
+      "get": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/ItemsAPI/items-bc-pricelist-descriptions": {
+      "get": {
+        "tags": [
+          "ItemsAPI"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/medic/ObtenerMedicos": {
       "get": {
         "tags": [
@@ -5554,6 +5924,74 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/PaymentTerm/sincronizar-bc": {
+      "post": {
+        "tags": [
+          "PaymentTerm"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/PaymentTerm": {
+      "get": {
+        "tags": [
+          "PaymentTerm"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentTerm"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentTerm"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentTerm"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -9363,6 +9801,28 @@
           },
           "isPrecise": {
             "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaymentTerm": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "dueDateCalculation": {
+            "type": "string",
             "nullable": true
           }
         },

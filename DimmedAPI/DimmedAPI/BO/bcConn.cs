@@ -535,6 +535,283 @@ namespace DimmedAPI.BO
                 return null;
             }
         }
+
+        public async Task<List<ItemsBCWithPriceListDTO>> GetItemsWithPriceList(int? take = null)
+        {
+            try
+            {
+                List<ItemsBCWithPriceListDTO> lData = new List<ItemsBCWithPriceListDTO>();
+                var response = await BCRQ("lylitemsum", "");
+                string dataNext = "";
+                bool reachedTake = false;
+                do
+                {
+                    var resValues = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response.Content);
+                    IEnumerable<object> data = JsonConvert.DeserializeObject(resValues["value"].ToString());
+
+                    if (data != null)
+                    {
+                        foreach (dynamic v in data)
+                        {
+                            var item = new ItemsBCWithPriceListDTO
+                            {
+                                No = v.no,
+                                Description = v.description,
+                                BaseUnitMeasure = v.baseUnitMeasure,
+                                UnitCost = v.unitCost != null ? (decimal)v.unitCost : 0,
+                                PriceIncludesVAT = v.priceIncludesVAT != null ? (bool)v.priceIncludesVAT : false,
+                                SalesCode = v.salesCode,
+                                UnitPrice = v.unitPrice != null ? (decimal)v.unitPrice : 0,
+                                UnitMeasureCode = v.unitMeasureCode,
+                                AuxiliaryIndex1 = v.auxiliaryIndex1,
+                                AuxiliaryIndex2 = v.auxiliaryIndex2,
+                                AuxiliaryIndex3 = v.auxiliaryIndex3
+                            };
+                            lData.Add(item);
+                            if (take.HasValue && lData.Count >= take.Value)
+                            {
+                                reachedTake = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (reachedTake)
+                        break;
+
+                    try
+                    {
+                        if (resValues["@odata.nextLink"] != null)
+                        {
+                            dataNext = resValues["@odata.nextLink"].ToString();
+                            if (!string.IsNullOrEmpty(dataNext))
+                            {
+                                var client = new RestClient(dataNext);
+                                var request = new RestRequest();
+                                request.AddHeader("Accept", "application/json");
+                                var token = await BCRQ_GETTOKEN();
+                                request.AddHeader("Authorization", $"Bearer {token}");
+                                response = await client.ExecuteAsync(request);
+                            }
+                        }
+                        else
+                        {
+                            dataNext = "";
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        dataNext = "";
+                    }
+                } while (!string.IsNullOrEmpty(dataNext));
+
+                return lData;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene componentes de EntryRequest desde Business Central
+        /// </summary>
+        /// <param name="method">Método a llamar en BC</param>
+        /// <param name="location">Ubicación (opcional)</param>
+        /// <param name="stock">Stock (opcional)</param>
+        /// <param name="salesCode">Código de venta (opcional)</param>
+        /// <returns>Lista de componentes</returns>
+        public async Task<List<EntryRequestComponents>> GetComponents(string method, string location, string stock, string salesCode)
+        {
+            try
+            {
+                List<EntryRequestComponents> lData = new List<EntryRequestComponents>();
+                EntryRequestComponents reqcomponents;
+                string dataNext = "";
+                do
+                {
+                    // Construir filtro dinámicamente basado en los parámetros proporcionados
+                    var filterConditions = new List<string>();
+                    
+                    // Siempre filtrar por cantidad mayor a 0
+                    filterConditions.Add("quantity ne 0");
+                    
+                    // Agregar filtro de salesCode solo si se proporciona
+                    if (!string.IsNullOrEmpty(salesCode))
+                    {
+                        filterConditions.Add("salesCode eq '" + salesCode + "'");
+                    }
+                    
+                    var filterurl = "?$filter=" + string.Join(" and ", filterConditions);
+                    
+                    if(dataNext != "")
+                    {
+                        string[] dataurl = dataNext.Split("?$filter=");
+                        filterurl = "?$filter=" + dataurl[1];
+                    }
+                    
+                    var response = await BCRQ(method, filterurl);
+                    var resValues = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response.Content);
+                    IEnumerable<object> data = JsonConvert.DeserializeObject(resValues["value"].ToString());
+
+                    try
+                    {
+                        if (resValues["@odata.nextLink"] != null)
+                        {
+                            dataNext = resValues["@odata.nextLink"].ToString();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        dataNext = "";
+                    }
+                    
+                    if (data != null)
+                    {
+                        foreach (dynamic v in data)
+                        {
+                            reqcomponents = new EntryRequestComponents();
+                            reqcomponents.ItemNo = v.no;
+                            reqcomponents.ItemName = v.description;
+                            reqcomponents.Warehouse = v.location;
+                            reqcomponents.UnitPrice = v.unitPrice;
+
+                            // Solo aplicar filtro de ubicación si se proporcionan los parámetros
+                            if (!string.IsNullOrEmpty(location) || !string.IsNullOrEmpty(stock))
+                            {
+                                if (v.location != location && v.location != stock)
+                                {
+                                    reqcomponents.Quantity = 0;
+                                }
+                                else
+                                {
+                                    if (v.reservedQuantity != null)
+                                        reqcomponents.Quantity = v.quantity - v.reservedQuantity;
+                                    else
+                                        reqcomponents.Quantity = v.quantity;
+                                }
+                            }
+                            else
+                            {
+                                // Si no se proporcionan filtros de ubicación, usar la cantidad completa
+                                if (v.reservedQuantity != null)
+                                    reqcomponents.Quantity = v.quantity - v.reservedQuantity;
+                                else
+                                    reqcomponents.Quantity = v.quantity;
+                            }
+
+                            if (v.salesCode != null)
+                            {
+                                reqcomponents.SystemId = v.salesCode;
+                            }
+
+                            lData.Add(reqcomponents);
+                        }
+                    }
+                } while (dataNext != "");         
+              
+                return lData;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene líneas de ensamble desde Business Central
+        /// </summary>
+        /// <param name="method">Método a llamar en BC</param>
+        /// <param name="documentNo">Número de documento (opcional)</param>
+        /// <returns>Lista de componentes de líneas de ensamble</returns>
+        public async Task<List<EntryRequestComponents>> GetAssemblyLines(string method, string documentNo = null)
+        {
+            try
+            {
+                List<EntryRequestComponents> lData = new List<EntryRequestComponents>();
+                EntryRequestComponents reqcomponents;
+                string dataNext = "";
+                do
+                {
+                    // Construir filtro dinámicamente basado en los parámetros proporcionados
+                    var filterConditions = new List<string>();
+                    
+                    // Agregar filtro de documento solo si se proporciona
+                    if (!string.IsNullOrEmpty(documentNo))
+                    {
+                        filterConditions.Add("documentNo eq '" + documentNo + "'");
+                    }
+                    
+                    var filterurl = filterConditions.Count > 0 ? "?$filter=" + string.Join(" and ", filterConditions) : "";
+                    
+                    if(dataNext != "")
+                    {
+                        string[] dataurl = dataNext.Split("?$filter=");
+                        filterurl = "?$filter=" + dataurl[1];
+                    }
+                    
+                    var response = await BCRQ(method, filterurl);
+                    var resValues = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response.Content);
+                    IEnumerable<object> data = JsonConvert.DeserializeObject(resValues["value"].ToString());
+
+                    try
+                    {
+                        if (resValues["@odata.nextLink"] != null)
+                        {
+                            dataNext = resValues["@odata.nextLink"].ToString();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        dataNext = "";
+                    }
+                    
+                    if (data != null)
+                    {
+                        foreach (dynamic v in data)
+                        {
+                            reqcomponents = new EntryRequestComponents();
+                            reqcomponents.ItemNo = v.no;
+                            reqcomponents.ItemName = v.description;
+                            reqcomponents.Quantity = v.quantityToConsume;
+                            reqcomponents.Warehouse = v.Location_Code;
+                            reqcomponents.AssemblyNo = v.documentNo;
+                            reqcomponents.status = v.documentType;
+                            
+                            // Mapear campos adicionales si están disponibles
+                            if (v.lineNo != null)
+                            {
+                                reqcomponents.IdEntryReq = (int)v.lineNo;
+                            }
+                            
+                            if (v.Unit_of_Measure_Code != null)
+                            {
+                                reqcomponents.shortDesc = v.Unit_of_Measure_Code;
+                            }
+
+                            lData.Add(reqcomponents);
+                        }
+                    }
+                } while (dataNext != "");         
+              
+                return lData;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<PaymentTermBCDTO>> GetPaymentTermsBCAsync()
+        {
+            var response = await BCRQ("lylpaymentterms", null);
+            if (response.IsSuccessful)
+            {
+                var result = JsonConvert.DeserializeObject<PaymentTermBCResponse>(response.Content);
+                return result.Value;
+            }
+            throw new Exception($"Error obteniendo términos de pago: {response.ErrorMessage}");
+        }
     }
 
     public class TokenResponse
@@ -559,5 +836,11 @@ namespace DimmedAPI.BO
     {
         [JsonProperty("value")]
         public List<EquipmentBCDTO> Value { get; set; }
+    }
+
+    public class PaymentTermBCResponse
+    {
+        [JsonProperty("value")]
+        public List<PaymentTermBCDTO> Value { get; set; }
     }
 } 

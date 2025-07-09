@@ -326,7 +326,6 @@ D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\scopedcss\
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\staticwebassets.build.json
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\staticwebassets.development.json
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\DimmedAPI.csproj.Up2Date
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\DimmedAPI.dll
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\refint\DimmedAPI.dll
@@ -338,3 +337,4 @@ D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\rjimswa.ds
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\staticwebassets.build.json.cache
+D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

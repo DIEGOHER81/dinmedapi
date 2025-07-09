@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DimmedAPI.DTOs;
 
 namespace DimmedAPI.BO
 {
@@ -242,6 +243,55 @@ namespace DimmedAPI.BO
             {
                 throw new Exception($"Error al obtener estadísticas: {ex.Message}", ex);
             }
+        }
+
+        public async Task<List<ItemsBCWithPriceListDTO>> getItemsWithPriceList(int? take = null)
+        {
+            try
+            {
+                var lData = await _bcConn.GetItemsWithPriceList(take);
+                return lData;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<ItemsBCWithPriceList>> SincronizarItemsBCWithPriceListAsync(int? take = null)
+        {
+            // Traer los datos desde BC
+            var itemsFromBC = await _bcConn.GetItemsWithPriceList(take);
+            if (itemsFromBC == null)
+                return new List<ItemsBCWithPriceList>();
+
+            // Limpiar la tabla local
+            var allLocal = _context.ItemsBCWithPriceList.ToList();
+            if (allLocal.Any())
+            {
+                _context.ItemsBCWithPriceList.RemoveRange(allLocal);
+                await _context.SaveChangesAsync();
+            }
+
+            // Mapear y guardar los nuevos registros
+            var entities = itemsFromBC.Select(dto => new ItemsBCWithPriceList
+            {
+                No = dto.No,
+                Description = dto.Description,
+                BaseUnitMeasure = dto.BaseUnitMeasure,
+                UnitCost = dto.UnitCost,
+                PriceIncludesVAT = dto.PriceIncludesVAT,
+                SalesCode = dto.SalesCode,
+                UnitPrice = dto.UnitPrice,
+                UnitMeasureCode = dto.UnitMeasureCode,
+                AuxiliaryIndex1 = dto.AuxiliaryIndex1,
+                AuxiliaryIndex2 = dto.AuxiliaryIndex2,
+                AuxiliaryIndex3 = dto.AuxiliaryIndex3
+            }).ToList();
+
+            _context.ItemsBCWithPriceList.AddRange(entities);
+            await _context.SaveChangesAsync();
+            return entities;
         }
     }
 } 

@@ -26,6 +26,7 @@ namespace DimmedAPI
         public DbSet<CustomerContact> CustomerContact { get; set; }
 
         public DbSet<ItemsBC> ItemsBC { get; set; }
+        public DbSet<ItemsBCWithPriceList> ItemsBCWithPriceList { get; set; }
 
         public DbSet<ClienteLead> ClienteLead { get; set; }
 
@@ -36,6 +37,11 @@ namespace DimmedAPI
         public DbSet<CustomerType> CustomerType { get; set; }
         public DbSet<Employee> Employee { get; set; }
         public DbSet<FollowUpQuotations> FollowUpQuotations { get; set; }
+
+        public DbSet<PaymentTerm> PaymentTerm { get; set; }
+
+        public DbSet<EntryRequestComponents> EntryRequestComponents  { get; set; }
+
 
     }
 }

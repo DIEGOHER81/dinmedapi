@@ -19,5 +19,9 @@ namespace DimmedAPI.BO
         Task<RestResponse> SPLE_API(string method, string filter, string type, string body);
         Task<CustomerContact> getCustContBCAsync(string method, string systemID);
         Task<List<ItemsBC>> GetItems(string method);
+        Task<List<PaymentTermBCDTO>> GetPaymentTermsBCAsync();
+        Task<List<ItemsBCWithPriceListDTO>> GetItemsWithPriceList(int? take = null);
+        Task<List<EntryRequestComponents>> GetComponents(string method, string location, string stock, string salesCode);
+        Task<List<EntryRequestComponents>> GetAssemblyLines(string method, string documentNo = null);
     }
 }

@@ -185,7 +185,11 @@ namespace DimmedAPI.Controllers
                     IsSecondPriceList = clienteBC.IsSecondPriceList,
                     SecondPriceGroup = clienteBC.SecondPriceGroup,
                     InsurerType = clienteBC.InsurerType,
-                    IsRemLot = clienteBC.IsRemLot
+                    IsRemLot = clienteBC.IsRemLot,
+                    LyLOpeningHours1 = clienteBC.LyLOpeningHours1,
+                    LyLOpeningHours2 = clienteBC.LyLOpeningHours2,
+                    PaymentMethodCode = clienteBC.PaymentMethodCode,
+                    PaymentTermsCode = clienteBC.PaymentTermsCode
                 });
                 return Ok(result);
             }

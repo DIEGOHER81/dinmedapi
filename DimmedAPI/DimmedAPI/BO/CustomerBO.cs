@@ -69,7 +69,9 @@ namespace DimmedAPI.BO
                             InsurerType = customerBC.InsurerType,
                             IsRemLot = customerBC.IsRemLot,
                             LyLOpeningHours1 = customerBC.LyLOpeningHours1,
-                            LyLOpeningHours2 = customerBC.LyLOpeningHours2
+                            LyLOpeningHours2 = customerBC.LyLOpeningHours2,
+                            PaymentMethodCode = customerBC.PaymentMethodCode,
+                            PaymentTermsCode = customerBC.PaymentTermsCode
                         };
 
                         _context.Customer.Add(newCustomer);
@@ -104,6 +106,8 @@ namespace DimmedAPI.BO
                         existingCustomer.IsRemLot = customerBC.IsRemLot;
                         existingCustomer.LyLOpeningHours1 = customerBC.LyLOpeningHours1;
                         existingCustomer.LyLOpeningHours2 = customerBC.LyLOpeningHours2;
+                        existingCustomer.PaymentMethodCode = customerBC.PaymentMethodCode;
+                        existingCustomer.PaymentTermsCode = customerBC.PaymentTermsCode;
 
                         customersUpdated.Add(existingCustomer);
                     }
@@ -158,7 +162,9 @@ namespace DimmedAPI.BO
                     InsurerType = dto.InsurerType,
                     IsRemLot = dto.IsRemLot,
                     LyLOpeningHours1 = dto.LyLOpeningHours1,
-                    LyLOpeningHours2 = dto.LyLOpeningHours2
+                    LyLOpeningHours2 = dto.LyLOpeningHours2,
+                    PaymentMethodCode = dto.PaymentMethodCode,
+                    PaymentTermsCode = dto.PaymentTermsCode
                 };
 
                 _context.Customer.Add(newCustomer);
@@ -194,6 +200,8 @@ namespace DimmedAPI.BO
                 existingCustomer.IsRemLot = dto.IsRemLot;
                 existingCustomer.LyLOpeningHours1 = dto.LyLOpeningHours1;
                 existingCustomer.LyLOpeningHours2 = dto.LyLOpeningHours2;
+                existingCustomer.PaymentMethodCode = dto.PaymentMethodCode;
+                existingCustomer.PaymentTermsCode = dto.PaymentTermsCode;
 
 
 
@@ -238,7 +246,9 @@ namespace DimmedAPI.BO
                         InsurerType = customer.InsurerType,
                         IsRemLot = customer.IsRemLot,
                         LyLOpeningHours1 = customer.LyLOpeningHours1,
-                        LyLOpeningHours2 = customer.LyLOpeningHours2
+                        LyLOpeningHours2 = customer.LyLOpeningHours2,
+                        PaymentMethodCode = customer.PaymentMethodCode,
+                        PaymentTermsCode = customer.PaymentTermsCode
         
                     });
                 }

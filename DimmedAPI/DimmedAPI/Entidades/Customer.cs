@@ -41,6 +41,8 @@ namespace DimmedAPI.Entidades
         public bool? IsRemLot { get; set; }
         public string? LyLOpeningHours1 { get; set; }
         public string? LyLOpeningHours2 { get; set; }
+        public string? PaymentMethodCode { get; set; }
+        public string? PaymentTermsCode { get; set; }
 
         // Relación con CustomerAddress (uno-a-muchos)
         // public virtual ICollection<CustomerAddress> ShipAddress { get; set; }

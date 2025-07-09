@@ -197,7 +197,11 @@ namespace DimmedAPI.BO
                         IsSecondPriceList = c.IsSecondPriceList,
                         SecondPriceGroup = c.SecondPriceGroup,
                         InsurerType = c.InsurerType,
-                        IsRemLot = c.IsRemLot
+                        IsRemLot = c.IsRemLot,
+                        LyLOpeningHours1 = c.LyLOpeningHours1,
+                        LyLOpeningHours2 = c.LyLOpeningHours2,
+                        PaymentMethodCode = c.PaymentMethodCode,
+                        PaymentTermsCode = c.PaymentTermsCode
                     }).ToList();
                 }
                 throw new Exception($"Error obteniendo clientes: {response.StatusCode} - {response.Content}");

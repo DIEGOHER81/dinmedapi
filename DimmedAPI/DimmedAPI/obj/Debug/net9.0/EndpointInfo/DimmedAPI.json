@@ -7846,6 +7846,14 @@
           "lyLOpeningHours2": {
             "type": "string",
             "nullable": true
+          },
+          "paymentMethodCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentTermsCode": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -7959,6 +7967,14 @@
             "nullable": true
           },
           "lyLOpeningHours2": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentMethodCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentTermsCode": {
             "type": "string",
             "nullable": true
           }
@@ -8927,6 +8943,7 @@
         "required": [
           "fk_IdEmployee",
           "fk_IdQuotation",
+          "idconceptoseguimiento",
           "observation"
         ],
         "type": "object",
@@ -8936,6 +8953,10 @@
             "format": "int32"
           },
           "fk_IdEmployee": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idconceptoseguimiento": {
             "type": "integer",
             "format": "int32"
           },
@@ -8961,6 +8982,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "idconceptoseguimiento": {
+            "type": "integer",
+            "format": "int32"
+          },
           "observation": {
             "type": "string",
             "nullable": true
@@ -8983,6 +9008,7 @@
         "required": [
           "fk_IdEmployee",
           "fk_IdQuotation",
+          "idconceptoseguimiento",
           "observation"
         ],
         "type": "object",
@@ -8992,6 +9018,10 @@
             "format": "int32"
           },
           "fk_IdEmployee": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idconceptoseguimiento": {
             "type": "integer",
             "format": "int32"
           },
@@ -9006,6 +9036,7 @@
         "required": [
           "fk_IdEmployee",
           "fk_IdQuotation",
+          "idconceptoseguimiento",
           "observation"
         ],
         "type": "object",
@@ -9019,6 +9050,10 @@
             "format": "int32"
           },
           "fk_IdEmployee": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idconceptoseguimiento": {
             "type": "integer",
             "format": "int32"
           },

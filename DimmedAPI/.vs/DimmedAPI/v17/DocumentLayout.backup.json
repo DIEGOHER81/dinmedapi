@@ -78,7 +78,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 177,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -95,14 +95,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
             },
             {
               "$type": "Document",
@@ -127,8 +119,7 @@
               "RelativeToolTip": "DimmedAPI\\BO\\bcConn.cs",
               "ViewState": "AgIAAAcCAAAAAAAAAAAjwBoCAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-09T09:32:05.939Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-09T09:32:05.939Z"
             },
             {
               "$type": "Document",
@@ -140,8 +131,7 @@
               "RelativeToolTip": "DimmedAPI\\Controllers\\ItemsAPIController.cs",
               "ViewState": "AgIAAHcBAAAAAAAAAAAswJkBAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-09T09:30:38.748Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-09T09:30:38.748Z"
             },
             {
               "$type": "Document",
@@ -153,8 +143,7 @@
               "RelativeToolTip": "DimmedAPI\\BO\\ItemsBO.cs",
               "ViewState": "AgIAACIAAAAAAAAAAAAWwDEAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-09T09:14:51.482Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-09T09:14:51.482Z"
             },
             {
               "$type": "Document",
@@ -166,8 +155,7 @@
               "RelativeToolTip": "DimmedAPI\\ApplicationDBContext.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAA6wCoAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-09T08:09:00.167Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-09T08:09:00.167Z"
             },
             {
               "$type": "Document",
@@ -179,8 +167,7 @@
               "RelativeToolTip": "DimmedAPI\\BO\\CustomerBO.cs",
               "ViewState": "AgIAAMAAAAAAAAAAAAAlwIIAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-09T06:37:52.681Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-09T06:37:52.681Z"
             },
             {
               "$type": "Document",
@@ -313,6 +300,14 @@
               "ViewState": "AgIAAAUAAAAAAAAAAAAAwDIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-05T17:06:16.059Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
             }
           ]
         }

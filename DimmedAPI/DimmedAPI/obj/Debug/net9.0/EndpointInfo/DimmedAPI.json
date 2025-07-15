@@ -2024,14 +2024,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "option",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
           }
         ],
         "responses": {

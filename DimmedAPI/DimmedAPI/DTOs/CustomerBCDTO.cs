@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace DimmedAPI.DTOs
 {
@@ -23,6 +24,7 @@ namespace DimmedAPI.DTOs
         public bool RemCustomer { get; set; }
         public string Observations { get; set; }
         public string Name { get; set; }
+        [JsonProperty("systemId")]
         public string SystemIdBc { get; set; }
         public string SalesZone { get; set; }
         public string TradeRepres { get; set; }

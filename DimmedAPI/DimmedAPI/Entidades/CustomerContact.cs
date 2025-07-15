@@ -1,4 +1,6 @@
-﻿namespace DimmedAPI.Entidades
+﻿using Newtonsoft.Json;
+
+namespace DimmedAPI.Entidades
 {
     public class CustomerContact
     {
@@ -6,7 +8,8 @@
         public string Code { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public string systemIdBC { get; set; }
+        [JsonProperty("systemId")]
+        public string? systemIdBC { get; set; }
         public string Phone { get; set; }
         public string CustomerName { get; set; }
         public string Identification { get; set; }

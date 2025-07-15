@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}|DimmedAPI\\DimmedAPI.csproj|d:\\dimmed\\devdinmedapi\\dinmedapi\\dimmedapi\\dimmedapi\\bo\\customerbo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}|DimmedAPI\\DimmedAPI.csproj|solutionrelative:dimmedapi\\bo\\customerbo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}|DimmedAPI\\DimmedAPI.csproj|d:\\dimmed\\devdinmedapi\\dinmedapi\\dimmedapi\\dimmedapi\\controllers\\customerapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}|DimmedAPI\\DimmedAPI.csproj|solutionrelative:dimmedapi\\controllers\\customerapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}|DimmedAPI\\DimmedAPI.csproj|d:\\dimmed\\devdinmedapi\\dinmedapi\\dimmedapi\\dimmedapi\\bo\\bcconn.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}|DimmedAPI\\DimmedAPI.csproj|solutionrelative:dimmedapi\\bo\\bcconn.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}|DimmedAPI\\DimmedAPI.csproj|d:\\dimmed\\devdinmedapi\\dinmedapi\\dimmedapi\\dimmedapi\\controllers\\companycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}|DimmedAPI\\DimmedAPI.csproj|solutionrelative:dimmedapi\\controllers\\companycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -22,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 177,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -41,8 +53,51 @@
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "CustomerAPIController.cs",
+              "DocumentMoniker": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\Controllers\\CustomerAPIController.cs",
+              "RelativeDocumentMoniker": "DimmedAPI\\Controllers\\CustomerAPIController.cs",
+              "ToolTip": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\Controllers\\CustomerAPIController.cs",
+              "RelativeToolTip": "DimmedAPI\\Controllers\\CustomerAPIController.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAowEwAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-15T10:28:17.223Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CustomerBO.cs",
+              "DocumentMoniker": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\BO\\CustomerBO.cs",
+              "RelativeDocumentMoniker": "DimmedAPI\\BO\\CustomerBO.cs",
+              "ToolTip": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\BO\\CustomerBO.cs",
+              "RelativeToolTip": "DimmedAPI\\BO\\CustomerBO.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAowBwAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-15T10:16:55.032Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "bcConn.cs",
+              "DocumentMoniker": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\BO\\bcConn.cs",
+              "RelativeDocumentMoniker": "DimmedAPI\\BO\\bcConn.cs",
+              "ToolTip": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\BO\\bcConn.cs",
+              "RelativeToolTip": "DimmedAPI\\BO\\bcConn.cs",
+              "ViewState": "AgIAAJcAAAAAAAAAAAAewLAAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-15T10:14:58.935Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "Options.cs",
               "DocumentMoniker": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\Entidades\\Options.cs",
               "RelativeDocumentMoniker": "DimmedAPI\\Entidades\\Options.cs",
@@ -50,25 +105,24 @@
               "RelativeToolTip": "DimmedAPI\\Entidades\\Options.cs",
               "ViewState": "AgIAAA0AAAAAAAAAAAAkwB8AAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T05:37:29.504Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-15T05:37:29.504Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "CompanyController.cs",
               "DocumentMoniker": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\Controllers\\CompanyController.cs",
               "RelativeDocumentMoniker": "DimmedAPI\\Controllers\\CompanyController.cs",
               "ToolTip": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\Controllers\\CompanyController.cs",
               "RelativeToolTip": "DimmedAPI\\Controllers\\CompanyController.cs",
-              "ViewState": "AgIAAIMAAAAAAAAAAAAIwJEAAAA+AAAAAAAAAA==",
+              "ViewState": "AgIAAIMAAAAAAAAAAAAIwJwAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-15T01:11:43.178Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "Companies.cs",
               "DocumentMoniker": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\Entidades\\Companies.cs",
               "RelativeDocumentMoniker": "DimmedAPI\\Entidades\\Companies.cs",

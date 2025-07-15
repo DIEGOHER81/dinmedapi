@@ -1262,11 +1262,6 @@
         "Name": "systemID",
         "Type": "System.String",
         "IsRequired": false
-      },
-      {
-        "Name": "option",
-        "Type": "System.Int32",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []

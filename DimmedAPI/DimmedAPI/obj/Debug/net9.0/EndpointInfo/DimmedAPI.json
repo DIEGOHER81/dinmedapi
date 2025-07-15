@@ -1609,24 +1609,100 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Companies"
+                "$ref": "#/components/schemas/CompanyCreateDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Companies"
+                "$ref": "#/components/schemas/CompanyCreateDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Companies"
+                "$ref": "#/components/schemas/CompanyCreateDTO"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Companies"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Companies"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Companies"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/companies/upload-logo": {
+      "post": {
+        "tags": [
+          "Company"
+        ],
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoUploadResponseDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoUploadResponseDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoUploadResponseDTO"
+                }
+              }
+            }
           }
         }
       }
@@ -8222,6 +8298,129 @@
         },
         "additionalProperties": false
       },
+      "CompanyCreateDTO": {
+        "required": [
+          "bcCodigoEmpresa",
+          "bcurl",
+          "bcurlWebService",
+          "businessName",
+          "identificationNumber",
+          "sqlConnectionString"
+        ],
+        "type": "object",
+        "properties": {
+          "identificationTypeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "identificationNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "businessName": {
+            "type": "string",
+            "nullable": true
+          },
+          "tradeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mainAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "legalRepresentative": {
+            "type": "string",
+            "nullable": true
+          },
+          "contactEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "contactPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "sqlConnectionString": {
+            "type": "string",
+            "nullable": true
+          },
+          "bcurlWebService": {
+            "type": "string",
+            "nullable": true
+          },
+          "bcurl": {
+            "type": "string",
+            "nullable": true
+          },
+          "bcCodigoEmpresa": {
+            "type": "string",
+            "nullable": true
+          },
+          "logoCompany": {
+            "type": "string",
+            "nullable": true
+          },
+          "instancia": {
+            "type": "string",
+            "nullable": true
+          },
+          "dominio": {
+            "type": "string",
+            "nullable": true
+          },
+          "clienteid": {
+            "type": "string",
+            "nullable": true
+          },
+          "tenantid": {
+            "type": "string",
+            "nullable": true
+          },
+          "clientsecret": {
+            "type": "string",
+            "nullable": true
+          },
+          "callbackpath": {
+            "type": "string",
+            "nullable": true
+          },
+          "correonotificacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombrenotificacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "pwdnotificacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "smtpserver": {
+            "type": "string",
+            "nullable": true
+          },
+          "puertosmtp": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdBy": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CompanyUpdateDTO": {
         "required": [
           "bcCodigoEmpresa",
@@ -9813,6 +10012,35 @@
             "nullable": true
           },
           "invima": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LogoUploadResponseDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileSize": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "contentType": {
             "type": "string",
             "nullable": true
           }

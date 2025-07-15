@@ -79,6 +79,10 @@ if (app.Environment.IsDevelopment())
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
+
+// Habilitar archivos estáticos para servir logos y otros archivos
+app.UseStaticFiles();
+
 app.UseOutputCache();
 app.UseAuthorization();
 app.MapControllers();

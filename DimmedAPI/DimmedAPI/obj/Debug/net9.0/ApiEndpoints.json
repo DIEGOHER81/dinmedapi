@@ -872,12 +872,22 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "company",
-        "Type": "DimmedAPI.Entidades.Companies",
+        "Name": "createDto",
+        "Type": "DimmedAPI.DTOs.CompanyCreateDTO",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.Companies",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "DimmedAPI.Controllers.CompanyController",
@@ -979,6 +989,37 @@
     "ReturnTypes": [
       {
         "Type": "DimmedAPI.Entidades.Companies",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CompanyController",
+    "Method": "UploadLogo",
+    "RelativePath": "api/companies/upload-logo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.DTOs.LogoUploadResponseDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",

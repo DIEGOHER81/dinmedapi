@@ -338,3 +338,4 @@ D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\rjsmrazor.
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\staticwebassets.build.json.cache
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\DimmedAPI.staticwebassets.runtime.json

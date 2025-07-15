@@ -44,6 +44,8 @@ namespace DimmedAPI
 
         public DbSet<IdentificationTypes> IdentificationTypes { get; set; }
 
+        public DbSet<Options> Options { get; set; }
+
 
     }
 }

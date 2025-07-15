@@ -22,75 +22,52 @@ namespace DimmedAPI.Controllers
         }
 
         /// <summary>
-        /// Sincroniza un contacto de cliente desde Business Central
+        /// Sincroniza datos de contacto de cliente desde BC: si existe actualiza, si no existe crea el registro.
         /// </summary>
         /// <param name="companyCode">Código de la compañía</param>
-        /// <param name="method">Método de Business Central</param>
-        /// <param name="systemID">SystemId del registro en Business Central</param>
-        /// <returns>Información del contacto del cliente</returns>
+        /// <param name="systemID">SystemId del registro en BC</param>
+        /// <returns>Objeto CustomerContact y acción realizada (created, updated)</returns>
         [HttpGet("sync/{companyCode}")]
         public async Task<IActionResult> SyncCustomerContact(
             [FromRoute] string companyCode,
-            [FromQuery] string method,
             [FromQuery] string systemID)
         {
             try
             {
                 if (string.IsNullOrEmpty(companyCode))
-                {
                     return BadRequest("El código de compañía es requerido");
-                }
-
-                if (string.IsNullOrEmpty(method))
-                {
-                    return BadRequest("El método de Business Central es requerido");
-                }
-
                 if (string.IsNullOrEmpty(systemID))
-                {
                     return BadRequest("El SystemId es requerido");
-                }
 
-                // Obtener la conexión a Business Central para la compañía específica
                 var bcConnection = await _bcConnectionService.GetBCConnectionAsync(companyCode);
+                var dbContext = await _connectionService.GetCompanyDbContextAsync(companyCode);
 
-                // Consultar el contacto del cliente en Business Central
-                var customerContact = await bcConnection.getCustContBCAsync(method, systemID);
+                var existingContact = await dbContext.CustomerContact
+                    .FirstOrDefaultAsync(c => c.systemIdBC == systemID);
+
+                // Siempre usa el método fijo "lylcustcontact"
+                var customerContact = await bcConnection.getCustContBCAsync("lylcustcontact", systemID);
 
                 if (customerContact == null)
                 {
                     return NotFound($"No se encontró el contacto del cliente con SystemId: {systemID}");
                 }
 
-                // Obtener el contexto de base de datos para la compañía específica
-                var dbContext = await _connectionService.GetCompanyDbContextAsync(companyCode);
-
-                // Verificar si el contacto ya existe en la base de datos local
-                var existingContact = await dbContext.CustomerContact
-                    .FirstOrDefaultAsync(c => c.systemIdBC == customerContact.systemIdBC);
-
                 if (existingContact != null)
                 {
-                    // Actualizar el contacto existente
+                    // Actualizar
                     existingContact.Code = customerContact.Code;
                     existingContact.Name = customerContact.Name;
                     existingContact.Email = customerContact.Email;
                     existingContact.Phone = customerContact.Phone;
                     existingContact.CustomerName = customerContact.CustomerName;
                     existingContact.Identification = customerContact.Identification;
-
                     await dbContext.SaveChangesAsync();
-
-                    return Ok(new
-                    {
-                        message = "Contacto del cliente actualizado exitosamente",
-                        contact = existingContact,
-                        action = "updated"
-                    });
+                    return Ok(new { message = "Contacto actualizado", contact = existingContact, action = "updated" });
                 }
                 else
                 {
-                    // Crear nuevo contacto
+                    // Crear
                     var newContact = new CustomerContact
                     {
                         Code = customerContact.Code,
@@ -101,21 +78,10 @@ namespace DimmedAPI.Controllers
                         CustomerName = customerContact.CustomerName,
                         Identification = customerContact.Identification
                     };
-
                     dbContext.CustomerContact.Add(newContact);
                     await dbContext.SaveChangesAsync();
-
-                    return Ok(new
-                    {
-                        message = "Contacto del cliente sincronizado exitosamente",
-                        contact = newContact,
-                        action = "created"
-                    });
+                    return Ok(new { message = "Contacto creado", contact = newContact, action = "created" });
                 }
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

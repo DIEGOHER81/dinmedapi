@@ -128,28 +128,72 @@ namespace DimmedAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Companies updated)
+        public async Task<ActionResult> Put(int id, [FromBody] CompanyUpdateDTO updateDto)
         {
-            //var existing = _context.Companies.Find(id);
-            //if (existing == null) return NotFound();
+            try
+            {
+                if (id <= 0)
+                {
+                    return BadRequest("El ID de la compañía debe ser mayor a 0");
+                }
 
-            //// Actualizar campos manualmente (puedes mejorar con AutoMapper)
-            //existing.IdentificationTypeId = updated.IdentificationTypeId;
-            //existing.IdentificationNumber = updated.IdentificationNumber;
-            //existing.BusinessName = updated.BusinessName;
-            //existing.TradeName = updated.TradeName;
-            //existing.MainAddress = updated.MainAddress;
-            //existing.Department = updated.Department;
-            //existing.City = updated.City;
-            //existing.LegalRepresentative = updated.LegalRepresentative;
-            //existing.ContactEmail = updated.ContactEmail;
-            //existing.ContactPhone = updated.ContactPhone;
-            //existing.SqlConnectionString = updated.SqlConnectionString;
-            //existing.ModifiedBy = updated.ModifiedBy;
-            //existing.ModifiedAt = DateTime.UtcNow;
+                var existing = await context.Companies.FindAsync(id);
+                if (existing == null)
+                {
+                    return NotFound($"Compañía con ID {id} no encontrada");
+                }
 
-            //_context.SaveChanges();
-            return NoContent();
+                // Validar que el tipo de identificación existe
+                if (updateDto.IdentificationTypeId > 0)
+                {
+                    var identificationType = await context.IdentificationTypes.FindAsync(updateDto.IdentificationTypeId);
+                    if (identificationType == null)
+                    {
+                        return BadRequest($"Tipo de identificación con ID {updateDto.IdentificationTypeId} no encontrado");
+                    }
+                }
+
+                // Actualizar campos
+                existing.IdentificationTypeId = updateDto.IdentificationTypeId;
+                existing.IdentificationNumber = updateDto.IdentificationNumber;
+                existing.BusinessName = updateDto.BusinessName;
+                existing.TradeName = updateDto.TradeName;
+                existing.MainAddress = updateDto.MainAddress;
+                existing.Department = updateDto.Department;
+                existing.City = updateDto.City;
+                existing.LegalRepresentative = updateDto.LegalRepresentative;
+                existing.ContactEmail = updateDto.ContactEmail;
+                existing.ContactPhone = updateDto.ContactPhone;
+                existing.SqlConnectionString = updateDto.SqlConnectionString;
+                existing.BCURLWebService = updateDto.BCURLWebService;
+                existing.BCURL = updateDto.BCURL;
+                existing.BCCodigoEmpresa = updateDto.BCCodigoEmpresa;
+                existing.logoCompany = updateDto.logoCompany;
+                existing.instancia = updateDto.instancia;
+                existing.dominio = updateDto.dominio;
+                existing.clienteid = updateDto.clienteid;
+                existing.tenantid = updateDto.tenantid;
+                existing.clientsecret = updateDto.clientsecret;
+                existing.callbackpath = updateDto.callbackpath;
+                existing.correonotificacion = updateDto.correonotificacion;
+                existing.nombrenotificacion = updateDto.nombrenotificacion;
+                existing.pwdnotificacion = updateDto.pwdnotificacion;
+                existing.smtpserver = updateDto.smtpserver;
+                existing.puertosmtp = updateDto.puertosmtp?.ToString();
+                existing.ModifiedBy = updateDto.ModifiedBy;
+                existing.ModifiedAt = DateTime.UtcNow;
+
+                await context.SaveChangesAsync();
+
+                // Invalidar cache
+                await _outputCacheStore.EvictByTagAsync(cacheTag, default);
+
+                return Ok(new { message = "Compañía actualizada exitosamente", company = existing });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]

@@ -1,9 +1,7 @@
-﻿namespace DimmedAPI.Entidades
+namespace DimmedAPI.DTOs
 {
-    public class Companies
+    public class CompanyUpdateDTO
     {
-        public int Id { get; set; }
-
         public int IdentificationTypeId { get; set; }
         public required string IdentificationNumber { get; set; }
         public required string BusinessName { get; set; }
@@ -15,19 +13,10 @@
         public string? ContactEmail { get; set; }
         public string? ContactPhone { get; set; }
         public required string SqlConnectionString { get; set; }
-
         public required string BCURLWebService { get; set; }
         public required string BCURL { get; set; }
         public required string BCCodigoEmpresa { get; set; }
-
-
-        public int? CreatedBy { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public int? ModifiedBy { get; set; }
-        public DateTime? ModifiedAt { get; set; }
-
         public string? logoCompany { get; set; }
-
         public string? instancia { get; set; }
         public string? dominio { get; set; }
         public string? clienteid { get; set; }
@@ -37,16 +26,8 @@
         public string? correonotificacion { get; set; }
         public string? nombrenotificacion { get; set; }
         public string? pwdnotificacion { get; set; }
-
         public string? smtpserver { get; set; }
         public string? puertosmtp { get; set; }
-
-        
-
-
-        // Relaciones de navegación
-        public IdentificationTypes? IdentificationType { get; set; }
-        public AppUser? CreatedByUser { get; set; }
-        public AppUser? ModifiedByUser { get; set; }
+        public int? ModifiedBy { get; set; }
     }
-}
+} 

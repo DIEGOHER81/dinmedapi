@@ -919,8 +919,8 @@
         "IsRequired": true
       },
       {
-        "Name": "updated",
-        "Type": "DimmedAPI.Entidades.Companies",
+        "Name": "updateDto",
+        "Type": "DimmedAPI.DTOs.CompanyUpdateDTO",
         "IsRequired": true
       }
     ],

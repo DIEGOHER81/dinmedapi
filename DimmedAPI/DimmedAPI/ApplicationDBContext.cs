@@ -42,6 +42,8 @@ namespace DimmedAPI
 
         public DbSet<EntryRequestComponents> EntryRequestComponents  { get; set; }
 
+        public DbSet<IdentificationTypes> IdentificationTypes { get; set; }
+
 
     }
 }

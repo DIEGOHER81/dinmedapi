@@ -1557,17 +1557,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Companies"
+                "$ref": "#/components/schemas/CompanyUpdateDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Companies"
+                "$ref": "#/components/schemas/CompanyUpdateDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Companies"
+                "$ref": "#/components/schemas/CompanyUpdateDTO"
               }
             }
           }
@@ -8162,6 +8162,54 @@
             "format": "date-time",
             "nullable": true
           },
+          "logoCompany": {
+            "type": "string",
+            "nullable": true
+          },
+          "instancia": {
+            "type": "string",
+            "nullable": true
+          },
+          "dominio": {
+            "type": "string",
+            "nullable": true
+          },
+          "clienteid": {
+            "type": "string",
+            "nullable": true
+          },
+          "tenantid": {
+            "type": "string",
+            "nullable": true
+          },
+          "clientsecret": {
+            "type": "string",
+            "nullable": true
+          },
+          "callbackpath": {
+            "type": "string",
+            "nullable": true
+          },
+          "correonotificacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombrenotificacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "pwdnotificacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "smtpserver": {
+            "type": "string",
+            "nullable": true
+          },
+          "puertosmtp": {
+            "type": "string",
+            "nullable": true
+          },
           "identificationType": {
             "$ref": "#/components/schemas/IdentificationTypes"
           },
@@ -8170,6 +8218,129 @@
           },
           "modifiedByUser": {
             "$ref": "#/components/schemas/AppUser"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CompanyUpdateDTO": {
+        "required": [
+          "bcCodigoEmpresa",
+          "bcurl",
+          "bcurlWebService",
+          "businessName",
+          "identificationNumber",
+          "sqlConnectionString"
+        ],
+        "type": "object",
+        "properties": {
+          "identificationTypeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "identificationNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "businessName": {
+            "type": "string",
+            "nullable": true
+          },
+          "tradeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "mainAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "department": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "legalRepresentative": {
+            "type": "string",
+            "nullable": true
+          },
+          "contactEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "contactPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "sqlConnectionString": {
+            "type": "string",
+            "nullable": true
+          },
+          "bcurlWebService": {
+            "type": "string",
+            "nullable": true
+          },
+          "bcurl": {
+            "type": "string",
+            "nullable": true
+          },
+          "bcCodigoEmpresa": {
+            "type": "string",
+            "nullable": true
+          },
+          "logoCompany": {
+            "type": "string",
+            "nullable": true
+          },
+          "instancia": {
+            "type": "string",
+            "nullable": true
+          },
+          "dominio": {
+            "type": "string",
+            "nullable": true
+          },
+          "clienteid": {
+            "type": "string",
+            "nullable": true
+          },
+          "tenantid": {
+            "type": "string",
+            "nullable": true
+          },
+          "clientsecret": {
+            "type": "string",
+            "nullable": true
+          },
+          "callbackpath": {
+            "type": "string",
+            "nullable": true
+          },
+          "correonotificacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombrenotificacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "pwdnotificacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "smtpserver": {
+            "type": "string",
+            "nullable": true
+          },
+          "puertosmtp": {
+            "type": "string",
+            "nullable": true
+          },
+          "modifiedBy": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false

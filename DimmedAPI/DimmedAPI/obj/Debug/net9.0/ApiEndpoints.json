@@ -2336,6 +2336,58 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
+    "Method": "GetEntryRequestsForATC",
+    "RelativePath": "api/EntryRequest/EntryRequestforATC",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.DTOs.EntryRequestForATCDTO, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
+    "Method": "GetEntryRequestsSummary",
+    "RelativePath": "api/EntryRequest/summary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.DTOs.EntryRequestSummaryDTO, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
     "Method": "VerificarConfiguracionCompania",
     "RelativePath": "api/EntryRequest/VerificarConfiguracionCompania",
     "HttpMethod": "GET",

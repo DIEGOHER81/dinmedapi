@@ -701,6 +701,134 @@ namespace DimmedAPI.Controllers
             }
         }
 
+        // GET: api/EntryRequest/summary
+        [HttpGet("summary")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<ActionResult<IEnumerable<EntryRequestSummaryDTO>>> GetEntryRequestsSummary([FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO GetEntryRequestsSummary ===");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+                
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+                
+                var entryRequestsSummary = await companyContext.EntryRequests
+                    .Include(er => er.IdCustomerNavigation) // Incluir la relación con Customer
+                    .Select(er => new EntryRequestSummaryDTO
+                    {
+                        Id = er.Id,
+                        SurgeryInit = er.SurgeryInit,
+                        SurgeryEnd = er.SurgeryEnd,
+                        Status = er.Status,
+                        IdCustomer = er.IdCustomer,
+                        IdATC = er.IdATC,
+                        BranchId = er.BranchId,
+                        Customer = er.IdCustomerNavigation
+                    })
+                    .ToListAsync();
+
+                Console.WriteLine($"Consulta completada. Registros encontrados: {entryRequestsSummary.Count}");
+                Console.WriteLine("=== FIN GetEntryRequestsSummary ===");
+                
+                return Ok(entryRequestsSummary);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"ArgumentException en GetEntryRequestsSummary: {ex.Message}");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en GetEntryRequestsSummary ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Inner Exception StackTrace: {ex.InnerException.StackTrace}");
+                }
+                
+                Console.WriteLine("=== FIN ERROR ===");
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
+        // GET: api/EntryRequest/EntryRequestforATC
+        [HttpGet("EntryRequestforATC")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<ActionResult<IEnumerable<EntryRequestForATCDTO>>> GetEntryRequestsForATC([FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO GetEntryRequestsForATC ===");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+                
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+                
+                var entryRequestsForATC = await companyContext.EntryRequests
+                    .Where(er => er.Status != "CANCEL") // Excluir solicitudes canceladas
+                    .Include(er => er.IdCustomerNavigation) // Incluir la relación con Customer
+                    .OrderByDescending(er => er.Id) // Ordenar por ID descendente (más recientes primero)
+                    .Select(er => new EntryRequestForATCDTO
+                    {
+                        Id = er.Id,
+                        SurgeryInit = er.SurgeryInit,
+                        SurgeryEnd = er.SurgeryEnd,
+                        Status = er.Status,
+                        IdCustomer = er.IdCustomer,
+                        IdATC = er.IdATC,
+                        BranchId = er.BranchId,
+                        Customer = er.IdCustomerNavigation
+                    })
+                    .ToListAsync();
+
+                Console.WriteLine($"Consulta completada. Registros encontrados (excluyendo cancelados): {entryRequestsForATC.Count}");
+                Console.WriteLine("=== FIN GetEntryRequestsForATC ===");
+                
+                return Ok(entryRequestsForATC);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"ArgumentException en GetEntryRequestsForATC: {ex.Message}");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en GetEntryRequestsForATC ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Inner Exception StackTrace: {ex.InnerException.StackTrace}");
+                }
+                
+                Console.WriteLine("=== FIN ERROR ===");
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
         // GET: api/EntryRequest/VerificarConfiguracionCompania
         [HttpGet("VerificarConfiguracionCompania")]
         public async Task<ActionResult<object>> VerificarConfiguracionCompania([FromQuery] string companyCode)

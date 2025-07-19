@@ -148,6 +148,112 @@ API para gestionar las solicitudes de entrada (EntryRequests) en el sistema mult
 - **Query Parameters:**
   - `companyCode` (string, requerido): Código de la compañía
 
+### Obtener resumen de solicitudes de entrada
+- **GET** `/api/EntryRequest/summary`
+- **Query Parameters:**
+  - `companyCode` (string, requerido): Código de la compañía
+
+**Respuesta:**
+```json
+[
+  {
+    "id": 1,
+    "surgeryInit": "2025-04-01T18:00:00",
+    "surgeryEnd": "2025-04-01T19:00:00",
+    "status": "NUEVO",
+    "idCustomer": 55,
+    "idAtc": null,
+    "branchId": 1,
+    "customer": {
+      "id": 55,
+      "identification": "12345678",
+      "idType": 1,
+      "address": "Calle Principal 123",
+      "city": "Bogotá",
+      "phone": "3001234567",
+      "email": "cliente@ejemplo.com",
+      "certMant": false,
+      "remCustomer": false,
+      "observations": "Cliente frecuente",
+      "name": "Juan Pérez",
+      "systemIdBc": "CUST001",
+      "salesZone": "Zona Norte",
+      "tradeRepres": "Vendedor A",
+      "noCopys": 1,
+      "isActive": true,
+      "segment": "Premium",
+      "no": "C001",
+      "fullName": "Juan Pérez García",
+      "priceGroup": "Grupo A",
+      "shortDesc": false,
+      "exIva": false,
+      "isSecondPriceList": false,
+      "secondPriceGroup": null,
+      "insurerType": "EPS",
+      "isRemLot": false,
+      "lyLOpeningHours1": "08:00-12:00",
+      "lyLOpeningHours2": "14:00-18:00",
+      "paymentMethodCode": "CASH",
+      "paymentTermsCode": "NET30"
+    }
+  }
+]
+```
+
+### Obtener solicitudes de entrada para ATC (excluyendo canceladas)
+- **GET** `/api/EntryRequest/EntryRequestforATC`
+- **Query Parameters:**
+  - `companyCode` (string, requerido): Código de la compañía
+
+**Descripción:** Retorna las solicitudes de entrada con los mismos campos que el endpoint summary, pero excluye aquellas con estado "CANCEL". Los resultados se ordenan por ID descendente (más recientes primero).
+
+**Respuesta:**
+```json
+[
+  {
+    "id": 1,
+    "surgeryInit": "2025-04-01T18:00:00",
+    "surgeryEnd": "2025-04-01T19:00:00",
+    "status": "NUEVO",
+    "idCustomer": 55,
+    "idAtc": null,
+    "branchId": 1,
+    "customer": {
+      "id": 55,
+      "identification": "12345678",
+      "idType": 1,
+      "address": "Calle Principal 123",
+      "city": "Bogotá",
+      "phone": "3001234567",
+      "email": "cliente@ejemplo.com",
+      "certMant": false,
+      "remCustomer": false,
+      "observations": "Cliente frecuente",
+      "name": "Juan Pérez",
+      "systemIdBc": "CUST001",
+      "salesZone": "Zona Norte",
+      "tradeRepres": "Vendedor A",
+      "noCopys": 1,
+      "isActive": true,
+      "segment": "Premium",
+      "no": "C001",
+      "fullName": "Juan Pérez García",
+      "priceGroup": "Grupo A",
+      "shortDesc": false,
+      "exIva": false,
+      "isSecondPriceList": false,
+      "secondPriceGroup": null,
+      "insurerType": "EPS",
+      "isRemLot": false,
+      "lyLOpeningHours1": "08:00-12:00",
+      "lyLOpeningHours2": "14:00-18:00",
+      "paymentMethodCode": "CASH",
+      "paymentTermsCode": "NET30"
+    }
+  }
+]
+```
+
 ### Crear nueva solicitud de entrada
 - **POST** `/api/EntryRequest`
 - **Query Parameters:**

@@ -3807,6 +3807,100 @@
         }
       }
     },
+    "/api/EntryRequest/summary": {
+      "get": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestSummaryDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestSummaryDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestSummaryDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EntryRequest/EntryRequestforATC": {
+      "get": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestForATCDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestForATCDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestForATCDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/EntryRequest/VerificarConfiguracionCompania": {
       "get": {
         "tags": [
@@ -10506,6 +10600,47 @@
         },
         "additionalProperties": false
       },
+      "EntryRequestForATCDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "surgeryInit": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "surgeryEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "idCustomer": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idATC": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "branchId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "customer": {
+            "$ref": "#/components/schemas/Customer"
+          }
+        },
+        "additionalProperties": false
+      },
       "EntryRequestHistory": {
         "type": "object",
         "properties": {
@@ -10765,6 +10900,47 @@
           "sAssembly": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestSummaryDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "surgeryInit": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "surgeryEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "idCustomer": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idATC": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "branchId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "customer": {
+            "$ref": "#/components/schemas/Customer"
           }
         },
         "additionalProperties": false

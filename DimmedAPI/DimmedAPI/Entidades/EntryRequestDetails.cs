@@ -13,7 +13,9 @@ namespace DimmedAPI.Entidades
         public DateTime DateIni { get; set; }
         public DateTime DateEnd { get; set; }
         public string status { get; set; }
+        [ForeignKey("IdEntryReq")]
         public virtual EntryRequests IdEntryReqNavigation { get; set; }
+        [ForeignKey("IdEquipment")]
         public virtual Equipment IdEquipmentNavigation { get; set; }
 
         [NotMapped]
@@ -33,11 +35,6 @@ namespace DimmedAPI.Entidades
         public int? UserIdTraceState { get; set; }
     }
 
-    public class EntryRequests
-    {
-        public int Id { get; set; }
-        public virtual ICollection<EntryRequestDetails> EntryRequestDetails { get; set; }
-    }
 
     public class DbMaintenance
     {

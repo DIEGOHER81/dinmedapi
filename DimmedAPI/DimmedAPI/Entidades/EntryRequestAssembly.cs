@@ -17,6 +17,7 @@ namespace DimmedAPI.Entidades
         public int? EntryRequestDetailId { get; set; }
         public decimal? QuantityConsumed { get; set; }
         public DateTime? ExpirationDate { get; set; }
+        [ForeignKey("EntryRequestId")]
         public virtual EntryRequests EntryRequest { get; set; }
         [NotMapped]
         public string Name { get; set; }

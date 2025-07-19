@@ -46,6 +46,14 @@ namespace DimmedAPI
 
         public DbSet<Options> Options { get; set; }
 
+        public DbSet<EntryRequests> EntryRequests { get; set; }
+        public DbSet<TraceabilityStates> TraceabilityStates { get; set; }
+        public DbSet<EntryRequestAssembly> EntryRequestAssembly { get; set; }
+        public DbSet<EntryRequestDetails> EntryRequestDetails { get; set; }
+        public DbSet<EntryRequestHistory> EntryRequestHistory { get; set; }
+        public DbSet<EntryRequestTraceStates> EntryRequestTraceStates { get; set; }
+        public DbSet<EntryRequestFiles> EntryRequestFiles { get; set; }
+
 
     }
 }

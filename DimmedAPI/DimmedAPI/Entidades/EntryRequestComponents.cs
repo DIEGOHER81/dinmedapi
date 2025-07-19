@@ -18,6 +18,7 @@ namespace DimmedAPI.Entidades
         public decimal? UnitPrice { get; set; }
         public string status { get; set; }
         public string AssemblyNo { get; set; }
+        [ForeignKey("IdEntryReq")]
         public virtual EntryRequests IdEntryReqNavigation { get; set; }
         // [NotMapped]
         public string TaxCode { get; set; }

@@ -33,6 +33,7 @@ namespace DimmedAPI.DTOs
         public string Segment { get; set; }
         public string No { get; set; }
         public string FullName { get; set; }
+        [JsonProperty("customerPriceGroup")]
         public string PriceGroup { get; set; }
         public bool ShortDesc { get; set; }
         public bool ExIva { get; set; }

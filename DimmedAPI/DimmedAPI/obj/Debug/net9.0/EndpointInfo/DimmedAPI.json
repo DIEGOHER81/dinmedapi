@@ -2033,6 +2033,27 @@
         }
       }
     },
+    "/api/CustomerContact/sincronizar-bc": {
+      "post": {
+        "tags": [
+          "CustomerContact"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/CustomerContact/list/{companyCode}": {
       "get": {
         "tags": [
@@ -3322,6 +3343,474 @@
       "get": {
         "tags": [
           "Employee"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EntryRequest": {
+      "get": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestResponseDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestResponseDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryRequestCreateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryRequestCreateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryRequestCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequests"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequests"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequests"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EntryRequest/{id}": {
+      "get": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequests"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequests"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequests"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryRequestUpdateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryRequestUpdateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryRequestUpdateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EntryRequest/by-customer/{customerId}": {
+      "get": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequests"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequests"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequests"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EntryRequest/by-medic/{medicId}": {
+      "get": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "medicId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequests"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequests"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequests"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EntryRequest/by-patient/{patientId}": {
+      "get": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "patientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestResponseDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestResponseDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EntryRequest/by-status/{status}": {
+      "get": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestResponseDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestResponseDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EntryRequest/VerificarConfiguracionCompania": {
+      "get": {
+        "tags": [
+          "EntryRequest"
         ],
         "parameters": [
           {
@@ -9620,6 +10109,292 @@
         },
         "additionalProperties": false
       },
+      "EntryRequestComponents": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "itemNo": {
+            "type": "string",
+            "nullable": true
+          },
+          "itemName": {
+            "type": "string",
+            "nullable": true
+          },
+          "warehouse": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "idEntryReq": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "systemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantityConsumed": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "branch": {
+            "type": "string",
+            "nullable": true
+          },
+          "lot": {
+            "type": "string",
+            "nullable": true
+          },
+          "unitPrice": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "assemblyNo": {
+            "type": "string",
+            "nullable": true
+          },
+          "idEntryReqNavigation": {
+            "$ref": "#/components/schemas/EntryRequests"
+          },
+          "taxCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortDesc": {
+            "type": "string",
+            "nullable": true
+          },
+          "locationCodeStock": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "userIdTraceState": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "invima": {
+            "type": "string",
+            "nullable": true
+          },
+          "expirationDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "traceState": {
+            "type": "string",
+            "nullable": true
+          },
+          "rsFechaVencimiento": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "rsClasifRegistro": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestCreateDTO": {
+        "required": [
+          "date"
+        ],
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "service": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "idOrderType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deliveryPriority": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "idCustomer": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "insurerType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "insurer": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idMedic": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idPatient": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "applicant": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "idATC": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "limbSide": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "deliveryDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orderObs": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          },
+          "surgeryTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "surgeryInit": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "surgeryEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "idTraceStates": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "branchId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "surgeryInitTime": {
+            "type": "string",
+            "format": "date-span",
+            "nullable": true
+          },
+          "surgeryEndTime": {
+            "type": "string",
+            "format": "date-span",
+            "nullable": true
+          },
+          "deliveryAddress": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseOrder": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "atcConsumed": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isSatisfied": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "observations": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "obsMaint": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "auxLog": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idCancelReason": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idCancelDetail": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "cancelReason": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          },
+          "cancelDetail": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          },
+          "notification": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isReplacement": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "assemblyComponents": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "priceGroup": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "EntryRequestDetails": {
         "type": "object",
         "properties": {
@@ -9693,18 +10468,824 @@
         },
         "additionalProperties": false
       },
-      "EntryRequests": {
+      "EntryRequestFiles": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
             "format": "int32"
           },
+          "requestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileNameHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileExt": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileBase64": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestHistory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEntryRequest": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateLoad": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "information": {
+            "type": "string",
+            "nullable": true
+          },
+          "idEntryRequestNavigation": {
+            "$ref": "#/components/schemas/EntryRequests"
+          },
+          "user": {
+            "$ref": "#/components/schemas/Users"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "service": {
+            "type": "string",
+            "nullable": true
+          },
+          "idOrderType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deliveryPriority": {
+            "type": "string",
+            "nullable": true
+          },
+          "idCustomer": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "insurerType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "insurer": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idMedic": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idPatient": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "applicant": {
+            "type": "string",
+            "nullable": true
+          },
+          "idATC": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "limbSide": {
+            "type": "string",
+            "nullable": true
+          },
+          "deliveryDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orderObs": {
+            "type": "string",
+            "nullable": true
+          },
+          "surgeryTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "surgeryInit": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "surgeryEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "idTraceStates": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "branchId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "surgeryInitTime": {
+            "type": "string",
+            "format": "date-span",
+            "nullable": true
+          },
+          "surgeryEndTime": {
+            "type": "string",
+            "format": "date-span",
+            "nullable": true
+          },
+          "deliveryAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseOrder": {
+            "type": "string",
+            "nullable": true
+          },
+          "atcConsumed": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isSatisfied": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "observations": {
+            "type": "string",
+            "nullable": true
+          },
+          "obsMaint": {
+            "type": "string",
+            "nullable": true
+          },
+          "auxLog": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idCancelReason": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idCancelDetail": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "cancelReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "cancelDetail": {
+            "type": "string",
+            "nullable": true
+          },
+          "notification": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isReplacement": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "assemblyComponents": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "priceGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "insurerNavigation": {
+            "$ref": "#/components/schemas/Insurer"
+          },
+          "insurerTypeNavigation": {
+            "$ref": "#/components/schemas/InsurerType"
+          },
+          "branch": {
+            "$ref": "#/components/schemas/Branch"
+          },
+          "idCustomerNavigation": {
+            "$ref": "#/components/schemas/Customer"
+          },
+          "idMedicNavigation": {
+            "$ref": "#/components/schemas/Medic"
+          },
+          "idPatientNavigation": {
+            "$ref": "#/components/schemas/Patient"
+          },
+          "idTraceStatesNavigation": {
+            "$ref": "#/components/schemas/TraceabilityStates"
+          },
+          "idAtcNavigation": {
+            "$ref": "#/components/schemas/Employee"
+          },
+          "customerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "patientName": {
+            "type": "string",
+            "nullable": true
+          },
+          "medicName": {
+            "type": "string",
+            "nullable": true
+          },
+          "noRequest": {
+            "type": "string",
+            "nullable": true
+          },
+          "sEquipments": {
+            "type": "string",
+            "nullable": true
+          },
+          "sAssembly": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestTraceStates": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "entryRequestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "traceabilityStatesId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loadDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sourse": {
+            "type": "string",
+            "nullable": true
+          },
+          "entryRequest": {
+            "$ref": "#/components/schemas/EntryRequests"
+          },
+          "traceabilityStates": {
+            "$ref": "#/components/schemas/TraceabilityStates"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestUpdateDTO": {
+        "required": [
+          "date"
+        ],
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "service": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "idOrderType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deliveryPriority": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "idCustomer": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "insurerType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "insurer": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idMedic": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idPatient": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "applicant": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "idATC": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "limbSide": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "deliveryDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orderObs": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          },
+          "surgeryTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "surgeryInit": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "surgeryEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "idTraceStates": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "branchId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "surgeryInitTime": {
+            "type": "string",
+            "format": "date-span",
+            "nullable": true
+          },
+          "surgeryEndTime": {
+            "type": "string",
+            "format": "date-span",
+            "nullable": true
+          },
+          "deliveryAddress": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseOrder": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "atcConsumed": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isSatisfied": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "observations": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "obsMaint": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "auxLog": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idCancelReason": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idCancelDetail": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "cancelReason": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          },
+          "cancelDetail": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          },
+          "notification": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isReplacement": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "assemblyComponents": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "priceGroup": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequests": {
+        "required": [
+          "date",
+          "deliveryTime"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "service": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "idOrderType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deliveryPriority": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "idCustomer": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "insurerType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "insurer": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idMedic": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idPatient": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "applicant": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "idATC": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "limbSide": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "deliveryDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orderObs": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          },
+          "surgeryTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "surgeryInit": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "surgeryEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "idTraceStates": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "branchId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "surgeryInitTime": {
+            "type": "string",
+            "format": "date-span",
+            "nullable": true
+          },
+          "surgeryEndTime": {
+            "type": "string",
+            "format": "date-span",
+            "nullable": true
+          },
+          "deliveryAddress": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseOrder": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "atcConsumed": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isSatisfied": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "observations": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "obsMaint": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "auxLog": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idCancelReason": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idCancelDetail": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "cancelReason": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          },
+          "cancelDetail": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          },
+          "notification": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isReplacement": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "assemblyComponents": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "insurerNavigation": {
+            "$ref": "#/components/schemas/Insurer"
+          },
+          "insurerTypeNavigation": {
+            "$ref": "#/components/schemas/InsurerType"
+          },
+          "branch": {
+            "$ref": "#/components/schemas/Branch"
+          },
+          "idCustomerNavigation": {
+            "$ref": "#/components/schemas/Customer"
+          },
+          "idMedicNavigation": {
+            "$ref": "#/components/schemas/Medic"
+          },
+          "idPatientNavigation": {
+            "$ref": "#/components/schemas/Patient"
+          },
+          "idTraceStatesNavigation": {
+            "$ref": "#/components/schemas/TraceabilityStates"
+          },
+          "idAtcNavigation": {
+            "$ref": "#/components/schemas/Employee"
+          },
+          "entryRequestAssembly": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntryRequestAssembly"
+            },
+            "nullable": true
+          },
           "entryRequestDetails": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/EntryRequestDetails"
             },
+            "nullable": true
+          },
+          "entryRequestComponents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntryRequestComponents"
+            },
+            "nullable": true
+          },
+          "entryRequestTraceStates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntryRequestTraceStates"
+            },
+            "nullable": true
+          },
+          "entryRequestHistory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntryRequestHistory"
+            },
+            "nullable": true
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemsBC"
+            },
+            "nullable": true
+          },
+          "entryRequestFiles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntryRequestFiles"
+            },
+            "nullable": true
+          },
+          "insurerData": {
+            "$ref": "#/components/schemas/Insurer"
+          },
+          "insurerTypeData": {
+            "$ref": "#/components/schemas/InsurerType"
+          },
+          "deliveryTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "atc": {
+            "$ref": "#/components/schemas/Employee"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "customerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "patientName": {
+            "type": "string",
+            "nullable": true
+          },
+          "medicName": {
+            "type": "string",
+            "nullable": true
+          },
+          "noRequest": {
+            "type": "string",
+            "nullable": true
+          },
+          "sEquipments": {
+            "type": "string",
+            "nullable": true
+          },
+          "sAssembly": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceGroup": {
+            "maxLength": 50,
+            "type": "string",
             "nullable": true
           }
         },
@@ -11451,6 +13032,46 @@
           },
           "customerName": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TraceabilityStates": {
+        "required": [
+          "description"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "entryRequests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntryRequests"
+            },
+            "nullable": true
+          },
+          "entryRequestTraceStates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntryRequestTraceStates"
+            },
             "nullable": true
           }
         },

@@ -90,6 +90,48 @@ namespace DimmedAPI.Controllers
         }
 
         /// <summary>
+        /// Sincroniza todos los contactos de clientes desde Business Central
+        /// </summary>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>Lista de contactos sincronizados</returns>
+        [HttpPost("sincronizar-bc")]
+        public async Task<IActionResult> SincronizarDesdeBC([FromQuery] string companyCode)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+                return BadRequest("El código de compañía es requerido");
+
+            var bcConnection = await _bcConnectionService.GetBCConnectionAsync(companyCode);
+            var dbContext = await _connectionService.GetCompanyDbContextAsync(companyCode);
+
+            var contactosBC = await bcConnection.GetCustContListAsync("lylcustcontact");
+            if (contactosBC == null)
+                return StatusCode(500, "No se pudieron obtener los contactos desde Business Central");
+
+            var contactosActualizados = new List<CustomerContact>();
+            foreach (var contactoBC in contactosBC)
+            {
+                var existing = await dbContext.CustomerContact.FirstOrDefaultAsync(c => c.systemIdBC == contactoBC.systemIdBC);
+                if (existing == null)
+                {
+                    dbContext.CustomerContact.Add(contactoBC);
+                    contactosActualizados.Add(contactoBC);
+                }
+                else
+                {
+                    existing.Code = contactoBC.Code;
+                    existing.Name = contactoBC.Name;
+                    existing.Identification = contactoBC.Identification;
+                    existing.Phone = contactoBC.Phone;
+                    existing.CustomerName = contactoBC.CustomerName;
+                    existing.Email = contactoBC.Email;
+                    contactosActualizados.Add(existing);
+                }
+            }
+            await dbContext.SaveChangesAsync();
+            return Ok(contactosActualizados);
+        }
+
+        /// <summary>
         /// Obtiene todos los contactos de clientes de una compañía
         /// </summary>
         /// <param name="companyCode">Código de la compañía</param>

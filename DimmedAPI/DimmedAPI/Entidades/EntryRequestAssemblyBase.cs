@@ -6,6 +6,7 @@ namespace DimmedAPI.Entidades
     {
         public int Id { get; set; }
         public int IdEntryReqDetail { get; set; }
+        [ForeignKey("IdEntryReqDetail")]
         public virtual EntryRequestDetails IdEntryReqDetailNavigation { get; set; }
     }
 } 

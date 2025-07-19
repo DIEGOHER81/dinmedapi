@@ -481,6 +481,43 @@ namespace DimmedAPI.BO
         }
 
         /// <summary>
+        /// Consulta de contactos de clientes a BC (todos)
+        /// </summary>
+        /// <param name="method">Método</param>
+        /// <returns>Lista CustomerContact</returns>
+        public async Task<List<CustomerContact>> GetCustContListAsync(string method)
+        {
+            try
+            {
+                List<CustomerContact> lCustomer = new List<CustomerContact>();
+                var response = await BCRQ(method, "");
+                var resValues = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response.Content);
+                IEnumerable<object> data = JsonConvert.DeserializeObject(resValues["value"].ToString());
+                CustomerContact customer;
+                if (data != null)
+                {
+                    foreach (dynamic v in data)
+                    {
+                        customer = new CustomerContact();
+                        customer.Code = v.no;
+                        customer.Name = v.searchName;
+                        customer.Identification = v.vatRegistrationNo;
+                        customer.Phone = v.phoneNo;
+                        customer.CustomerName = v.companyName;
+                        customer.Email = v.eMail;
+                        customer.systemIdBC = v.systemId;
+                        lCustomer.Add(customer);
+                    }
+                }
+                return lCustomer;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Obtiene todos los artículos desde Business Central
         /// </summary>
         /// <param name="method">Método a llamar en BC</param>

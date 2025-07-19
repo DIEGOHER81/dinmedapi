@@ -829,6 +829,323 @@ namespace DimmedAPI.Controllers
             }
         }
 
+        // GET: api/EntryRequest/filter
+        [HttpGet("filter")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<ActionResult<IEnumerable<EntryRequestFilteredResponseDTO>>> GetEntryRequestsFiltered(
+            [FromQuery] string companyCode,
+            [FromQuery] EntryRequestFilterDTO filter)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO GetEntryRequestsFiltered ===");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+                
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+                
+                // Construir la consulta base
+                var query = companyContext.EntryRequests
+                    .Include(er => er.IdCustomerNavigation) // Incluir la relación con Customer
+                    .AsQueryable();
+
+                // Aplicar filtros dinámicamente
+                if (filter.Id.HasValue)
+                    query = query.Where(er => er.Id == filter.Id.Value);
+
+                if (filter.SurgeryInitFrom.HasValue)
+                    query = query.Where(er => er.SurgeryInit >= filter.SurgeryInitFrom.Value);
+
+                if (filter.SurgeryInitTo.HasValue)
+                    query = query.Where(er => er.SurgeryInit <= filter.SurgeryInitTo.Value);
+
+                if (filter.SurgeryEndFrom.HasValue)
+                    query = query.Where(er => er.SurgeryEnd >= filter.SurgeryEndFrom.Value);
+
+                if (filter.SurgeryEndTo.HasValue)
+                    query = query.Where(er => er.SurgeryEnd <= filter.SurgeryEndTo.Value);
+
+                if (!string.IsNullOrEmpty(filter.Status))
+                    query = query.Where(er => er.Status == filter.Status);
+
+                if (filter.IdCustomer.HasValue)
+                    query = query.Where(er => er.IdCustomer == filter.IdCustomer.Value);
+
+                if (filter.IdATC.HasValue)
+                    query = query.Where(er => er.IdATC == filter.IdATC.Value);
+
+                if (filter.BranchId.HasValue)
+                    query = query.Where(er => er.BranchId == filter.BranchId.Value);
+
+                if (!string.IsNullOrEmpty(filter.Service))
+                    query = query.Where(er => er.Service != null && er.Service.Contains(filter.Service));
+
+                if (filter.IdOrderType.HasValue)
+                    query = query.Where(er => er.IdOrderType == filter.IdOrderType.Value);
+
+                if (!string.IsNullOrEmpty(filter.DeliveryPriority))
+                    query = query.Where(er => er.DeliveryPriority == filter.DeliveryPriority);
+
+                if (filter.InsurerType.HasValue)
+                    query = query.Where(er => er.InsurerType == filter.InsurerType.Value);
+
+                if (filter.Insurer.HasValue)
+                    query = query.Where(er => er.Insurer == filter.Insurer.Value);
+
+                if (filter.IdMedic.HasValue)
+                    query = query.Where(er => er.IdMedic == filter.IdMedic.Value);
+
+                if (filter.IdPatient.HasValue)
+                    query = query.Where(er => er.IdPatient == filter.IdPatient.Value);
+
+                if (!string.IsNullOrEmpty(filter.Applicant))
+                    query = query.Where(er => er.Applicant != null && er.Applicant.Contains(filter.Applicant));
+
+                if (!string.IsNullOrEmpty(filter.LimbSide))
+                    query = query.Where(er => er.LimbSide == filter.LimbSide);
+
+                if (filter.DeliveryDateFrom.HasValue)
+                    query = query.Where(er => er.DeliveryDate >= filter.DeliveryDateFrom.Value);
+
+                if (filter.DeliveryDateTo.HasValue)
+                    query = query.Where(er => er.DeliveryDate <= filter.DeliveryDateTo.Value);
+
+                if (!string.IsNullOrEmpty(filter.OrderObs))
+                    query = query.Where(er => er.OrderObs != null && er.OrderObs.Contains(filter.OrderObs));
+
+                if (filter.SurgeryTime.HasValue)
+                    query = query.Where(er => er.SurgeryTime == filter.SurgeryTime.Value);
+
+                if (filter.IdTraceStates.HasValue)
+                    query = query.Where(er => er.IdTraceStates == filter.IdTraceStates.Value);
+
+                if (filter.SurgeryInitTime.HasValue)
+                    query = query.Where(er => er.SurgeryInitTime == filter.SurgeryInitTime.Value);
+
+                if (filter.SurgeryEndTime.HasValue)
+                    query = query.Where(er => er.SurgeryEndTime == filter.SurgeryEndTime.Value);
+
+                if (!string.IsNullOrEmpty(filter.DeliveryAddress))
+                    query = query.Where(er => er.DeliveryAddress != null && er.DeliveryAddress.Contains(filter.DeliveryAddress));
+
+                if (!string.IsNullOrEmpty(filter.PurchaseOrder))
+                    query = query.Where(er => er.PurchaseOrder != null && er.PurchaseOrder.Contains(filter.PurchaseOrder));
+
+                if (filter.AtcConsumed.HasValue)
+                    query = query.Where(er => er.AtcConsumed == filter.AtcConsumed.Value);
+
+                if (filter.IsSatisfied.HasValue)
+                    query = query.Where(er => er.IsSatisfied == filter.IsSatisfied.Value);
+
+                if (!string.IsNullOrEmpty(filter.Observations))
+                    query = query.Where(er => er.Observations != null && er.Observations.Contains(filter.Observations));
+
+                if (!string.IsNullOrEmpty(filter.obsMaint))
+                    query = query.Where(er => er.obsMaint != null && er.obsMaint.Contains(filter.obsMaint));
+
+                if (filter.AuxLog.HasValue)
+                    query = query.Where(er => er.AuxLog == filter.AuxLog.Value);
+
+                if (filter.IdCancelReason.HasValue)
+                    query = query.Where(er => er.IdCancelReason == filter.IdCancelReason.Value);
+
+                if (filter.IdCancelDetail.HasValue)
+                    query = query.Where(er => er.IdCancelDetail == filter.IdCancelDetail.Value);
+
+                if (!string.IsNullOrEmpty(filter.CancelReason))
+                    query = query.Where(er => er.CancelReason != null && er.CancelReason.Contains(filter.CancelReason));
+
+                if (!string.IsNullOrEmpty(filter.CancelDetail))
+                    query = query.Where(er => er.CancelDetail != null && er.CancelDetail.Contains(filter.CancelDetail));
+
+                if (filter.Notification.HasValue)
+                    query = query.Where(er => er.Notification == filter.Notification.Value);
+
+                if (filter.IsReplacement.HasValue)
+                    query = query.Where(er => er.IsReplacement == filter.IsReplacement.Value);
+
+                if (filter.AssemblyComponents.HasValue)
+                    query = query.Where(er => er.AssemblyComponents == filter.AssemblyComponents.Value);
+
+                if (!string.IsNullOrEmpty(filter.priceGroup))
+                    query = query.Where(er => er.priceGroup == filter.priceGroup);
+
+                // Ordenar por ID descendente y ejecutar la consulta
+                var entryRequestsFiltered = await query
+                    .OrderByDescending(er => er.Id)
+                    .Select(er => new EntryRequestFilteredResponseDTO
+                    {
+                        Id = er.Id,
+                        Date = er.Date,
+                        Service = er.Service,
+                        IdOrderType = er.IdOrderType,
+                        DeliveryPriority = er.DeliveryPriority,
+                        IdCustomer = er.IdCustomer,
+                        InsurerType = er.InsurerType,
+                        Insurer = er.Insurer,
+                        IdMedic = er.IdMedic,
+                        IdPatient = er.IdPatient,
+                        Applicant = er.Applicant,
+                        IdATC = er.IdATC,
+                        LimbSide = er.LimbSide,
+                        DeliveryDate = er.DeliveryDate,
+                        OrderObs = er.OrderObs,
+                        SurgeryTime = er.SurgeryTime,
+                        SurgeryInit = er.SurgeryInit,
+                        SurgeryEnd = er.SurgeryEnd,
+                        Status = er.Status,
+                        IdTraceStates = er.IdTraceStates,
+                        BranchId = er.BranchId,
+                        SurgeryInitTime = er.SurgeryInitTime,
+                        SurgeryEndTime = er.SurgeryEndTime,
+                        DeliveryAddress = er.DeliveryAddress,
+                        PurchaseOrder = er.PurchaseOrder,
+                        AtcConsumed = er.AtcConsumed,
+                        IsSatisfied = er.IsSatisfied,
+                        Observations = er.Observations,
+                        obsMaint = er.obsMaint,
+                        AuxLog = er.AuxLog,
+                        IdCancelReason = er.IdCancelReason,
+                        IdCancelDetail = er.IdCancelDetail,
+                        CancelReason = er.CancelReason,
+                        CancelDetail = er.CancelDetail,
+                        Notification = er.Notification,
+                        IsReplacement = er.IsReplacement,
+                        AssemblyComponents = er.AssemblyComponents,
+                        priceGroup = er.priceGroup,
+                        Customer = er.IdCustomerNavigation
+                    })
+                    .ToListAsync();
+
+                Console.WriteLine($"Consulta completada. Registros encontrados: {entryRequestsFiltered.Count}");
+                Console.WriteLine("=== FIN GetEntryRequestsFiltered ===");
+                
+                return Ok(entryRequestsFiltered);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"ArgumentException en GetEntryRequestsFiltered: {ex.Message}");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en GetEntryRequestsFiltered ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Inner Exception StackTrace: {ex.InnerException.StackTrace}");
+                }
+                
+                Console.WriteLine("=== FIN ERROR ===");
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
+        // GET: api/EntryRequest/EntryRequestforATC/filter
+        [HttpGet("EntryRequestforATC/filter")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<ActionResult<IEnumerable<EntryRequestForATCDTO>>> GetEntryRequestsForATCFiltered(
+            [FromQuery] string companyCode,
+            [FromQuery] EntryRequestForATCFilterDTO filter)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO GetEntryRequestsForATCFiltered ===");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+                
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+                
+                // Construir la consulta base (excluyendo canceladas como EntryRequestforATC)
+                var query = companyContext.EntryRequests
+                    .Where(er => er.Status != "CANCEL") // Excluir solicitudes canceladas
+                    .Include(er => er.IdCustomerNavigation) // Incluir la relación con Customer
+                    .AsQueryable();
+
+                // Aplicar filtros dinámicamente (solo los campos de EntryRequestforATC)
+                if (filter.Id.HasValue)
+                    query = query.Where(er => er.Id == filter.Id.Value);
+
+                if (filter.SurgeryInit.HasValue)
+                    query = query.Where(er => er.SurgeryInit.HasValue && er.SurgeryInit.Value.Date == filter.SurgeryInit.Value.Date);
+
+                if (filter.SurgeryEnd.HasValue)
+                    query = query.Where(er => er.SurgeryEnd.HasValue && er.SurgeryEnd.Value.Date == filter.SurgeryEnd.Value.Date);
+
+                if (!string.IsNullOrEmpty(filter.Status))
+                    query = query.Where(er => er.Status == filter.Status);
+
+                if (filter.IdCustomer.HasValue)
+                    query = query.Where(er => er.IdCustomer == filter.IdCustomer.Value);
+
+                if (filter.IdATC.HasValue)
+                    query = query.Where(er => er.IdATC == filter.IdATC.Value);
+
+                if (filter.BranchId.HasValue)
+                    query = query.Where(er => er.BranchId == filter.BranchId.Value);
+
+                // Ordenar por ID descendente y ejecutar la consulta
+                var entryRequestsForATCFiltered = await query
+                    .OrderByDescending(er => er.Id)
+                    .Select(er => new EntryRequestForATCDTO
+                    {
+                        Id = er.Id,
+                        SurgeryInit = er.SurgeryInit,
+                        SurgeryEnd = er.SurgeryEnd,
+                        Status = er.Status,
+                        IdCustomer = er.IdCustomer,
+                        IdATC = er.IdATC,
+                        BranchId = er.BranchId,
+                        Customer = er.IdCustomerNavigation
+                    })
+                    .ToListAsync();
+
+                Console.WriteLine($"Consulta completada. Registros encontrados (excluyendo cancelados): {entryRequestsForATCFiltered.Count}");
+                Console.WriteLine("=== FIN GetEntryRequestsForATCFiltered ===");
+                
+                return Ok(entryRequestsForATCFiltered);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"ArgumentException en GetEntryRequestsForATCFiltered: {ex.Message}");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en GetEntryRequestsForATCFiltered ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Inner Exception StackTrace: {ex.InnerException.StackTrace}");
+                }
+                
+                Console.WriteLine("=== FIN ERROR ===");
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
         // GET: api/EntryRequest/VerificarConfiguracionCompania
         [HttpGet("VerificarConfiguracionCompania")]
         public async Task<ActionResult<object>> VerificarConfiguracionCompania([FromQuery] string companyCode)

@@ -54,6 +54,8 @@ namespace DimmedAPI
         public DbSet<EntryRequestTraceStates> EntryRequestTraceStates { get; set; }
         public DbSet<EntryRequestFiles> EntryRequestFiles { get; set; }
 
+        public DbSet<EntryrequestService> EntryrequestService { get; set; }
+
 
     }
 }

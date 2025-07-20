@@ -767,7 +767,7 @@ namespace DimmedAPI.Controllers
         // GET: api/EntryRequest/EntryRequestforATC
         [HttpGet("EntryRequestforATC")]
         [OutputCache(Tags = [cacheTag])]
-        public async Task<ActionResult<IEnumerable<EntryRequestForATCDTO>>> GetEntryRequestsForATC([FromQuery] string companyCode)
+        public async Task<ActionResult<IEnumerable<EntryRequestForATCResponseDTO>>> GetEntryRequestsForATC([FromQuery] string companyCode)
         {
             try
             {
@@ -788,11 +788,11 @@ namespace DimmedAPI.Controllers
                     .Where(er => er.Status != "CANCEL") // Excluir solicitudes canceladas
                     .Include(er => er.IdCustomerNavigation) // Incluir la relación con Customer
                     .OrderByDescending(er => er.Id) // Ordenar por ID descendente (más recientes primero)
-                    .Select(er => new EntryRequestForATCDTO
+                    .Select(er => new EntryRequestForATCResponseDTO
                     {
                         Id = er.Id,
-                        SurgeryInit = er.SurgeryInit,
-                        SurgeryEnd = er.SurgeryEnd,
+                        SurgeryInit = er.SurgeryInit.HasValue ? er.SurgeryInit.Value.ToString("yyyy-MM-ddTHH:mm") : null,
+                        SurgeryEnd = er.SurgeryEnd.HasValue ? er.SurgeryEnd.Value.ToString("yyyy-MM-ddTHH:mm") : null,
                         Status = er.Status,
                         IdCustomer = er.IdCustomer,
                         IdATC = er.IdATC,
@@ -1055,7 +1055,7 @@ namespace DimmedAPI.Controllers
         // GET: api/EntryRequest/EntryRequestforATC/filter
         [HttpGet("EntryRequestforATC/filter")]
         [OutputCache(Tags = [cacheTag])]
-        public async Task<ActionResult<IEnumerable<EntryRequestForATCDTO>>> GetEntryRequestsForATCFiltered(
+        public async Task<ActionResult<IEnumerable<EntryRequestForATCResponseDTO>>> GetEntryRequestsForATCFiltered(
             [FromQuery] string companyCode,
             [FromQuery] EntryRequestForATCFilterDTO filter)
         {
@@ -1105,11 +1105,11 @@ namespace DimmedAPI.Controllers
                 // Ordenar por ID descendente y ejecutar la consulta
                 var entryRequestsForATCFiltered = await query
                     .OrderByDescending(er => er.Id)
-                    .Select(er => new EntryRequestForATCDTO
+                    .Select(er => new EntryRequestForATCResponseDTO
                     {
                         Id = er.Id,
-                        SurgeryInit = er.SurgeryInit,
-                        SurgeryEnd = er.SurgeryEnd,
+                        SurgeryInit = er.SurgeryInit.HasValue ? er.SurgeryInit.Value.ToString("yyyy-MM-ddTHH:mm") : null,
+                        SurgeryEnd = er.SurgeryEnd.HasValue ? er.SurgeryEnd.Value.ToString("yyyy-MM-ddTHH:mm") : null,
                         Status = er.Status,
                         IdCustomer = er.IdCustomer,
                         IdATC = er.IdATC,

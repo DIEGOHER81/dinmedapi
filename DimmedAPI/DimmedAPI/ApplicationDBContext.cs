@@ -56,6 +56,8 @@ namespace DimmedAPI
 
         public DbSet<EntryrequestService> EntryrequestService { get; set; }
 
+        public DbSet<OrderType> OrderType { get; set; }
+
 
     }
 }

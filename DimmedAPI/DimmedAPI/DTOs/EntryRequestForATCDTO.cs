@@ -14,5 +14,9 @@ namespace DimmedAPI.DTOs
         
         // Relación con Customer
         public Customer? Customer { get; set; }
+
+        // Propiedades formateadas para mostrar solo hora y minutos
+        public string? SurgeryInitFormatted => SurgeryInit?.ToString("yyyy-MM-ddTHH:mm");
+        public string? SurgeryEndFormatted => SurgeryEnd?.ToString("yyyy-MM-ddTHH:mm");
     }
 } 

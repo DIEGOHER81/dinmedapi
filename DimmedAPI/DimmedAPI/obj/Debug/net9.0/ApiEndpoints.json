@@ -1046,6 +1046,151 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "DimmedAPI.Controllers.CustomerAddressController",
+    "Method": "GetAllFromBC",
+    "RelativePath": "api/CustomerAddress/bc/{companyCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DimmedAPI.Entidades.CustomerAddress, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerAddressController",
+    "Method": "GetByCustomerId",
+    "RelativePath": "api/CustomerAddress/detail/{companyCode}/{customerId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "customerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DimmedAPI.Entidades.CustomerAddress, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerAddressController",
+    "Method": "GetAll",
+    "RelativePath": "api/CustomerAddress/list/{companyCode}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DimmedAPI.Entidades.CustomerAddress, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerAddressController",
+    "Method": "SyncAllFromBC",
+    "RelativePath": "api/CustomerAddress/sync-all/{companyCode}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[DimmedAPI.Entidades.CustomerAddress, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.CustomerAddressController",
+    "Method": "SyncFromBC",
+    "RelativePath": "api/CustomerAddress/sync/{companyCode}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "systemID",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "option",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.CustomerAddress",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "DimmedAPI.Controllers.CustomerAPIController",
     "Method": "ConsultarBC",
     "RelativePath": "api/CustomerAPI/consultar-bc",

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DimmedAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2797a0bcd5c5778cce41375e2443782edfbead67")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e9063656bb6da7169647c8d96f9391e5e210129e")]
 [assembly: System.Reflection.AssemblyProductAttribute("DimmedAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DimmedAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

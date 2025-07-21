@@ -58,6 +58,8 @@ namespace DimmedAPI
 
         public DbSet<OrderType> OrderType { get; set; }
 
+        public DbSet<CustomerAddress> CustomerAddress { get; set; }
+
 
     }
 }

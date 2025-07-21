@@ -63,18 +63,7 @@ builder.Services.AddScoped<IDynamicConnectionService, DynamicConnectionService>(
 // Register Dynamic BC Connection Service
 builder.Services.AddScoped<IDynamicBCConnectionService, DynamicBCConnectionService>();
 
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    var certPath = Environment.GetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Path");
-    var certPassword = Environment.GetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Password");
-    if (!string.IsNullOrEmpty(certPath) && !string.IsNullOrEmpty(certPassword))
-    {
-        serverOptions.ConfigureHttpsDefaults(listenOptions =>
-        {
-            listenOptions.ServerCertificate = new System.Security.Cryptography.X509Certificates.X509Certificate2(certPath, certPassword);
-        });
-    }
-});
+// Eliminada la configuración explícita de Kestrel para certificados SSL
 
 var app = builder.Build();
 

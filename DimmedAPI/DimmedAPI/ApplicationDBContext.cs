@@ -60,6 +60,8 @@ namespace DimmedAPI
 
         public DbSet<CustomerAddress> CustomerAddress { get; set; }
 
+        public DbSet<UserNotifications> UserNotifications { get; set; }
+
 
     }
 }

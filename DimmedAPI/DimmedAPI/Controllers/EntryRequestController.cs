@@ -1187,5 +1187,22 @@ namespace DimmedAPI.Controllers
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
             }
         }
+
+        // PATCH: api/EntryRequest/{id}/idATC
+        [HttpPatch("{id}/idATC")]
+        public async Task<IActionResult> UpdateIdATC(int id, [FromQuery] string companyCode, [FromBody] int idATC)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+                return BadRequest("El código de compañía es requerido");
+
+            using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+            var entryRequest = await companyContext.EntryRequests.FindAsync(id);
+            if (entryRequest == null)
+                return NotFound($"No se encontró la solicitud con ID {id}");
+
+            entryRequest.IdATC = idATC;
+            await companyContext.SaveChangesAsync();
+            return NoContent();
+        }
     }
 } 

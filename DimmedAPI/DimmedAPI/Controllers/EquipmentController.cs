@@ -140,12 +140,13 @@ namespace DimmedAPI.Controllers
             }
         }
 
-        // GET: api/equipment/summary?companyCode=xxx&page=1&pageSize=10
+        // GET: api/equipment/summary?companyCode=xxx&page=1&pageSize=10&filter=xxx
         [HttpGet("summary")]
         public async Task<ActionResult<object>> GetSummary(
             [FromQuery] string companyCode,
             [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 10)
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string filter = null)
         {
             if (string.IsNullOrEmpty(companyCode))
                 return BadRequest("El código de compañía es requerido");
@@ -162,6 +163,17 @@ namespace DimmedAPI.Controllers
                     ShortName = e.ShortName ?? string.Empty,
                     Branch = e.Branch ?? string.Empty
                 });
+
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                var filterLower = filter.ToLower();
+                query = query.Where(e =>
+                    e.Code.ToLower().Contains(filterLower) ||
+                    e.Name.ToLower().Contains(filterLower) ||
+                    e.ShortName.ToLower().Contains(filterLower) ||
+                    e.Branch.ToLower().Contains(filterLower)
+                );
+            }
 
             var total = await query.CountAsync();
             var data = await query

@@ -1214,5 +1214,37 @@ namespace DimmedAPI.Controllers
             await companyContext.SaveChangesAsync();
             return NoContent();
         }
+
+        // GET: api/EntryRequest/remisiones?companyCode=xxx
+        [HttpGet("remisiones")]
+        public async Task<ActionResult<IEnumerable<DTOs.RemisionEquipoSummaryDTO>>> GetRemisionesEquipo([FromQuery] string companyCode)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+                return BadRequest("El código de compañía es requerido");
+
+            using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+            var remisiones = await companyContext.EntryRequests
+                .Include(er => er.IdCustomerNavigation)
+                .Include(er => er.Branch)
+                .Join(companyContext.OrderType,
+                    er => er.IdOrderType,
+                    ot => ot.Id,
+                    (er, ot) => new { er, ot })
+                .Select(x => new DTOs.RemisionEquipoSummaryDTO
+                {
+                    Id = x.er.Id,
+                    Date = x.er.Date,
+                    IdOrderType = x.er.IdOrderType,
+                    OrderTypeName = x.ot.Description,
+                    IdCustomer = x.er.IdCustomer,
+                    CustomerName = x.er.IdCustomerNavigation != null ? (x.er.IdCustomerNavigation.Name ?? "") : "",
+                    Status = x.er.Status ?? string.Empty,
+                    BranchId = x.er.BranchId,
+                    BranchName = x.er.Branch != null ? x.er.Branch.Name : string.Empty
+                })
+                .ToListAsync();
+
+            return Ok(remisiones);
+        }
     }
 } 

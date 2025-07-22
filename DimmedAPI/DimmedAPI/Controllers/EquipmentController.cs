@@ -140,6 +140,38 @@ namespace DimmedAPI.Controllers
             }
         }
 
+        // GET: api/equipment/summary?companyCode=xxx&page=1&pageSize=10
+        [HttpGet("summary")]
+        public async Task<ActionResult<object>> GetSummary(
+            [FromQuery] string companyCode,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+                return BadRequest("El código de compañía es requerido");
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+
+            using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+            var query = companyContext.Equipment
+                .Select(e => new DTOs.SummaryEquipmentDTO
+                {
+                    Id = e.Id,
+                    Code = e.Code ?? string.Empty,
+                    Name = e.Name ?? string.Empty,
+                    ShortName = e.ShortName ?? string.Empty,
+                    Branch = e.Branch ?? string.Empty
+                });
+
+            var total = await query.CountAsync();
+            var data = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return Ok(new { total, page, pageSize, data });
+        }
+
         // Método auxiliar para identificar el campo nulo
         private string IdentificarCampoNulo(Equipment equipo)
         {

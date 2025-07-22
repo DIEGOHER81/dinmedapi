@@ -122,7 +122,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 177,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
@@ -154,10 +154,6 @@
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
-            },
-            {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Employee.cs",
@@ -165,7 +161,7 @@
               "RelativeDocumentMoniker": "DimmedAPI\\Entidades\\Employee.cs",
               "ToolTip": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\Entidades\\Employee.cs",
               "RelativeToolTip": "DimmedAPI\\Entidades\\Employee.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAgwCUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACQAAAAAAAAAAAAowCUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-21T18:57:58.918Z",
               "EditorCaption": ""
@@ -180,8 +176,7 @@
               "RelativeToolTip": "DimmedAPI\\Entidades\\UserNotifications.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-21T18:51:40.306Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-21T18:51:40.306Z"
             },
             {
               "$type": "Document",
@@ -193,8 +188,7 @@
               "RelativeToolTip": "DimmedAPI\\ApplicationDBContext.cs",
               "ViewState": "AgIAAC0AAAAAAAAAAAAYwDwAAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-21T07:00:33.695Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-21T07:00:33.695Z"
             },
             {
               "$type": "Document",
@@ -482,6 +476,10 @@
               "ViewState": "AgIAABwAAAAAAAAAAADwvyYAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-11T11:19:43.563Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
             }
           ]
         }

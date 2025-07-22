@@ -1,0 +1,173 @@
+using Microsoft.AspNetCore.Mvc;
+using DimmedAPI.Entidades;
+using DimmedAPI.DTOs;
+using DimmedAPI.Services;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System;
+
+namespace DimmedAPI.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class EntryRequestDetailsController : ControllerBase
+    {
+        private readonly ApplicationDBContext _context;
+        private readonly IDynamicConnectionService _dynamicConnectionService;
+
+        public EntryRequestDetailsController(ApplicationDBContext context, IDynamicConnectionService dynamicConnectionService)
+        {
+            _context = context;
+            _dynamicConnectionService = dynamicConnectionService;
+        }
+
+        // GET: api/EntryRequestDetails?companyCode=xxx
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<EntryRequestDetailsResponseDTO>>> GetAll([FromQuery] string companyCode)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+                return BadRequest("El código de compañía es requerido");
+
+            using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+            var details = await companyContext.EntryRequestDetails
+                .Select(d => new EntryRequestDetailsResponseDTO
+                {
+                    Id = d.Id,
+                    IdEntryReq = d.IdEntryReq,
+                    IdEquipment = d.IdEquipment,
+                    CreateAt = d.CreateAt,
+                    DateIni = d.DateIni,
+                    DateEnd = d.DateEnd,
+                    status = d.status,
+                    DateLoadState = d.DateLoadState,
+                    TraceState = d.TraceState,
+                    IsComponent = d.IsComponent,
+                    UserIdTraceState = d.UserIdTraceState,
+                    sInformation = d.sInformation,
+                    Name = d.Name
+                })
+                .ToListAsync();
+            return Ok(details);
+        }
+
+        // GET: api/EntryRequestDetails/{id}?companyCode=xxx
+        [HttpGet("{id}")]
+        public async Task<ActionResult<EntryRequestDetailsResponseDTO>> GetById(int id, [FromQuery] string companyCode)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+                return BadRequest("El código de compañía es requerido");
+
+            using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+            var d = await companyContext.EntryRequestDetails.FindAsync(id);
+            if (d == null)
+                return NotFound();
+            var dto = new EntryRequestDetailsResponseDTO
+            {
+                Id = d.Id,
+                IdEntryReq = d.IdEntryReq,
+                IdEquipment = d.IdEquipment,
+                CreateAt = d.CreateAt,
+                DateIni = d.DateIni,
+                DateEnd = d.DateEnd,
+                status = d.status,
+                DateLoadState = d.DateLoadState,
+                TraceState = d.TraceState,
+                IsComponent = d.IsComponent,
+                UserIdTraceState = d.UserIdTraceState,
+                sInformation = d.sInformation,
+                Name = d.Name
+            };
+            return Ok(dto);
+        }
+
+        // POST: api/EntryRequestDetails?companyCode=xxx
+        [HttpPost]
+        public async Task<ActionResult<EntryRequestDetailsResponseDTO>> Create([FromBody] EntryRequestDetailsCreateDTO createDto, [FromQuery] string companyCode)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+                return BadRequest("El código de compañía es requerido");
+
+            using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+            var entity = new EntryRequestDetails
+            {
+                IdEntryReq = createDto.IdEntryReq,
+                IdEquipment = createDto.IdEquipment,
+                CreateAt = createDto.CreateAt,
+                DateIni = createDto.DateIni,
+                DateEnd = createDto.DateEnd,
+                status = createDto.status,
+                DateLoadState = createDto.DateLoadState,
+                TraceState = createDto.TraceState,
+                IsComponent = createDto.IsComponent,
+                UserIdTraceState = createDto.UserIdTraceState,
+                sInformation = createDto.sInformation,
+                Name = createDto.Name
+            };
+            companyContext.EntryRequestDetails.Add(entity);
+            await companyContext.SaveChangesAsync();
+            var dto = new EntryRequestDetailsResponseDTO
+            {
+                Id = entity.Id,
+                IdEntryReq = entity.IdEntryReq,
+                IdEquipment = entity.IdEquipment,
+                CreateAt = entity.CreateAt,
+                DateIni = entity.DateIni,
+                DateEnd = entity.DateEnd,
+                status = entity.status,
+                DateLoadState = entity.DateLoadState,
+                TraceState = entity.TraceState,
+                IsComponent = entity.IsComponent,
+                UserIdTraceState = entity.UserIdTraceState,
+                sInformation = entity.sInformation,
+                Name = entity.Name
+            };
+            return CreatedAtAction(nameof(GetById), new { id = entity.Id, companyCode }, dto);
+        }
+
+        // PUT: api/EntryRequestDetails/{id}?companyCode=xxx
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] EntryRequestDetailsCreateDTO updateDto, [FromQuery] string companyCode)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+                return BadRequest("El código de compañía es requerido");
+
+            using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+            var entity = await companyContext.EntryRequestDetails.FindAsync(id);
+            if (entity == null)
+                return NotFound();
+
+            entity.IdEntryReq = updateDto.IdEntryReq;
+            entity.IdEquipment = updateDto.IdEquipment;
+            entity.CreateAt = updateDto.CreateAt;
+            entity.DateIni = updateDto.DateIni;
+            entity.DateEnd = updateDto.DateEnd;
+            entity.status = updateDto.status;
+            entity.DateLoadState = updateDto.DateLoadState;
+            entity.TraceState = updateDto.TraceState;
+            entity.IsComponent = updateDto.IsComponent;
+            entity.UserIdTraceState = updateDto.UserIdTraceState;
+            entity.sInformation = updateDto.sInformation;
+            entity.Name = updateDto.Name;
+
+            await companyContext.SaveChangesAsync();
+            return NoContent();
+        }
+
+        // DELETE: api/EntryRequestDetails/{id}?companyCode=xxx
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id, [FromQuery] string companyCode)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+                return BadRequest("El código de compañía es requerido");
+
+            using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+            var entity = await companyContext.EntryRequestDetails.FindAsync(id);
+            if (entity == null)
+                return NotFound();
+            companyContext.EntryRequestDetails.Remove(entity);
+            await companyContext.SaveChangesAsync();
+            return NoContent();
+        }
+    }
+} 

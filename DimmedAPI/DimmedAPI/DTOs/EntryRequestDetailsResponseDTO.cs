@@ -17,5 +17,6 @@ namespace DimmedAPI.DTOs
         public int? UserIdTraceState { get; set; }
         public string sInformation { get; set; }
         public string Name { get; set; }
+        public string? EquipmentName { get; set; }
     }
 } 

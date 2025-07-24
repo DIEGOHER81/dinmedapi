@@ -62,6 +62,8 @@ namespace DimmedAPI
 
         public DbSet<UserNotifications> UserNotifications { get; set; }
 
+        public DbSet<FollowType> FollowType { get; set; }
+
 
     }
 }

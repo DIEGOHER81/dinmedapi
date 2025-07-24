@@ -11,9 +11,9 @@ namespace DimmedAPI.DTOs
         public string? DeliveryPriority { get; set; }
         public int IdCustomer { get; set; }
         public int InsurerType { get; set; }
-        public int Insurer { get; set; }
-        public int IdMedic { get; set; }
-        public int IdPatient { get; set; }
+        public int? Insurer { get; set; }
+        public int? IdMedic { get; set; }
+        public int? IdPatient { get; set; }
         public string? Applicant { get; set; }
         public int? IdATC { get; set; }
         public string? LimbSide { get; set; }

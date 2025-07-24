@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using System.Linq;
 
 namespace DimmedAPI.Controllers
 {
@@ -79,6 +80,39 @@ namespace DimmedAPI.Controllers
                 Name = d.Name
             };
             return Ok(dto);
+        }
+
+        // GET: api/EntryRequestDetails/by-entryreq/{idEntryReq}?companyCode=xxx
+        [HttpGet("by-entryreq/{idEntryReq}")]
+        public async Task<ActionResult<IEnumerable<EntryRequestDetailsResponseDTO>>> GetByIdEntryReq(int idEntryReq, [FromQuery] string companyCode)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+                return BadRequest("El código de compañía es requerido");
+
+            using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+            var details = await companyContext.EntryRequestDetails
+                .Where(d => d.IdEntryReq == idEntryReq)
+                .Include(d => d.IdEquipmentNavigation)
+                .Select(d => new EntryRequestDetailsResponseDTO
+                {
+                    Id = d.Id,
+                    IdEntryReq = d.IdEntryReq,
+                    IdEquipment = d.IdEquipment,
+                    CreateAt = d.CreateAt,
+                    DateIni = d.DateIni,
+                    DateEnd = d.DateEnd,
+                    status = d.status,
+                    DateLoadState = d.DateLoadState,
+                    TraceState = d.TraceState,
+                    IsComponent = d.IsComponent,
+                    UserIdTraceState = d.UserIdTraceState,
+                    sInformation = d.sInformation,
+                    Name = d.Name,
+                    // Nuevo campo: nombre del equipo
+                    EquipmentName = d.IdEquipmentNavigation != null ? d.IdEquipmentNavigation.Name : null
+                })
+                .ToListAsync();
+            return Ok(details);
         }
 
         // POST: api/EntryRequestDetails?companyCode=xxx

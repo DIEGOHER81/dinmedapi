@@ -30,11 +30,11 @@ namespace DimmedAPI.Entidades
         [Display(Name = "Tipo Aseguradora")]
         public int InsurerType { get; set; }
         [Display(Name = "Aseguradora")]
-        public int Insurer { get; set; }
+        public int? Insurer { get; set; }
         [Display(Name = "Medico")]
-        public int IdMedic { get; set; }
+        public int? IdMedic { get; set; }
         [Display(Name = "Paciente")]
-        public int IdPatient { get; set; }
+        public int? IdPatient { get; set; }
         [Display(Name = "Solicitante")]
         [MaxLength(100, ErrorMessage = "El atributo {0} solo puede contener {1} caracteres.")]
         public string? Applicant { get; set; }

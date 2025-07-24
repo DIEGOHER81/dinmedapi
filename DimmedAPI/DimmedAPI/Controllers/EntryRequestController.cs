@@ -496,16 +496,24 @@ namespace DimmedAPI.Controllers
                     return BadRequest($"Cliente con ID {entryRequestDto.IdCustomer} no encontrado");
                 }
 
-                var medic = await companyContext.Medic.FindAsync(entryRequestDto.IdMedic);
-                if (medic == null)
+                // Validar médico solo si IdMedic tiene valor y es distinto de cero
+                if (entryRequestDto.IdMedic != null && entryRequestDto.IdMedic != 0)
                 {
-                    return BadRequest($"Médico con ID {entryRequestDto.IdMedic} no encontrado");
+                    var medic = await companyContext.Medic.FindAsync(entryRequestDto.IdMedic.Value);
+                    if (medic == null)
+                    {
+                        return BadRequest($"Médico con ID {entryRequestDto.IdMedic} no encontrado");
+                    }
                 }
 
-                var patient = await companyContext.Patient.FindAsync(entryRequestDto.IdPatient);
-                if (patient == null)
+                // Validar paciente solo si IdPatient tiene valor y es distinto de cero
+                if (entryRequestDto.IdPatient != null && entryRequestDto.IdPatient != 0)
                 {
-                    return BadRequest($"Paciente con ID {entryRequestDto.IdPatient} no encontrado");
+                    var patient = await companyContext.Patient.FindAsync(entryRequestDto.IdPatient.Value);
+                    if (patient == null)
+                    {
+                        return BadRequest($"Paciente con ID {entryRequestDto.IdPatient} no encontrado");
+                    }
                 }
 
                 // Crear nueva solicitud de entrada
@@ -605,16 +613,24 @@ namespace DimmedAPI.Controllers
                     return BadRequest($"Cliente con ID {entryRequestDto.IdCustomer} no encontrado");
                 }
 
-                var medic = await companyContext.Medic.FindAsync(entryRequestDto.IdMedic);
-                if (medic == null)
+                // Validar médico solo si IdMedic tiene valor y es distinto de cero
+                if (entryRequestDto.IdMedic != null && entryRequestDto.IdMedic != 0)
                 {
-                    return BadRequest($"Médico con ID {entryRequestDto.IdMedic} no encontrado");
+                    var medic = await companyContext.Medic.FindAsync(entryRequestDto.IdMedic.Value);
+                    if (medic == null)
+                    {
+                        return BadRequest($"Médico con ID {entryRequestDto.IdMedic} no encontrado");
+                    }
                 }
 
-                var patient = await companyContext.Patient.FindAsync(entryRequestDto.IdPatient);
-                if (patient == null)
+                // Validar paciente solo si IdPatient tiene valor y es distinto de cero
+                if (entryRequestDto.IdPatient != null && entryRequestDto.IdPatient != 0)
                 {
-                    return BadRequest($"Paciente con ID {entryRequestDto.IdPatient} no encontrado");
+                    var patient = await companyContext.Patient.FindAsync(entryRequestDto.IdPatient.Value);
+                    if (patient == null)
+                    {
+                        return BadRequest($"Paciente con ID {entryRequestDto.IdPatient} no encontrado");
+                    }
                 }
 
                 // Actualizar propiedades
@@ -1245,6 +1261,65 @@ namespace DimmedAPI.Controllers
                 .ToListAsync();
 
             return Ok(remisiones);
+        }
+
+        // GET: api/EntryRequest/basic/{id}
+        [HttpGet("basic/{id}")]
+        public async Task<IActionResult> GetEntryRequestBasic(int id, [FromQuery] string companyCode)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+                return BadRequest("El código de compañía es requerido");
+
+            using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+            var entryRequest = await companyContext.EntryRequests
+                .FirstOrDefaultAsync(er => er.Id == id);
+            if (entryRequest == null)
+                return NotFound($"No se encontró la solicitud de entrada con ID {id}");
+
+            // Obtener nombres relacionados
+            string? medicName = null;
+            string? patientName = null;
+            string? atcName = null;
+            string? customerName = null;
+
+            if (entryRequest.IdMedic.HasValue)
+            {
+                var medic = await companyContext.Medic.FindAsync(entryRequest.IdMedic.Value);
+                medicName = medic?.Name;
+            }
+            if (entryRequest.IdPatient.HasValue)
+            {
+                var patient = await companyContext.Patient.FindAsync(entryRequest.IdPatient.Value);
+                patientName = patient?.Name;
+            }
+            if (entryRequest.IdATC.HasValue)
+            {
+                var atc = await companyContext.Employee.FindAsync(entryRequest.IdATC.Value);
+                atcName = atc?.Name;
+            }
+            if (entryRequest.IdCustomer != 0)
+            {
+                var customer = await companyContext.Customer.FindAsync(entryRequest.IdCustomer);
+                customerName = customer?.Name;
+            }
+
+            return Ok(new {
+                id = entryRequest.Id,
+                date = entryRequest.Date,
+                idCustomer = entryRequest.IdCustomer,
+                customerName,
+                idMedic = entryRequest.IdMedic,
+                medicName,
+                idPatient = entryRequest.IdPatient,
+                patientName,
+                idATC = entryRequest.IdATC,
+                atcName,
+                deliveryDate = entryRequest.DeliveryDate,
+                surgeryInitTime = entryRequest.SurgeryInitTime,
+                surgeryEndTime = entryRequest.SurgeryEndTime,
+                surgeryInit = entryRequest.SurgeryInit,
+                surgeryEnd = entryRequest.SurgeryEnd
+            });
         }
     }
 } 

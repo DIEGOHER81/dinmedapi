@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DimmedAPI.BO;
 using DimmedAPI.Entidades;
+using DimmedAPI.Services;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -11,11 +12,11 @@ namespace DimmedAPI.Controllers
     [ApiController]
     public class EquipmentAssemblyAPIController : ControllerBase
     {
-        private readonly IntBCConex _bcConn;
+        private readonly IDynamicBCConnectionService _dynamicBCConnectionService;
 
-        public EquipmentAssemblyAPIController(IntBCConex bcConn)
+        public EquipmentAssemblyAPIController(IDynamicBCConnectionService dynamicBCConnectionService)
         {
-            _bcConn = bcConn;
+            _dynamicBCConnectionService = dynamicBCConnectionService;
         }
 
         /// <summary>
@@ -23,13 +24,17 @@ namespace DimmedAPI.Controllers
         /// </summary>
         /// <param name="equipmentCode">Código del equipo</param>
         /// <param name="salesPrice">Código de precio de venta (opcional)</param>
+        /// <param name="companyCode">Código de la compañía</param>
         /// <returns>Lista de componentes del ensamble</returns>
         [HttpGet("assembly/{equipmentCode}")]
-        public async Task<IActionResult> GetAssembly(string equipmentCode, [FromQuery] string salesPrice = "")
+        public async Task<IActionResult> GetAssembly(string equipmentCode, [FromQuery] string companyCode, [FromQuery] string salesPrice = "")
         {
             try
             {
-                var assembly = await _bcConn.GetEntryReqAssembly("lylassembly", equipmentCode, salesPrice);
+                if (string.IsNullOrEmpty(companyCode))
+                    return BadRequest("El código de compañía es requerido");
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var assembly = await bcConn.GetEntryReqAssembly("lylassembly", equipmentCode, salesPrice);
                 return Ok(assembly);
             }
             catch (Exception ex)
@@ -44,13 +49,17 @@ namespace DimmedAPI.Controllers
         /// </summary>
         /// <param name="equipmentCode">Código del equipo</param>
         /// <param name="salesPrice">Código de precio de venta (opcional)</param>
+        /// <param name="companyCode">Código de la compañía</param>
         /// <returns>Lista de componentes del ensamble</returns>
         [HttpGet("assembly-v2/{equipmentCode}")]
-        public async Task<IActionResult> GetAssemblyV2(string equipmentCode, [FromQuery] string salesPrice = "")
+        public async Task<IActionResult> GetAssemblyV2(string equipmentCode, [FromQuery] string companyCode, [FromQuery] string salesPrice = "")
         {
             try
             {
-                var assembly = await _bcConn.GetEntryReqAssembly("lylassemblyV2", equipmentCode, salesPrice);
+                if (string.IsNullOrEmpty(companyCode))
+                    return BadRequest("El código de compañía es requerido");
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var assembly = await bcConn.GetEntryReqAssembly("lylassemblyV2", equipmentCode, salesPrice);
                 return Ok(assembly);
             }
             catch (Exception ex)
@@ -64,13 +73,17 @@ namespace DimmedAPI.Controllers
         /// Obtiene las líneas de ensamble de un equipo específico
         /// </summary>
         /// <param name="equipmentCode">Código del equipo</param>
+        /// <param name="companyCode">Código de la compañía</param>
         /// <returns>Lista de líneas de ensamble</returns>
         [HttpGet("assembly-lines/{equipmentCode}")]
-        public async Task<IActionResult> GetAssemblyLines(string equipmentCode)
+        public async Task<IActionResult> GetAssemblyLines(string equipmentCode, [FromQuery] string companyCode)
         {
             try
             {
-                var assemblyLines = await _bcConn.GetEntryReqAssembly("lylassemblyolines", equipmentCode, "");
+                if (string.IsNullOrEmpty(companyCode))
+                    return BadRequest("El código de compañía es requerido");
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var assemblyLines = await bcConn.GetEntryReqAssembly("lylassemblyolines", equipmentCode, "");
                 return Ok(assemblyLines);
             }
             catch (Exception ex)
@@ -84,13 +97,17 @@ namespace DimmedAPI.Controllers
         /// Obtiene el ensamble de equipo específico
         /// </summary>
         /// <param name="equipmentCode">Código del equipo</param>
+        /// <param name="companyCode">Código de la compañía</param>
         /// <returns>Lista de componentes del ensamble de equipo</returns>
         [HttpGet("equipment-assembly/{equipmentCode}")]
-        public async Task<IActionResult> GetEquipmentAssembly(string equipmentCode)
+        public async Task<IActionResult> GetEquipmentAssembly(string equipmentCode, [FromQuery] string companyCode)
         {
             try
             {
-                var equipmentAssembly = await _bcConn.GetEntryReqAssembly("lylassemblyeq", equipmentCode, "");
+                if (string.IsNullOrEmpty(companyCode))
+                    return BadRequest("El código de compañía es requerido");
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var equipmentAssembly = await bcConn.GetEntryReqAssembly("lylassemblyeq", equipmentCode, "");
                 return Ok(equipmentAssembly);
             }
             catch (Exception ex)

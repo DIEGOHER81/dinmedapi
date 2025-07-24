@@ -237,6 +237,59 @@ namespace DimmedAPI.Controllers
             }
         }
 
+        [HttpGet("obtener-locales-basico")]
+        public async Task<IActionResult> ObtenerLocalesBasico(
+            [FromQuery] string companyCode,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string filter = null)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return BadRequest("El código de compañía es requerido");
+                }
+                if (page < 1) page = 1;
+                if (pageSize < 1) pageSize = 10;
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                
+                // Crear un ItemsBO con el contexto específico de la compañía
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var itemsBO = new ItemsBO(companyContext, bcConn);
+                
+                var articulos = await itemsBO.GetLocalItemsAsync();
+                var query = articulos.AsQueryable();
+                if (!string.IsNullOrWhiteSpace(filter))
+                {
+                    var filterLower = filter.ToLower();
+                    query = query.Where(a =>
+                        (!string.IsNullOrEmpty(a.Code) && a.Code.ToLower().Contains(filterLower)) ||
+                        (!string.IsNullOrEmpty(a.Name) && a.Name.ToLower().Contains(filterLower))
+                    );
+                }
+                var total = query.Count();
+                var data = query
+                    .OrderBy(a => a.Id)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(a => new { a.Id, a.Code, a.Name })
+                    .ToList();
+                return Ok(new { total, page, pageSize, data });
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                var detalle = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return BadRequest(new { mensaje = "Error al obtener artículos locales básicos", detalle });
+            }
+        }
+
         [HttpGet("obtener-por-codigo")]
         public async Task<IActionResult> ObtenerPorCodigo([FromQuery] string companyCode, [FromQuery] string code)
         {

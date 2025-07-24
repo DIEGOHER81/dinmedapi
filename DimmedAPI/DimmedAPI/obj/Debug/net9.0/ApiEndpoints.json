@@ -2383,6 +2383,27 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
+    "Method": "GetEntryRequestBasic",
+    "RelativePath": "api/EntryRequest/basic/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
     "Method": "GetEntryRequestsByCustomer",
     "RelativePath": "api/EntryRequest/by-customer/{customerId}",
     "HttpMethod": "GET",
@@ -3216,6 +3237,37 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestDetailsController",
+    "Method": "GetByIdEntryReq",
+    "RelativePath": "api/EntryRequestDetails/by-entryreq/{idEntryReq}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idEntryReq",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.DTOs.EntryRequestDetailsResponseDTO, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "DimmedAPI.Controllers.EntryrequestServiceController",
     "Method": "GetAll",
     "RelativePath": "api/EntryrequestService",
@@ -3753,6 +3805,11 @@
         "Name": "equipmentCode",
         "Type": "System.String",
         "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -3769,6 +3826,11 @@
         "Name": "equipmentCode",
         "Type": "System.String",
         "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
       },
       {
         "Name": "salesPrice",
@@ -3792,6 +3854,11 @@
         "IsRequired": true
       },
       {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "salesPrice",
         "Type": "System.String",
         "IsRequired": false
@@ -3811,6 +3878,146 @@
         "Name": "equipmentCode",
         "Type": "System.String",
         "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.FollowTypeController",
+    "Method": "GetAll",
+    "RelativePath": "api/FollowType",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.DTOs.FollowTypeResponseDTO, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.FollowTypeController",
+    "Method": "Create",
+    "RelativePath": "api/FollowType",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "createDto",
+        "Type": "DimmedAPI.DTOs.FollowTypeCreateDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.DTOs.FollowTypeResponseDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.FollowTypeController",
+    "Method": "GetById",
+    "RelativePath": "api/FollowType/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.DTOs.FollowTypeResponseDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.FollowTypeController",
+    "Method": "Update",
+    "RelativePath": "api/FollowType/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updateDto",
+        "Type": "DimmedAPI.DTOs.FollowTypeUpdateDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.FollowTypeController",
+    "Method": "Delete",
+    "RelativePath": "api/FollowType/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -4490,6 +4697,37 @@
     "Parameters": [
       {
         "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "ObtenerLocalesBasico",
+    "RelativePath": "api/ItemsAPI/obtener-locales-basico",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "filter",
         "Type": "System.String",
         "IsRequired": false
       }

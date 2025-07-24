@@ -21,9 +21,9 @@ namespace DimmedAPI.DTOs
 
         public int Insurer { get; set; }
 
-        public int IdMedic { get; set; }
+        public int? IdMedic { get; set; }
 
-        public int IdPatient { get; set; }
+        public int? IdPatient { get; set; }
 
         [MaxLength(100, ErrorMessage = "El solicitante no puede exceder 100 caracteres")]
         public string? Applicant { get; set; }

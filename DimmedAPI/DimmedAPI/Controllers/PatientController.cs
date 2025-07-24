@@ -118,7 +118,17 @@ namespace DimmedAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                // Mostrar detalles de la inner exception para depuración
+                var errorMsg = $"Error interno del servidor: {ex.Message}";
+                if (ex.InnerException != null)
+                {
+                    errorMsg += $" | InnerException: {ex.InnerException.Message}";
+                }
+                if (ex.InnerException?.InnerException != null)
+                {
+                    errorMsg += $" | InnerMostException: {ex.InnerException.InnerException.Message}";
+                }
+                return StatusCode(500, errorMsg);
             }
         }
 

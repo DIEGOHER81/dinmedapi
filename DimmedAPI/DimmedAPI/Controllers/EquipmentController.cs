@@ -161,7 +161,8 @@ namespace DimmedAPI.Controllers
                     Code = e.Code ?? string.Empty,
                     Name = e.Name ?? string.Empty,
                     ShortName = e.ShortName ?? string.Empty,
-                    Branch = e.Branch ?? string.Empty
+                    Branch = e.Branch ?? string.Empty,
+                    Status = e.Status ?? string.Empty
                 });
 
             if (!string.IsNullOrWhiteSpace(filter))
@@ -169,9 +170,7 @@ namespace DimmedAPI.Controllers
                 var filterLower = filter.ToLower();
                 query = query.Where(e =>
                     e.Code.ToLower().Contains(filterLower) ||
-                    e.Name.ToLower().Contains(filterLower) ||
-                    e.ShortName.ToLower().Contains(filterLower) ||
-                    e.Branch.ToLower().Contains(filterLower)
+                    e.Name.ToLower().Contains(filterLower)
                 );
             }
 

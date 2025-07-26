@@ -205,6 +205,55 @@ namespace DimmedAPI.Controllers
             }
         }
 
+        // GET: api/Patient/search?companyCode=xxx&filter=xxx&page=1&pageSize=10
+        [HttpGet("search")]
+        public async Task<ActionResult<object>> SearchPatients(
+            [FromQuery] string companyCode,
+            [FromQuery] string filter = null,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return BadRequest("El código de compañía es requerido");
+                }
+                if (page < 1) page = 1;
+                if (pageSize < 1) pageSize = 10;
+
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                var query = companyContext.Set<Patient>().AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(filter))
+                {
+                    var filterLower = filter.ToLower();
+                    query = query.Where(p =>
+                        (!string.IsNullOrEmpty(p.Name) && p.Name.ToLower().Contains(filterLower)) ||
+                        (!string.IsNullOrEmpty(p.LastName) && p.LastName.ToLower().Contains(filterLower)) ||
+                        (!string.IsNullOrEmpty(p.Identification) && p.Identification.ToLower().Contains(filterLower))
+                    );
+                }
+
+                var total = await query.CountAsync();
+                var result = await query
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(p => new { p.Id, p.Identification, p.Name, p.LastName })
+                    .ToListAsync();
+
+                return Ok(new { total, page, pageSize, data = result });
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
         [HttpGet("VerificarConfiguracionCompania")]
         public async Task<ActionResult<object>> VerificarConfiguracionCompania([FromQuery] string companyCode)
         {

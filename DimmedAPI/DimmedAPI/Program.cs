@@ -63,6 +63,9 @@ builder.Services.AddScoped<IDynamicConnectionService, DynamicConnectionService>(
 // Register Dynamic BC Connection Service
 builder.Services.AddScoped<IDynamicBCConnectionService, DynamicBCConnectionService>();
 
+// Register Email Service
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 // Eliminada la configuración explícita de Kestrel para certificados SSL
 
 var app = builder.Build();

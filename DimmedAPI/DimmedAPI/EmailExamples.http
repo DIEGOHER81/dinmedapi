@@ -1,0 +1,52 @@
+### Envío de Correo Simple
+POST {{baseUrl}}/api/email/send?companyCode=COMPANY001
+Content-Type: application/json
+
+{
+  "toEmail": "destinatario@example.com",
+  "subject": "Prueba de Correo desde API",
+  "body": "Este es un correo de prueba enviado desde la API de Dimmed. Fecha: {{$datetime iso8601}}",
+  "isHtml": false
+}
+
+### Envío de Correo HTML
+POST {{baseUrl}}/api/email/send?companyCode=COMPANY001
+Content-Type: application/json
+
+{
+  "toEmail": "destinatario@example.com",
+  "subject": "Correo HTML desde API",
+  "body": "<h1>Hola desde la API</h1><p>Este es un <strong>correo HTML</strong> enviado desde la API de Dimmed.</p><p>Fecha: {{$datetime iso8601}}</p>",
+  "isHtml": true
+}
+
+### Envío de Correo con Notificación
+POST {{baseUrl}}/api/email/send?companyCode=COMPANY001
+Content-Type: application/json
+
+{
+  "toEmail": "admin@example.com",
+  "subject": "Notificación del Sistema",
+  "body": "Se ha procesado una nueva solicitud en el sistema. Por favor revise los detalles.",
+  "isHtml": false
+}
+
+### Ejemplo de Error - Compañía no encontrada
+POST {{baseUrl}}/api/email/send?companyCode=COMPANY_INEXISTENTE
+Content-Type: application/json
+
+{
+  "toEmail": "destinatario@example.com",
+  "subject": "Prueba de Error",
+  "body": "Este correo no debería enviarse",
+  "isHtml": false
+}
+
+### Ejemplo de Error - Campos faltantes
+POST {{baseUrl}}/api/email/send?companyCode=COMPANY001
+Content-Type: application/json
+
+{
+  "toEmail": "destinatario@example.com"
+  // Falta subject y body
+} 

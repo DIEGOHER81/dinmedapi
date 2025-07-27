@@ -4,3 +4,21 @@ GET {{DimmedAPI_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+# Equipment View API - Procedimiento Almacenado
+GET {{DimmedAPI_HostAddress}}/api/equipment/view?companyCode=DINMED&page=1&pageSize=10
+Accept: application/json
+
+###
+
+# Equipment View API con filtro
+GET {{DimmedAPI_HostAddress}}/api/equipment/view?companyCode=DINMED&page=1&pageSize=20&filter=equipo
+Accept: application/json
+
+###
+
+# Equipment View API - Diagnosticar columnas
+GET {{DimmedAPI_HostAddress}}/api/equipment/view/columns?companyCode=DINMED
+Accept: application/json
+
+###

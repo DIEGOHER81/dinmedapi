@@ -488,15 +488,186 @@ namespace DimmedAPI.Controllers
                 var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
                 var itemsBO = new ItemsBO(companyContext, bcConn);
 
-                var resultado = await itemsBO.SincronizarItemsBCWithPriceListAsync(take);
+                // Si take está vacío, procesar en bloques de 100
+                if (!take.HasValue || take.Value <= 0)
+                {
+                    return await SincronizarEnBloques(itemsBO, companyContext);
+                }
+
+                // Si take tiene valor, procesar normalmente
+                var resultado = await itemsBO.SincronizarItemsBCWithPriceListAsync(take, true);
                 return Ok(new {
-                    totalSincronizados = resultado.Count
+                    totalSincronizados = resultado.Count,
+                    mensaje = $"Sincronización completada. Total de items procesados: {resultado.Count}"
                 });
             }
             catch (Exception ex)
             {
                 var detalle = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 return BadRequest(new { mensaje = "Error al sincronizar items con price list", detalle });
+            }
+        }
+
+        /// <summary>
+        /// Sincroniza items en bloques de 100 hasta completar toda la sincronización
+        /// </summary>
+        private async Task<IActionResult> SincronizarEnBloques(ItemsBO itemsBO, ApplicationDBContext companyContext)
+        {
+            const int TAMANO_BLOQUE = 100;
+            int totalProcesados = 0;
+            int bloqueActual = 1;
+            var resultados = new List<object>();
+
+            try
+            {
+                // Limpiar la tabla local antes de comenzar
+                var allLocal = companyContext.ItemsBCWithPriceList.ToList();
+                if (allLocal.Any())
+                {
+                    companyContext.ItemsBCWithPriceList.RemoveRange(allLocal);
+                    await companyContext.SaveChangesAsync();
+                }
+
+                while (true)
+                {
+                    // Procesar bloque actual
+                    var bloqueResultado = await itemsBO.SincronizarItemsBCWithPriceListAsync(TAMANO_BLOQUE, false);
+                    
+                    if (bloqueResultado.Count == 0)
+                    {
+                        // No hay más items para procesar
+                        break;
+                    }
+
+                    totalProcesados += bloqueResultado.Count;
+                    
+                    // Agregar información del bloque procesado
+                    resultados.Add(new
+                    {
+                        bloque = bloqueActual,
+                        itemsEnBloque = bloqueResultado.Count,
+                        totalAcumulado = totalProcesados,
+                        mensaje = $"Bloque {bloqueActual} procesado: {bloqueResultado.Count} items"
+                    });
+
+                    bloqueActual++;
+
+                    // Si el bloque tiene menos de 100 items, significa que es el último
+                    if (bloqueResultado.Count < TAMANO_BLOQUE)
+                    {
+                        break;
+                    }
+                }
+
+                return Ok(new
+                {
+                    totalSincronizados = totalProcesados,
+                    totalBloques = bloqueActual - 1,
+                    mensaje = $"Sincronización completada exitosamente. Total de items procesados: {totalProcesados} en {bloqueActual - 1} bloques",
+                    detalles = resultados
+                });
+            }
+            catch (Exception ex)
+            {
+                var detalle = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return BadRequest(new { 
+                    mensaje = "Error durante la sincronización en bloques", 
+                    detalle,
+                    totalProcesados,
+                    bloqueActual,
+                    resultados
+                });
+            }
+        }
+
+        /// <summary>
+        /// Sincroniza items con progreso en tiempo real usando Server-Sent Events
+        /// </summary>
+        [HttpPost("sincronizar-items-bc-pricelist-progreso")]
+        public async Task SincronizarItemsBCWithPriceListProgreso([FromQuery] string companyCode)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+            {
+                Response.StatusCode = 400;
+                await Response.WriteAsync("El código de compañía es requerido");
+                return;
+            }
+
+            Response.Headers.Add("Content-Type", "text/event-stream");
+            Response.Headers.Add("Cache-Control", "no-cache");
+            Response.Headers.Add("Connection", "keep-alive");
+
+            try
+            {
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var itemsBO = new ItemsBO(companyContext, bcConn);
+
+                const int TAMANO_BLOQUE = 100;
+                int totalProcesados = 0;
+                int bloqueActual = 1;
+
+                // Enviar mensaje de inicio
+                await Response.WriteAsync($"data: {{\"tipo\":\"inicio\",\"mensaje\":\"Iniciando sincronización de items con price list...\"}}\n\n");
+                await Response.Body.FlushAsync();
+
+                // Limpiar la tabla local antes de comenzar
+                var allLocal = companyContext.ItemsBCWithPriceList.ToList();
+                if (allLocal.Any())
+                {
+                    await Response.WriteAsync($"data: {{\"tipo\":\"limpieza\",\"mensaje\":\"Limpiando tabla local...\"}}\n\n");
+                    await Response.Body.FlushAsync();
+                    
+                    companyContext.ItemsBCWithPriceList.RemoveRange(allLocal);
+                    await companyContext.SaveChangesAsync();
+                    
+                    await Response.WriteAsync($"data: {{\"tipo\":\"limpieza_completada\",\"mensaje\":\"Tabla local limpiada exitosamente\"}}\n\n");
+                    await Response.Body.FlushAsync();
+                }
+
+                while (true)
+                {
+                    // Enviar progreso del bloque actual
+                    await Response.WriteAsync($"data: {{\"tipo\":\"procesando_bloque\",\"bloque\":{bloqueActual},\"mensaje\":\"Procesando bloque {bloqueActual}...\"}}\n\n");
+                    await Response.Body.FlushAsync();
+
+                    // Procesar bloque actual
+                    var bloqueResultado = await itemsBO.SincronizarItemsBCWithPriceListAsync(TAMANO_BLOQUE, false);
+                    
+                    if (bloqueResultado.Count == 0)
+                    {
+                        // No hay más items para procesar
+                        await Response.WriteAsync($"data: {{\"tipo\":\"sin_mas_items\",\"mensaje\":\"No hay más items para procesar\"}}\n\n");
+                        await Response.Body.FlushAsync();
+                        break;
+                    }
+
+                    totalProcesados += bloqueResultado.Count;
+                    
+                    // Enviar resultado del bloque
+                    await Response.WriteAsync($"data: {{\"tipo\":\"bloque_completado\",\"bloque\":{bloqueActual},\"itemsEnBloque\":{bloqueResultado.Count},\"totalAcumulado\":{totalProcesados},\"mensaje\":\"Bloque {bloqueActual} completado: {bloqueResultado.Count} items procesados\"}}\n\n");
+                    await Response.Body.FlushAsync();
+
+                    bloqueActual++;
+
+                    // Si el bloque tiene menos de 100 items, significa que es el último
+                    if (bloqueResultado.Count < TAMANO_BLOQUE)
+                    {
+                        await Response.WriteAsync($"data: {{\"tipo\":\"ultimo_bloque\",\"mensaje\":\"Último bloque procesado\"}}\n\n");
+                        await Response.Body.FlushAsync();
+                        break;
+                    }
+                }
+
+                // Enviar mensaje de finalización
+                await Response.WriteAsync($"data: {{\"tipo\":\"completado\",\"totalSincronizados\":{totalProcesados},\"totalBloques\":{bloqueActual - 1},\"mensaje\":\"Sincronización completada exitosamente. Total de items procesados: {totalProcesados} en {bloqueActual - 1} bloques\"}}\n\n");
+                await Response.Body.FlushAsync();
+            }
+            catch (Exception ex)
+            {
+                var detalle = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                await Response.WriteAsync($"data: {{\"tipo\":\"error\",\"mensaje\":\"Error durante la sincronización\",\"detalle\":\"{detalle}\"}}\n\n");
+                await Response.Body.FlushAsync();
             }
         }
 

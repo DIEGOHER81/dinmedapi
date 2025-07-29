@@ -1,0 +1,95 @@
+### API de Consulta de Cantidades y Disponibilidad - Ejemplos Optimizados
+
+### 1. Consultar Cantidades y Disponibilidad - Todos los parámetros con paginación
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-disponibilidad?companyCode=COMP001&location=WH01&stock=STK01&salesCode=SALES001&reference=ITEM001&page=1&pageSize=50
+
+### 2. Consultar Cantidades y Disponibilidad - Solo compañía (paginación por defecto)
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-disponibilidad?companyCode=COMP001
+
+### 3. Consultar Cantidades y Disponibilidad - Con ubicación y stock, página 2
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-disponibilidad?companyCode=COMP001&location=WH01&stock=STK01&page=2&pageSize=100
+
+### 4. Consultar Cantidades y Disponibilidad - Con código de venta, página grande
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-disponibilidad?companyCode=COMP001&salesCode=SALES001&page=1&pageSize=200
+
+### 5. Consultar Cantidades y Disponibilidad - Con referencia específica, página pequeña
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-disponibilidad?companyCode=COMP001&reference=ITEM001&page=1&pageSize=25
+
+### 6. Consultar Cantidades por Grupo de Precios - Todos los parámetros con paginación
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-por-grupo-precios?companyCode=COMP001&location=WH01&stock=STK01&priceGroup=GRUPO_A&reference=ITEM001&page=1&pageSize=50
+
+### 7. Consultar Cantidades por Grupo de Precios - Solo compañía y grupo de precios
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-por-grupo-precios?companyCode=COMP001&priceGroup=GRUPO_A
+
+### 8. Consultar Cantidades por Grupo de Precios - Con ubicación y stock, página 3
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-por-grupo-precios?companyCode=COMP001&location=WH01&stock=STK01&priceGroup=GRUPO_A&page=3&pageSize=75
+
+### 9. Consultar Cantidades por Grupo de Precios - Con referencia específica, página grande
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-por-grupo-precios?companyCode=COMP001&priceGroup=GRUPO_A&reference=ITEM001&page=1&pageSize=200
+
+### 10. Consultar Cantidades por Grupo de Precios - Solo compañía, página pequeña
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-por-grupo-precios?companyCode=COMP001&page=1&pageSize=10
+
+### Variables de entorno (configurar en el archivo .http)
+@baseUrl = https://api.example.com
+@companyCode = COMP001
+@location = WH01
+@stock = STK01
+@salesCode = SALES001
+@priceGroup = GRUPO_A
+@reference = ITEM001
+@page = 1
+@pageSize = 50
+
+### Ejemplos con variables
+
+### 11. Consultar Cantidades y Disponibilidad con variables
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-disponibilidad?companyCode={{companyCode}}&location={{location}}&stock={{stock}}&salesCode={{salesCode}}&reference={{reference}}&page={{page}}&pageSize={{pageSize}}
+
+### 12. Consultar Cantidades por Grupo de Precios con variables
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-por-grupo-precios?companyCode={{companyCode}}&location={{location}}&stock={{stock}}&priceGroup={{priceGroup}}&reference={{reference}}&page={{page}}&pageSize={{pageSize}}
+
+### 13. Consultar Cantidades y Disponibilidad - Error de compañía no encontrada
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-disponibilidad?companyCode=COMP_INEXISTENTE
+
+### 14. Consultar Cantidades por Grupo de Precios - Error de compañía no encontrada
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-por-grupo-precios?companyCode=COMP_INEXISTENTE&priceGroup={{priceGroup}}
+
+### 15. Consultar Cantidades y Disponibilidad - Sin código de compañía (error)
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-disponibilidad
+
+### 16. Consultar Cantidades por Grupo de Precios - Sin código de compañía (error)
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-por-grupo-precios?priceGroup={{priceGroup}}
+
+### 17. Consultar Cantidades y Disponibilidad - Parámetros de paginación inválidos (se corrigen automáticamente)
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-disponibilidad?companyCode=COMP001&page=0&pageSize=300
+
+### 18. Consultar Cantidades por Grupo de Precios - Parámetros de paginación inválidos (se corrigen automáticamente)
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-por-grupo-precios?companyCode=COMP001&priceGroup=GRUPO_A&page=-1&pageSize=0
+
+### 19. Consultar Cantidades y Disponibilidad - Primera página con tamaño máximo
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-disponibilidad?companyCode=COMP001&page=1&pageSize=200
+
+### 20. Consultar Cantidades por Grupo de Precios - Última página (asumiendo 1500 elementos)
+GET {{baseUrl}}/api/EntryRequestComponents/consultar-cantidades-por-grupo-precios?companyCode=COMP001&priceGroup=GRUPO_A&page=30&pageSize=50
+
+### Notas de uso:
+### - Reemplaza {{baseUrl}} con la URL real de tu API
+### - Reemplaza los valores de las variables con los valores reales de tu entorno
+### - Los parámetros location, stock, salesCode, priceGroup y reference son opcionales
+### - El parámetro companyCode es obligatorio en todos los endpoints
+### - Los parámetros page y pageSize son opcionales (por defecto: page=1, pageSize=50)
+### - El máximo pageSize es 200, valores mayores se ajustan automáticamente
+### - Los endpoints devuelven información detallada de cantidades, disponibilidad y precios
+### - Las respuestas incluyen información de paginación
+### - Los endpoints tienen caché de 2 minutos para mejorar el rendimiento
+### - El sistema incluye reintentos automáticos en caso de errores de conexión
+
+### Optimizaciones implementadas:
+### ✅ Caché inteligente (2 minutos para consultas de cantidades)
+### ✅ Paginación eficiente (máximo 200 elementos por página)
+### ✅ Reintentos automáticos (máximo 3 intentos)
+### ✅ Validación de parámetros
+### ✅ Manejo robusto de errores
+### ✅ Logging detallado para debugging
+### ✅ Invalidación automática de caché después de cambios

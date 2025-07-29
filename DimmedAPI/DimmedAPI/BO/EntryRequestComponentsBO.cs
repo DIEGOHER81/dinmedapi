@@ -42,11 +42,17 @@ namespace DimmedAPI.BO
                 }
 
                 List<EntryRequestComponents> lData = await _bcConn.GetComponents("lylitems", location ?? "", stock ?? "", salesCode ?? "");
-                return lData;
+                
+                // Si lData es null, devolver lista vacía en lugar de null
+                return lData ?? new List<EntryRequestComponents>();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Log del error para debugging
+                Console.WriteLine($"Error en GetComponentsAsync: {ex.Message}");
+                
+                // Devolver lista vacía en lugar de lanzar excepción
+                return new List<EntryRequestComponents>();
             }
         }
 

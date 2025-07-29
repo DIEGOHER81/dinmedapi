@@ -3013,6 +3013,98 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
+    "Method": "ConsultarCantidadesDisponibilidad",
+    "RelativePath": "api/EntryRequestComponents/consultar-cantidades-disponibilidad",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "location",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "stock",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "salesCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "reference",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
+    "Method": "ConsultarCantidadesPorGrupoPrecios",
+    "RelativePath": "api/EntryRequestComponents/consultar-cantidades-por-grupo-precios",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "location",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "stock",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "priceGroup",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "reference",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
     "Method": "GetEstadisticas",
     "RelativePath": "api/EntryRequestComponents/estadisticas",
     "HttpMethod": "GET",
@@ -4890,6 +4982,28 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",
+    "Method": "SincronizarItemsBCWithPriceListProgreso",
+    "RelativePath": "api/ItemsAPI/sincronizar-items-bc-pricelist-progreso",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "DimmedAPI.Controllers.ItemsAPIController",

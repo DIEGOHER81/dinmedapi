@@ -665,92 +665,127 @@ namespace DimmedAPI.BO
                 List<EntryRequestComponents> lData = new List<EntryRequestComponents>();
                 EntryRequestComponents reqcomponents;
                 string dataNext = "";
+                int maxRetries = 3;
+                int currentRetry = 0;
+
                 do
                 {
-                    // Construir filtro dinámicamente basado en los parámetros proporcionados
-                    var filterConditions = new List<string>();
-                    
-                    // Siempre filtrar por cantidad mayor a 0
-                    filterConditions.Add("quantity ne 0");
-                    
-                    // Agregar filtro de salesCode solo si se proporciona
-                    if (!string.IsNullOrEmpty(salesCode))
-                    {
-                        filterConditions.Add("salesCode eq '" + salesCode + "'");
-                    }
-                    
-                    var filterurl = "?$filter=" + string.Join(" and ", filterConditions);
-                    
-                    if(dataNext != "")
-                    {
-                        string[] dataurl = dataNext.Split("?$filter=");
-                        filterurl = "?$filter=" + dataurl[1];
-                    }
-                    
-                    var response = await BCRQ(method, filterurl);
-                    var resValues = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response.Content);
-                    IEnumerable<object> data = JsonConvert.DeserializeObject(resValues["value"].ToString());
-
                     try
                     {
-                        if (resValues["@odata.nextLink"] != null)
+                        // Construir filtro dinámicamente basado en los parámetros proporcionados
+                        var filterConditions = new List<string>();
+                        
+                        // Siempre filtrar por cantidad mayor a 0
+                        filterConditions.Add("quantity ne 0");
+                        
+                        // Agregar filtro de salesCode solo si se proporciona
+                        if (!string.IsNullOrEmpty(salesCode))
                         {
-                            dataNext = resValues["@odata.nextLink"].ToString();
+                            filterConditions.Add("salesCode eq '" + salesCode + "'");
                         }
-                    }
-                    catch (Exception)
-                    {
-                        dataNext = "";
-                    }
-                    
-                    if (data != null)
-                    {
-                        foreach (dynamic v in data)
+                        
+                        var filterurl = "?$filter=" + string.Join(" and ", filterConditions);
+                        
+                        if(dataNext != "")
                         {
-                            reqcomponents = new EntryRequestComponents();
-                            reqcomponents.ItemNo = v.no;
-                            reqcomponents.ItemName = v.description;
-                            reqcomponents.Warehouse = v.location;
-                            reqcomponents.UnitPrice = v.unitPrice;
+                            string[] dataurl = dataNext.Split("?$filter=");
+                            filterurl = "?$filter=" + dataurl[1];
+                        }
+                        
+                        var response = await BCRQ(method, filterurl);
+                        
+                        if (!response.IsSuccessful)
+                        {
+                            throw new Exception($"Error en la respuesta de BC: {response.StatusCode} - {response.Content}");
+                        }
+                        
+                        var resValues = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response.Content);
+                        
+                        if (resValues == null || !resValues.ContainsKey("value"))
+                        {
+                            throw new Exception("Respuesta inválida de Business Central");
+                        }
+                        
+                        IEnumerable<object> data = JsonConvert.DeserializeObject(resValues["value"].ToString());
 
-                            // Solo aplicar filtro de ubicación si se proporcionan los parámetros
-                            if (!string.IsNullOrEmpty(location) || !string.IsNullOrEmpty(stock))
+                        try
+                        {
+                            if (resValues["@odata.nextLink"] != null)
                             {
-                                if (v.location != location && v.location != stock)
+                                dataNext = resValues["@odata.nextLink"].ToString();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            dataNext = "";
+                        }
+                        
+                        if (data != null)
+                        {
+                            foreach (dynamic v in data)
+                            {
+                                reqcomponents = new EntryRequestComponents();
+                                reqcomponents.ItemNo = v.no;
+                                reqcomponents.ItemName = v.description;
+                                reqcomponents.Warehouse = v.location;
+                                reqcomponents.UnitPrice = v.unitPrice;
+
+                                // Solo aplicar filtro de ubicación si se proporcionan los parámetros
+                                if (!string.IsNullOrEmpty(location) || !string.IsNullOrEmpty(stock))
                                 {
-                                    reqcomponents.Quantity = 0;
+                                    if (v.location != location && v.location != stock)
+                                    {
+                                        reqcomponents.Quantity = 0;
+                                    }
+                                    else
+                                    {
+                                        if (v.reservedQuantity != null)
+                                            reqcomponents.Quantity = v.quantity - v.reservedQuantity;
+                                        else
+                                            reqcomponents.Quantity = v.quantity;
+                                    }
                                 }
                                 else
                                 {
+                                    // Si no se proporcionan filtros de ubicación, usar la cantidad completa
                                     if (v.reservedQuantity != null)
                                         reqcomponents.Quantity = v.quantity - v.reservedQuantity;
                                     else
                                         reqcomponents.Quantity = v.quantity;
                                 }
-                            }
-                            else
-                            {
-                                // Si no se proporcionan filtros de ubicación, usar la cantidad completa
-                                if (v.reservedQuantity != null)
-                                    reqcomponents.Quantity = v.quantity - v.reservedQuantity;
-                                else
-                                    reqcomponents.Quantity = v.quantity;
-                            }
 
-                            if (v.salesCode != null)
-                            {
-                                reqcomponents.SystemId = v.salesCode;
-                            }
+                                if (v.salesCode != null)
+                                {
+                                    reqcomponents.SystemId = v.salesCode;
+                                }
 
-                            lData.Add(reqcomponents);
+                                lData.Add(reqcomponents);
+                            }
                         }
+                        
+                        // Reset retry counter on successful request
+                        currentRetry = 0;
                     }
-                } while (dataNext != "");         
+                    catch (Exception ex)
+                    {
+                        currentRetry++;
+                        Console.WriteLine($"Error en GetComponents (intento {currentRetry}/{maxRetries}): {ex.Message}");
+                        
+                        if (currentRetry >= maxRetries)
+                        {
+                            throw new Exception($"Error después de {maxRetries} intentos: {ex.Message}", ex);
+                        }
+                        
+                        // Esperar antes de reintentar (backoff exponencial)
+                        await Task.Delay(1000 * currentRetry);
+                    }
+                } while (!string.IsNullOrEmpty(dataNext) && currentRetry < maxRetries);         
               
                 return lData;
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error crítico en GetComponents: {ex.Message}");
                 return null;
             }
         }

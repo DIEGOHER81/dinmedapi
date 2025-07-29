@@ -258,19 +258,22 @@ namespace DimmedAPI.BO
             }
         }
 
-        public async Task<List<ItemsBCWithPriceList>> SincronizarItemsBCWithPriceListAsync(int? take = null)
+        public async Task<List<ItemsBCWithPriceList>> SincronizarItemsBCWithPriceListAsync(int? take = null, bool limpiarTabla = true)
         {
             // Traer los datos desde BC
             var itemsFromBC = await _bcConn.GetItemsWithPriceList(take);
             if (itemsFromBC == null)
                 return new List<ItemsBCWithPriceList>();
 
-            // Limpiar la tabla local
-            var allLocal = _context.ItemsBCWithPriceList.ToList();
-            if (allLocal.Any())
+            // Limpiar la tabla local solo si se solicita
+            if (limpiarTabla)
             {
-                _context.ItemsBCWithPriceList.RemoveRange(allLocal);
-                await _context.SaveChangesAsync();
+                var allLocal = _context.ItemsBCWithPriceList.ToList();
+                if (allLocal.Any())
+                {
+                    _context.ItemsBCWithPriceList.RemoveRange(allLocal);
+                    await _context.SaveChangesAsync();
+                }
             }
 
             // Mapear y guardar los nuevos registros

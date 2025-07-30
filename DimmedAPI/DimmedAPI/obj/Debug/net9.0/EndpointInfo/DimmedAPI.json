@@ -4784,6 +4784,86 @@
         }
       }
     },
+    "/api/EntryRequest/report": {
+      "get": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "noEntryRequest",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "dateIni",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestReportDTOPaginatedResponseDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestReportDTOPaginatedResponseDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestReportDTOPaginatedResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/EntryRequest/basic/{id}": {
       "get": {
         "tags": [
@@ -13428,6 +13508,10 @@
           "equipmentName": {
             "type": "string",
             "nullable": true
+          },
+          "equipmentCode": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -13726,6 +13810,164 @@
           "name": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestReportDTO": {
+        "type": "object",
+        "properties": {
+          "pedido": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "consumo": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "fechaCirugia": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "fechaSolicitud": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "estado": {
+            "type": "string",
+            "nullable": true
+          },
+          "estadoTrazabilidad": {
+            "type": "string",
+            "nullable": true
+          },
+          "cliente": {
+            "type": "string",
+            "nullable": true
+          },
+          "equipos": {
+            "type": "string",
+            "nullable": true
+          },
+          "direccionEntrega": {
+            "type": "string",
+            "nullable": true
+          },
+          "prioridadEntrega": {
+            "type": "string",
+            "nullable": true
+          },
+          "observaciones": {
+            "type": "string",
+            "nullable": true
+          },
+          "observacionesComerciales": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombrePaciente": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombreMedico": {
+            "type": "string",
+            "nullable": true
+          },
+          "nombreAtc": {
+            "type": "string",
+            "nullable": true
+          },
+          "sede": {
+            "type": "string",
+            "nullable": true
+          },
+          "servicio": {
+            "type": "string",
+            "nullable": true
+          },
+          "tipodePedido": {
+            "type": "string",
+            "nullable": true
+          },
+          "causalesdenocirugia": {
+            "type": "string",
+            "nullable": true
+          },
+          "detallescausalesdenocirugia": {
+            "type": "string",
+            "nullable": true
+          },
+          "aseguradora": {
+            "type": "string",
+            "nullable": true
+          },
+          "tipodeaseguradora": {
+            "type": "string",
+            "nullable": true
+          },
+          "solicitante": {
+            "type": "string",
+            "nullable": true
+          },
+          "ladoExtremidad": {
+            "type": "string",
+            "nullable": true
+          },
+          "fechaTerminacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "esReposicion": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "imprimir": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "reporteTrazabilidad": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestReportDTOPaginatedResponseDTO": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntryRequestReportDTO"
+            },
+            "nullable": true
+          },
+          "totalRecords": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasPreviousPage": {
+            "type": "boolean"
+          },
+          "hasNextPage": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

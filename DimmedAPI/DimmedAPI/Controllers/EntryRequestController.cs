@@ -4,6 +4,8 @@ using DimmedAPI.Services;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using DimmedAPI.DTOs;
+using System.Collections.Generic;
+using System.Data;
 
 namespace DimmedAPI.Controllers
 {
@@ -64,7 +66,7 @@ namespace DimmedAPI.Controllers
                 
                 // Intentamos obtener solo los primeros 5 registros para debug
                 var entryRequests = await companyContext.EntryRequests
-                    .Take(5)
+                    .OrderByDescending(er => er.Id) // Ordenar por Id descendente
                     .Select(er => new EntryRequestResponseDTO
                     {
                         Id = er.Id,
@@ -1261,6 +1263,318 @@ namespace DimmedAPI.Controllers
                 .ToListAsync();
 
             return Ok(remisiones);
+        }
+
+        // GET: api/EntryRequest/report
+        [HttpGet("report")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<ActionResult<PaginatedResponseDTO<EntryRequestReportDTO>>> GetEntryRequestsReport(
+            [FromQuery] string companyCode,
+            [FromQuery] int? noEntryRequest = null,
+            [FromQuery] DateTime? dateIni = null,
+            [FromQuery] DateTime? dateEnd = null,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 50)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO GetEntryRequestsReport ===");
+                Console.WriteLine($"CompanyCode recibido: {companyCode}");
+                Console.WriteLine($"NoEntryRequest: {noEntryRequest}");
+                Console.WriteLine($"DateIni: {dateIni}");
+                Console.WriteLine($"DateEnd: {dateEnd}");
+                Console.WriteLine($"PageNumber: {pageNumber}");
+                Console.WriteLine($"PageSize: {pageSize}");
+
+                // Validar parámetros de paginación
+                if (pageNumber < 1) pageNumber = 1;
+                if (pageSize < 1) pageSize = 50;
+                if (pageSize > 1000) pageSize = 1000; // Límite máximo
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                Console.WriteLine("Creando contexto de base de datos...");
+                
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+
+                // Ejecutar el procedimiento almacenado - siempre enviar todos los parámetros
+                var parameters = new List<object>();
+                var parameterNames = new List<string>();
+
+                // Siempre enviar @NoEntryRequest (NULL si no se proporciona)
+                parameters.Add(noEntryRequest ?? (object)DBNull.Value);
+                parameterNames.Add("@NoEntryRequest");
+
+                // Siempre enviar @DateIni (NULL si no se proporciona)
+                parameters.Add(dateIni?.Date ?? (object)DBNull.Value);
+                parameterNames.Add("@DateIni");
+
+                // Siempre enviar @DateEnd (NULL si no se proporciona)
+                parameters.Add(dateEnd?.Date ?? (object)DBNull.Value);
+                parameterNames.Add("@DateEnd");
+
+                // Construir la consulta SQL con todos los parámetros
+                var sql = "EXEC sp_GetEntryRequestsReport " + string.Join(", ", parameterNames);
+
+                Console.WriteLine($"Ejecutando SQL: {sql}");
+                Console.WriteLine($"Parámetros: {string.Join(", ", parameters)}");
+                Console.WriteLine($"Parámetros detallados:");
+                Console.WriteLine($"  @NoEntryRequest: {noEntryRequest?.ToString() ?? "NULL"}");
+                Console.WriteLine($"  @DateIni: {dateIni?.Date.ToString("yyyy-MM-dd") ?? "NULL"}");
+                Console.WriteLine($"  @DateEnd: {dateEnd?.Date.ToString("yyyy-MM-dd") ?? "NULL"}");
+
+                // Ejecutar el procedimiento almacenado usando DbCommand para mejor control de tipos
+                var allResults = new List<EntryRequestReportDTO>();
+                using var command = companyContext.Database.GetDbConnection().CreateCommand();
+                command.CommandText = sql;
+                command.CommandType = System.Data.CommandType.Text;
+                
+                // Agregar parámetros
+                for (int i = 0; i < parameters.Count; i++)
+                {
+                    var parameter = command.CreateParameter();
+                    parameter.ParameterName = parameterNames[i];
+                    parameter.Value = parameters[i];
+                    command.Parameters.Add(parameter);
+                }
+                
+                companyContext.Database.OpenConnection();
+                using var reader = await command.ExecuteReaderAsync();
+                
+                while (await reader.ReadAsync())
+                {
+                    // Debug: Log del valor original de Pedido
+                    try
+                    {
+                        int pedidoIndex = reader.GetOrdinal("Pedido");
+                        var pedidoValue = reader.GetValue(pedidoIndex);
+                        Console.WriteLine($"DEBUG - Valor original de Pedido: '{pedidoValue}' (Tipo: {pedidoValue?.GetType().Name})");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"DEBUG - Error obteniendo Pedido: {ex.Message}");
+                    }
+
+                    var item = new EntryRequestReportDTO
+                    {
+                        Pedido = GetSafeInt32(reader, "Pedido"),
+                        Consumo = GetSafeInt32(reader, "Consumo"),
+                        FechaCirugia = GetSafeDateTime(reader, "FechaCirugia"),
+                        FechaSolicitud = GetSafeDateTime(reader, "FechaSolicitud"),
+                        Estado = GetSafeString(reader, "Estado"),
+                        EstadoTrazabilidad = GetSafeString(reader, "EstadoTrazabilidad"),
+                        Cliente = GetSafeString(reader, "Cliente"),
+                        Equipos = GetSafeString(reader, "Equipos"),
+                        DireccionEntrega = GetSafeString(reader, "DireccionEntrega"),
+                        PrioridadEntrega = GetSafeString(reader, "PrioridadEntrega"),
+                        Observaciones = GetSafeString(reader, "Observaciones"),
+                        ObservacionesComerciales = GetSafeString(reader, "ObservacionesComerciales"),
+                        NombrePaciente = GetSafeString(reader, "NombrePaciente"),
+                        NombreMedico = GetSafeString(reader, "NombreMedico"),
+                        NombreAtc = GetSafeString(reader, "NombreAtc"),
+                        Sede = GetSafeString(reader, "Sede"),
+                        Servicio = GetSafeString(reader, "Servicio"),
+                        TipodePedido = GetSafeString(reader, "TipodePedido"),
+                        Causalesdenocirugia = GetSafeString(reader, "Causalesdenocirugia"),
+                        Detallescausalesdenocirugia = GetSafeString(reader, "Detallescausalesdenocirugia"),
+                        Aseguradora = GetSafeString(reader, "Aseguradora"),
+                        Tipodeaseguradora = GetSafeString(reader, "Tipodeaseguradora"),
+                        Solicitante = GetSafeString(reader, "Solicitante"),
+                        LadoExtremidad = GetSafeString(reader, "LadoExtremidad"),
+                        FechaTerminacion = GetSafeDateTime(reader, "FechaTerminacion"),
+                        EsReposicion = GetSafeBoolean(reader, "EsReposicion"),
+                        Imprimir = GetSafeBoolean(reader, "Imprimir"),
+                        ReporteTrazabilidad = GetSafeString(reader, "ReporteTrazabilidad")
+                    };
+                    allResults.Add(item);
+                }
+
+                Console.WriteLine($"Resultados obtenidos: {allResults.Count} registros totales");
+
+                // Aplicar paginación
+                var totalRecords = allResults.Count;
+                var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+                var skip = (pageNumber - 1) * pageSize;
+                var take = pageSize;
+
+                var paginatedData = allResults
+                    .Skip(skip)
+                    .Take(take)
+                    .ToList();
+
+                var response = new PaginatedResponseDTO<EntryRequestReportDTO>
+                {
+                    Data = paginatedData,
+                    TotalRecords = totalRecords,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalPages = totalPages,
+                    HasPreviousPage = pageNumber > 1,
+                    HasNextPage = pageNumber < totalPages
+                };
+
+                Console.WriteLine($"Paginación aplicada: Página {pageNumber} de {totalPages}, {paginatedData.Count} registros mostrados");
+
+                return Ok(response);
+            }
+            catch (InvalidCastException ex)
+            {
+                Console.WriteLine($"Error de conversión de tipos en GetEntryRequestsReport: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                return StatusCode(500, $"Error de conversión de datos: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en GetEntryRequestsReport: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
+        // Métodos auxiliares para conversiones seguras
+        private static int? GetSafeInt32(IDataReader reader, string columnName)
+        {
+            try
+            {
+                int columnIndex = reader.GetOrdinal(columnName);
+                if (reader.IsDBNull(columnIndex))
+                {
+                    Console.WriteLine($"DEBUG - {columnName} es NULL");
+                    return null;
+                }
+
+                var value = reader.GetValue(columnIndex);
+                Console.WriteLine($"DEBUG - {columnName}: '{value}' (Tipo: {value?.GetType().Name})");
+                
+                if (value is int intValue)
+                {
+                    Console.WriteLine($"DEBUG - {columnName} es int: {intValue}");
+                    return intValue;
+                }
+                if (value is string stringValue)
+                {
+                    Console.WriteLine($"DEBUG - {columnName} es string: '{stringValue}'");
+                    // Extraer números del string (ej: "P- 10168" -> 10168)
+                    var numbers = new string(stringValue.Where(char.IsDigit).ToArray());
+                    Console.WriteLine($"DEBUG - {columnName} números extraídos: '{numbers}'");
+                    
+                    if (!string.IsNullOrEmpty(numbers) && int.TryParse(numbers, out int parsedValue))
+                    {
+                        Console.WriteLine($"DEBUG - {columnName} parseado exitosamente: {parsedValue}");
+                        return parsedValue;
+                    }
+                    
+                    // Intentar parse directo si no hay caracteres especiales
+                    if (int.TryParse(stringValue, out int directParsedValue))
+                    {
+                        Console.WriteLine($"DEBUG - {columnName} parse directo exitoso: {directParsedValue}");
+                        return directParsedValue;
+                    }
+                    
+                    Console.WriteLine($"DEBUG - {columnName} no se pudo parsear");
+                }
+                if (value is decimal decimalValue)
+                {
+                    Console.WriteLine($"DEBUG - {columnName} es decimal: {decimalValue}");
+                    return (int)decimalValue;
+                }
+                if (value is double doubleValue)
+                {
+                    Console.WriteLine($"DEBUG - {columnName} es double: {doubleValue}");
+                    return (int)doubleValue;
+                }
+
+                Console.WriteLine($"DEBUG - {columnName} tipo no manejado: {value?.GetType().Name}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DEBUG - Error en GetSafeInt32 para {columnName}: {ex.Message}");
+                return null;
+            }
+        }
+
+        private static DateTime? GetSafeDateTime(IDataReader reader, string columnName)
+        {
+            try
+            {
+                int columnIndex = reader.GetOrdinal(columnName);
+                if (reader.IsDBNull(columnIndex))
+                    return null;
+
+                var value = reader.GetValue(columnIndex);
+                if (value is DateTime dateTimeValue)
+                    return dateTimeValue;
+                if (value is string stringValue && DateTime.TryParse(stringValue, out DateTime parsedValue))
+                    return parsedValue;
+
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static string? GetSafeString(IDataReader reader, string columnName)
+        {
+            try
+            {
+                int columnIndex = reader.GetOrdinal(columnName);
+                if (reader.IsDBNull(columnIndex))
+                    return null;
+
+                var value = reader.GetValue(columnIndex);
+                return value?.ToString();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static bool? GetSafeBoolean(IDataReader reader, string columnName)
+        {
+            try
+            {
+                int columnIndex = reader.GetOrdinal(columnName);
+                if (reader.IsDBNull(columnIndex))
+                    return null;
+
+                var value = reader.GetValue(columnIndex);
+                if (value is bool boolValue)
+                    return boolValue;
+                if (value is string stringValue)
+                {
+                    if (bool.TryParse(stringValue, out bool parsedValue))
+                        return parsedValue;
+                    if (stringValue.Equals("1", StringComparison.OrdinalIgnoreCase) || 
+                        stringValue.Equals("true", StringComparison.OrdinalIgnoreCase) ||
+                        stringValue.Equals("si", StringComparison.OrdinalIgnoreCase) ||
+                        stringValue.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                        return true;
+                    if (stringValue.Equals("0", StringComparison.OrdinalIgnoreCase) || 
+                        stringValue.Equals("false", StringComparison.OrdinalIgnoreCase) ||
+                        stringValue.Equals("no", StringComparison.OrdinalIgnoreCase))
+                        return false;
+                }
+                if (value is int intValue)
+                    return intValue != 0;
+                if (value is decimal decimalValue)
+                    return decimalValue != 0;
+
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         // GET: api/EntryRequest/basic/{id}

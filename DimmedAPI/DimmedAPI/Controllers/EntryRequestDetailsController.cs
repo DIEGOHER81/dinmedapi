@@ -32,6 +32,7 @@ namespace DimmedAPI.Controllers
 
             using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
             var details = await companyContext.EntryRequestDetails
+                .Include(d => d.IdEquipmentNavigation)
                 .Select(d => new EntryRequestDetailsResponseDTO
                 {
                     Id = d.Id,
@@ -46,7 +47,9 @@ namespace DimmedAPI.Controllers
                     IsComponent = d.IsComponent,
                     UserIdTraceState = d.UserIdTraceState,
                     sInformation = d.sInformation,
-                    Name = d.Name
+                    Name = d.Name,
+                    EquipmentName = d.IdEquipmentNavigation != null ? d.IdEquipmentNavigation.Name : null,
+                    EquipmentCode = d.IdEquipmentNavigation != null ? d.IdEquipmentNavigation.Code : null
                 })
                 .ToListAsync();
             return Ok(details);
@@ -60,7 +63,9 @@ namespace DimmedAPI.Controllers
                 return BadRequest("El código de compañía es requerido");
 
             using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
-            var d = await companyContext.EntryRequestDetails.FindAsync(id);
+            var d = await companyContext.EntryRequestDetails
+                .Include(d => d.IdEquipmentNavigation)
+                .FirstOrDefaultAsync(d => d.Id == id);
             if (d == null)
                 return NotFound();
             var dto = new EntryRequestDetailsResponseDTO
@@ -77,7 +82,9 @@ namespace DimmedAPI.Controllers
                 IsComponent = d.IsComponent,
                 UserIdTraceState = d.UserIdTraceState,
                 sInformation = d.sInformation,
-                Name = d.Name
+                Name = d.Name,
+                EquipmentName = d.IdEquipmentNavigation != null ? d.IdEquipmentNavigation.Name : null,
+                EquipmentCode = d.IdEquipmentNavigation != null ? d.IdEquipmentNavigation.Code : null
             };
             return Ok(dto);
         }
@@ -109,7 +116,9 @@ namespace DimmedAPI.Controllers
                     sInformation = d.sInformation,
                     Name = d.Name,
                     // Nuevo campo: nombre del equipo
-                    EquipmentName = d.IdEquipmentNavigation != null ? d.IdEquipmentNavigation.Name : null
+                    EquipmentName = d.IdEquipmentNavigation != null ? d.IdEquipmentNavigation.Name : null,
+                    // Nuevo campo: código del equipo
+                    EquipmentCode = d.IdEquipmentNavigation != null ? d.IdEquipmentNavigation.Code : null
                 })
                 .ToListAsync();
             return Ok(details);
@@ -140,6 +149,9 @@ namespace DimmedAPI.Controllers
             };
             companyContext.EntryRequestDetails.Add(entity);
             await companyContext.SaveChangesAsync();
+            
+            // Load the equipment information for the response
+            var equipment = await companyContext.Equipment.FindAsync(entity.IdEquipment);
             var dto = new EntryRequestDetailsResponseDTO
             {
                 Id = entity.Id,
@@ -154,7 +166,9 @@ namespace DimmedAPI.Controllers
                 IsComponent = entity.IsComponent,
                 UserIdTraceState = entity.UserIdTraceState,
                 sInformation = entity.sInformation,
-                Name = entity.Name
+                Name = entity.Name,
+                EquipmentName = equipment?.Name,
+                EquipmentCode = equipment?.Code
             };
             return CreatedAtAction(nameof(GetById), new { id = entity.Id, companyCode }, dto);
         }

@@ -18,5 +18,6 @@ namespace DimmedAPI.DTOs
         public string sInformation { get; set; }
         public string Name { get; set; }
         public string? EquipmentName { get; set; }
+        public string? EquipmentCode { get; set; }
     }
 } 

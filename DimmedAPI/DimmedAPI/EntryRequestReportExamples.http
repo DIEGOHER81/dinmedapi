@@ -1,0 +1,34 @@
+### EntryRequest Report API Examples
+
+### 1. Obtener todas las solicitudes de una compañía (paginado por defecto)
+GET {{baseUrl}}/api/EntryRequest/report?companyCode=COMP001
+
+### 2. Filtrar por número de solicitud específico
+GET {{baseUrl}}/api/EntryRequest/report?companyCode=COMP001&noEntryRequest=12345
+
+### 3. Filtrar por fecha de inicio
+GET {{baseUrl}}/api/EntryRequest/report?companyCode=COMP001&dateIni=2024-01-01
+
+### 4. Filtrar por fecha de fin
+GET {{baseUrl}}/api/EntryRequest/report?companyCode=COMP001&dateEnd=2024-12-31
+
+### 5. Filtrar por rango de fechas
+GET {{baseUrl}}/api/EntryRequest/report?companyCode=COMP001&dateIni=2024-01-01&dateEnd=2024-01-31
+
+### 6. Combinar todos los filtros
+GET {{baseUrl}}/api/EntryRequest/report?companyCode=COMP001&noEntryRequest=12345&dateIni=2024-01-01&dateEnd=2024-01-31
+
+### 7. Paginación - Primera página con 25 registros
+GET {{baseUrl}}/api/EntryRequest/report?companyCode=COMP001&pageNumber=1&pageSize=25
+
+### 8. Paginación - Segunda página con 100 registros
+GET {{baseUrl}}/api/EntryRequest/report?companyCode=COMP001&pageNumber=2&pageSize=100
+
+### 9. Combinar filtros con paginación personalizada
+GET {{baseUrl}}/api/EntryRequest/report?companyCode=COMP001&dateIni=2024-01-01&dateEnd=2024-01-31&pageNumber=3&pageSize=75
+
+### 10. Error - Sin código de compañía
+GET {{baseUrl}}/api/EntryRequest/report
+
+### 11. Error - Código de compañía vacío
+GET {{baseUrl}}/api/EntryRequest/report?companyCode= 

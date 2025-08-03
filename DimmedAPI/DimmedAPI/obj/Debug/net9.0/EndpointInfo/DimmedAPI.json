@@ -13823,8 +13823,7 @@
             "nullable": true
           },
           "consumo": {
-            "type": "integer",
-            "format": "int32",
+            "type": "boolean",
             "nullable": true
           },
           "fechaCirugia": {

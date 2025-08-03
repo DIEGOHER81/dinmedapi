@@ -1220,17 +1220,50 @@ namespace DimmedAPI.Controllers
         [HttpPatch("{id}/idATC")]
         public async Task<IActionResult> UpdateIdATC(int id, [FromQuery] string companyCode, [FromBody] int idATC)
         {
-            if (string.IsNullOrEmpty(companyCode))
-                return BadRequest("El código de compañía es requerido");
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return BadRequest(new UpdateResponseDTO
+                    {
+                        Success = false,
+                        Message = "Error de validación",
+                        ErrorDetails = "El código de compañía es requerido"
+                    });
+                }
 
-            using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
-            var entryRequest = await companyContext.EntryRequests.FindAsync(id);
-            if (entryRequest == null)
-                return NotFound($"No se encontró la solicitud con ID {id}");
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                var entryRequest = await companyContext.EntryRequests.FindAsync(id);
+                
+                if (entryRequest == null)
+                {
+                    return NotFound(new UpdateResponseDTO
+                    {
+                        Success = false,
+                        Message = "Recurso no encontrado",
+                        ErrorDetails = $"No se encontró la solicitud con ID {id}"
+                    });
+                }
 
-            entryRequest.IdATC = idATC;
-            await companyContext.SaveChangesAsync();
-            return NoContent();
+                entryRequest.IdATC = idATC;
+                await companyContext.SaveChangesAsync();
+                
+                return Ok(new UpdateResponseDTO
+                {
+                    Success = true,
+                    Message = "IdATC actualizado exitosamente",
+                    UpdatedId = id
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new UpdateResponseDTO
+                {
+                    Success = false,
+                    Message = "Error interno del servidor",
+                    ErrorDetails = ex.Message
+                });
+            }
         }
 
         // GET: api/EntryRequest/remisiones?companyCode=xxx

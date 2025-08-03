@@ -1364,7 +1364,7 @@ namespace DimmedAPI.Controllers
                     var item = new EntryRequestReportDTO
                     {
                         Pedido = GetSafeInt32(reader, "Pedido"),
-                        Consumo = GetSafeInt32(reader, "Consumo"),
+                        Consumo = GetSafeBoolean(reader, "Consumo"),
                         FechaCirugia = GetSafeDateTime(reader, "FechaCirugia"),
                         FechaSolicitud = GetSafeDateTime(reader, "FechaSolicitud"),
                         Estado = GetSafeString(reader, "Estado"),

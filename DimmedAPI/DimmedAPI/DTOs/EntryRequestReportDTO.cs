@@ -5,7 +5,7 @@ namespace DimmedAPI.DTOs
     public class EntryRequestReportDTO
     {
         public int? Pedido { get; set; }
-        public int? Consumo { get; set; }
+        public bool? Consumo { get; set; }
         public DateTime? FechaCirugia { get; set; }
         public DateTime? FechaSolicitud { get; set; }
         public string? Estado { get; set; }

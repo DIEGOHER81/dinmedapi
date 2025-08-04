@@ -3223,6 +3223,47 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
+    "Method": "CrearLocal",
+    "RelativePath": "api/EntryRequestComponents/crear-local",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "itemNo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "quantity",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "idEntryReq",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "assemblyNo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "branch",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
     "Method": "GetEstadisticas",
     "RelativePath": "api/EntryRequestComponents/estadisticas",
     "HttpMethod": "GET",

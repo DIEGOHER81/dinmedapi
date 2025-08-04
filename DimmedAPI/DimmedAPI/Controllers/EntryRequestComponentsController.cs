@@ -711,6 +711,61 @@ namespace DimmedAPI.Controllers
         }
 
         /// <summary>
+        /// Crea un componente localmente con los datos proporcionados
+        /// </summary>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <param name="itemNo">Número del item</param>
+        /// <param name="quantity">Cantidad</param>
+        /// <param name="idEntryReq">ID del EntryRequest</param>
+        /// <param name="assemblyNo">Número de ensamble</param>
+        /// <param name="branch">ID de la sucursal</param>
+        /// <returns>Componente creado</returns>
+        [HttpPost("crear-local")]
+        public async Task<IActionResult> CrearLocal(
+            [FromQuery] string companyCode,
+            [FromQuery] string itemNo,
+            [FromQuery] decimal quantity,
+            [FromQuery] int idEntryReq,
+            [FromQuery] string assemblyNo,
+            [FromQuery] int branch)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                
+                // Crear un EntryRequestComponentsBO con el contexto específico de la compañía
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var componentsBO = new EntryRequestComponentsBO(companyContext, bcConn);
+                
+                var componente = await componentsBO.CreateLocalComponentAsync(itemNo, quantity, idEntryReq, assemblyNo, branch);
+                
+                // Invalidar caché después de crear
+                await _outputCacheStore.EvictByTagAsync(cacheTag, default);
+
+                return Ok(new
+                {
+                    mensaje = "Componente creado exitosamente",
+                    componente = componente
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                var detalle = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return BadRequest(new { mensaje = "Error al crear componente local", detalle });
+            }
+        }
+
+        /// <summary>
         /// Determina el estado del inventario basado en la cantidad disponible
         /// </summary>
         /// <param name="cantidad">Cantidad disponible</param>

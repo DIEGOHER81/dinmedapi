@@ -313,6 +313,81 @@ Verifica la configuración de la compañía y Business Central.
 }
 ```
 
+### 8. Crear Componente Local
+
+**POST** `/api/EntryRequestComponents/crear-local`
+
+Crea un componente localmente con los datos proporcionados, obteniendo información adicional desde las tablas ItemsBC y Branches.
+
+**Parámetros de consulta:**
+- `companyCode` (string, requerido): Código de la compañía
+- `itemNo` (string, requerido): Número del item
+- `quantity` (decimal, requerido): Cantidad del componente
+- `idEntryReq` (int, requerido): ID del EntryRequest
+- `assemblyNo` (string, requerido): Número de ensamble
+- `branch` (int, requerido): ID de la sucursal
+
+**Lógica del endpoint:**
+1. Valida que todos los parámetros requeridos estén presentes
+2. Busca el item en la tabla `ItemsBC` usando el `itemNo` para obtener:
+   - `ItemName`
+   - `TaxCode`
+   - `ShortDesc`
+   - `Invima`
+3. Busca la sucursal en la tabla `Branches` usando el `branch` para obtener:
+   - `LocationCode` (se asigna a `Warehouse` y `Branch`)
+4. Crea el componente con los siguientes valores por defecto:
+   - `TraceState`: cadena vacía
+   - `RSFechaVencimiento`: null
+   - `RSClasifRegistro`: cadena vacía
+   - `ExpirationDate`: 2999-12-31
+   - `SystemId`: nuevo GUID
+   - `QuantityConsumed`: 0
+   - `UnitPrice`: 0
+   - `status`: "ACTIVE"
+   - `Lot`: cadena vacía
+
+**Ejemplo de respuesta exitosa:**
+```json
+{
+  "mensaje": "Componente creado exitosamente",
+  "componente": {
+    "id": 123,
+    "itemNo": "10103B0020066",
+    "itemName": "Nombre del Item",
+    "warehouse": "LOC",
+    "quantity": 10.5,
+    "idEntryReq": 456,
+    "systemId": "guid-generado",
+    "quantityConsumed": 0,
+    "branch": "LOC",
+    "lot": "",
+    "unitPrice": 0,
+    "status": "ACTIVE",
+    "assemblyNo": "ASM001",
+    "taxCode": "TAX01",
+    "shortDesc": "Descripción corta",
+    "invima": "INV001",
+    "expirationDate": "2999-12-31T00:00:00",
+    "traceState": "",
+    "rsFechaVencimiento": null,
+    "rsClasifRegistro": ""
+  }
+}
+```
+
+**Ejemplo de respuesta de error:**
+```json
+{
+  "mensaje": "No se encontró el item con código: 10103B0020066"
+}
+```
+
+**Códigos de error:**
+- `400 Bad Request`: Parámetros faltantes o inválidos
+- `400 Bad Request`: Item o sucursal no encontrados
+- `500 Internal Server Error`: Error interno del servidor
+
 ## Códigos de Error
 
 - **400 Bad Request**: Parámetros requeridos faltantes o inválidos

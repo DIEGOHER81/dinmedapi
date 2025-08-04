@@ -1,0 +1,17 @@
+### Crear Componente Local
+POST {{baseUrl}}/api/EntryRequestComponents/crear-local?companyCode=COMP001&itemNo=10103B0020066&quantity=10.5&idEntryReq=123&assemblyNo=ASM001&branch=1
+
+### Crear Componente Local - Error: Item no encontrado
+POST {{baseUrl}}/api/EntryRequestComponents/crear-local?companyCode=COMP001&itemNo=ITEM_INEXISTENTE&quantity=10.5&idEntryReq=123&assemblyNo=ASM001&branch=1
+
+### Crear Componente Local - Error: Sucursal no encontrada
+POST {{baseUrl}}/api/EntryRequestComponents/crear-local?companyCode=COMP001&itemNo=10103B0020066&quantity=10.5&idEntryReq=123&assemblyNo=ASM001&branch=999
+
+### Crear Componente Local - Error: Parámetros faltantes
+POST {{baseUrl}}/api/EntryRequestComponents/crear-local?companyCode=COMP001&itemNo=10103B0020066&quantity=10.5&idEntryReq=123&assemblyNo=ASM001
+
+### Crear Componente Local - Error: Cantidad inválida
+POST {{baseUrl}}/api/EntryRequestComponents/crear-local?companyCode=COMP001&itemNo=10103B0020066&quantity=0&idEntryReq=123&assemblyNo=ASM001&branch=1
+
+### Crear Componente Local - Error: ID EntryRequest inválido
+POST {{baseUrl}}/api/EntryRequestComponents/crear-local?companyCode=COMP001&itemNo=10103B0020066&quantity=10.5&idEntryReq=0&assemblyNo=ASM001&branch=1 

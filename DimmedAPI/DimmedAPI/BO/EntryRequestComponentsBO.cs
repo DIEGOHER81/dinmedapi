@@ -320,5 +320,98 @@ namespace DimmedAPI.BO
                 throw new Exception($"Error al obtener estadísticas: {ex.Message}", ex);
             }
         }
+
+        /// <summary>
+        /// Crea un componente localmente con los datos proporcionados
+        /// </summary>
+        /// <param name="itemNo">Número del item</param>
+        /// <param name="quantity">Cantidad</param>
+        /// <param name="idEntryReq">ID del EntryRequest</param>
+        /// <param name="assemblyNo">Número de ensamble</param>
+        /// <param name="branch">ID de la sucursal</param>
+        /// <returns>Componente creado</returns>
+        public async Task<EntryRequestComponents> CreateLocalComponentAsync(string itemNo, decimal quantity, int idEntryReq, string assemblyNo, int branch)
+        {
+            try
+            {
+                // Validar parámetros requeridos
+                if (string.IsNullOrEmpty(itemNo))
+                {
+                    throw new ArgumentException("El número del item es requerido");
+                }
+
+                if (quantity <= 0)
+                {
+                    throw new ArgumentException("La cantidad debe ser mayor a 0");
+                }
+
+                if (idEntryReq <= 0)
+                {
+                    throw new ArgumentException("El ID del EntryRequest debe ser mayor a 0");
+                }
+
+                if (string.IsNullOrEmpty(assemblyNo))
+                {
+                    throw new ArgumentException("El número de ensamble es requerido");
+                }
+
+                if (branch <= 0)
+                {
+                    throw new ArgumentException("El ID de la sucursal debe ser mayor a 0");
+                }
+
+                // Obtener datos del item desde ItemsBC
+                var itemBC = await _context.ItemsBC
+                    .FirstOrDefaultAsync(i => i.Code == itemNo);
+
+                if (itemBC == null)
+                {
+                    throw new ArgumentException($"No se encontró el item con código: {itemNo}");
+                }
+
+                // Obtener datos de la sucursal
+                var branchData = await _context.Branches
+                    .FirstOrDefaultAsync(b => b.Id == branch);
+
+                if (branchData == null)
+                {
+                    throw new ArgumentException($"No se encontró la sucursal con ID: {branch}");
+                }
+
+                // Crear el componente
+                var componente = new EntryRequestComponents
+                {
+                    ItemNo = itemNo,
+                    ItemName = itemBC.Name ?? "",
+                    Warehouse = branchData.LocationCode ?? "",
+                    Quantity = quantity,
+                    IdEntryReq = idEntryReq,
+                    //SystemId = Guid.NewGuid().ToString(),
+                    SystemId = "",
+                    QuantityConsumed = 0,
+                    Branch = branchData.LocationCode ?? "",
+                    Lot = "",
+                    UnitPrice = 0,
+                    status = "NUEVO",
+                    AssemblyNo = assemblyNo,
+                    TaxCode = itemBC.TaxCode ?? "",
+                    shortDesc = itemBC.ShortDesc ?? "",
+                    Invima = itemBC.Invima ?? "",
+                    ExpirationDate = new DateTime(2999, 12, 31),
+                    TraceState = "",
+                    RSFechaVencimiento = null,
+                    RSClasifRegistro = ""
+                };
+
+                _context.EntryRequestComponents.Add(componente);
+                await _context.SaveChangesAsync();
+
+                return componente;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al crear componente local: {ex.Message}", ex);
+            }
+        }
     }
 } 

@@ -132,6 +132,19 @@ namespace DimmedAPI.Controllers
                 return BadRequest("El código de compañía es requerido");
 
             using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+            
+            // Validación: verificar que no exista ya un registro con la misma combinación de IdEntryReq e IdEquipment
+            var existingDetail = await companyContext.EntryRequestDetails
+                .FirstOrDefaultAsync(d => d.IdEntryReq == createDto.IdEntryReq && d.IdEquipment == createDto.IdEquipment);
+            
+            if (existingDetail != null)
+            {
+                return BadRequest(new { 
+                    message = "El equipo seleccionado ya se encuentra agendado en el pedido",
+                    error = "DUPLICATE_EQUIPMENT_IN_ENTRY_REQUEST"
+                });
+            }
+            
             var entity = new EntryRequestDetails
             {
                 IdEntryReq = createDto.IdEntryReq,
@@ -184,6 +197,21 @@ namespace DimmedAPI.Controllers
             var entity = await companyContext.EntryRequestDetails.FindAsync(id);
             if (entity == null)
                 return NotFound();
+
+            // Validación: verificar que no exista ya un registro con la misma combinación de IdEntryReq e IdEquipment
+            // Excluir el registro actual que se está actualizando
+            var existingDetail = await companyContext.EntryRequestDetails
+                .FirstOrDefaultAsync(d => d.IdEntryReq == updateDto.IdEntryReq && 
+                                        d.IdEquipment == updateDto.IdEquipment && 
+                                        d.Id != id);
+            
+            if (existingDetail != null)
+            {
+                return BadRequest(new { 
+                    message = "El equipo seleccionado ya se encuentra agendado en el pedido",
+                    error = "DUPLICATE_EQUIPMENT_IN_ENTRY_REQUEST"
+                });
+            }
 
             entity.IdEntryReq = updateDto.IdEntryReq;
             entity.IdEquipment = updateDto.IdEquipment;

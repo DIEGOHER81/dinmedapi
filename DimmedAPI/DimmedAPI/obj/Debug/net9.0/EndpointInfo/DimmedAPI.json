@@ -4894,6 +4894,118 @@
         }
       }
     },
+    "/api/EntryRequest/{id}/notification": {
+      "patch": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "boolean"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "boolean"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationUpdateResponseDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationUpdateResponseDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationUpdateResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EntryRequest/datosConfirmacion": {
+      "get": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "numeroPedido",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestConfirmacionDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestConfirmacionDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestConfirmacionDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/EntryRequestComponents/consultar-bc": {
       "get": {
         "tags": [
@@ -13138,6 +13250,37 @@
         },
         "additionalProperties": false
       },
+      "EntryRequestConfirmacionDTO": {
+        "type": "object",
+        "properties": {
+          "idPedido": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "saludo": {
+            "type": "string",
+            "nullable": true
+          },
+          "headerCorreo": {
+            "type": "string",
+            "nullable": true
+          },
+          "listaEquipos": {
+            "type": "string",
+            "nullable": true
+          },
+          "footerCorreo": {
+            "type": "string",
+            "nullable": true
+          },
+          "destinatario": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "EntryRequestCreateDTO": {
         "required": [
           "date"
@@ -15669,6 +15812,28 @@
             "nullable": true
           },
           "lastName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "NotificationUpdateResponseDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "updatedId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "errorDetails": {
             "type": "string",
             "nullable": true
           }

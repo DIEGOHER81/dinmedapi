@@ -1668,5 +1668,201 @@ namespace DimmedAPI.Controllers
                 surgeryEnd = entryRequest.SurgeryEnd
             });
         }
+
+        // PATCH: api/EntryRequest/{id}/notification
+        [HttpPatch("{id}/notification")]
+        public async Task<ActionResult<NotificationUpdateResponseDTO>> UpdateNotification(
+            int id, 
+            [FromQuery] string companyCode, 
+            [FromBody] bool notification)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO UpdateNotification ===");
+                Console.WriteLine($"Id: {id}, CompanyCode: {companyCode}, Notification: {notification}");
+                
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest(new NotificationUpdateResponseDTO
+                    {
+                        Success = false,
+                        Message = "Error de validación",
+                        ErrorDetails = "El código de compañía es requerido"
+                    });
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+                
+                // Buscar el EntryRequest por ID
+                var entryRequest = await companyContext.EntryRequests.FindAsync(id);
+                
+                if (entryRequest == null)
+                {
+                    Console.WriteLine($"No se encontró la solicitud con ID {id}");
+                    return NotFound(new NotificationUpdateResponseDTO
+                    {
+                        Success = false,
+                        Message = "Recurso no encontrado",
+                        ErrorDetails = $"No se encontró la solicitud de entrada con ID {id}"
+                    });
+                }
+
+                // Actualizar el campo Notification
+                entryRequest.Notification = notification;
+                
+                // Guardar los cambios
+                await companyContext.SaveChangesAsync();
+                
+                // Invalidar caché
+                await _outputCacheStore.EvictByTagAsync(cacheTag, default);
+                
+                Console.WriteLine($"Campo Notification actualizado exitosamente para ID {id}");
+                Console.WriteLine("=== FIN UpdateNotification ===");
+                
+                return Ok(new NotificationUpdateResponseDTO
+                {
+                    Success = true,
+                    Message = "Campo Notification actualizado exitosamente",
+                    UpdatedId = id
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"ArgumentException en UpdateNotification: {ex.Message}");
+                return NotFound(new NotificationUpdateResponseDTO
+                {
+                    Success = false,
+                    Message = "Error de configuración",
+                    ErrorDetails = ex.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en UpdateNotification ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Inner Exception StackTrace: {ex.InnerException.StackTrace}");
+                }
+                
+                Console.WriteLine("=== FIN ERROR ===");
+                
+                return StatusCode(500, new NotificationUpdateResponseDTO
+                {
+                    Success = false,
+                    Message = "Error interno del servidor",
+                    ErrorDetails = ex.Message
+                });
+            }
+        }
+
+        // GET: api/EntryRequest/datosConfirmacion
+        [HttpGet("datosConfirmacion")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<ActionResult<EntryRequestConfirmacionDTO>> GetDatosConfirmacion(
+            [FromQuery] string companyCode,
+            [FromQuery] int numeroPedido)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO GetDatosConfirmacion ===");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+                Console.WriteLine($"NumeroPedido: {numeroPedido}");
+                
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                if (numeroPedido <= 0)
+                {
+                    Console.WriteLine("Error: NumeroPedido debe ser mayor a 0");
+                    return BadRequest("El número de pedido debe ser mayor a 0");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+                
+                // Ejecutar el procedimiento almacenado
+                var sql = "EXEC sp_CorreoConfirmacion @NumeroPedido";
+                Console.WriteLine($"Ejecutando SQL: {sql}");
+                Console.WriteLine($"Parámetro @NumeroPedido: {numeroPedido}");
+
+                // Ejecutar el procedimiento almacenado usando DbCommand
+                using var command = companyContext.Database.GetDbConnection().CreateCommand();
+                command.CommandText = sql;
+                command.CommandType = System.Data.CommandType.Text;
+                
+                // Agregar parámetro
+                var parameter = command.CreateParameter();
+                parameter.ParameterName = "@NumeroPedido";
+                parameter.Value = numeroPedido;
+                command.Parameters.Add(parameter);
+                
+                companyContext.Database.OpenConnection();
+                using var reader = await command.ExecuteReaderAsync();
+                
+                // Leer el resultado (el procedimiento debería devolver una sola fila)
+                if (await reader.ReadAsync())
+                {
+                    var resultado = new EntryRequestConfirmacionDTO
+                    {
+                        IdPedido = GetSafeInt32(reader, "idPedido"),
+                        Saludo = GetSafeString(reader, "Saludo"),
+                        HeaderCorreo = GetSafeString(reader, "HeaderCorreo"),
+                        ListaEquipos = GetSafeString(reader, "ListaEquipos"),
+                        FooterCorreo = GetSafeString(reader, "FooterCorreo"),
+                        Destinatario = GetSafeString(reader, "destinatario")
+                    };
+
+                    Console.WriteLine($"Datos de confirmación obtenidos exitosamente");
+                    Console.WriteLine($"IdPedido: {resultado.IdPedido}");
+                    Console.WriteLine($"Saludo: {resultado.Saludo}");
+                    Console.WriteLine($"HeaderCorreo: {resultado.HeaderCorreo}");
+                    Console.WriteLine($"ListaEquipos: {resultado.ListaEquipos}");
+                    Console.WriteLine($"FooterCorreo: {resultado.FooterCorreo}");
+                    Console.WriteLine($"Destinatario: {resultado.Destinatario}");
+                    Console.WriteLine("=== FIN GetDatosConfirmacion ===");
+                    
+                    return Ok(resultado);
+                }
+                else
+                {
+                    Console.WriteLine("No se encontraron datos de confirmación para el pedido especificado");
+                    Console.WriteLine("=== FIN GetDatosConfirmacion ===");
+                    return NotFound($"No se encontraron datos de confirmación para el pedido {numeroPedido}");
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"ArgumentException en GetDatosConfirmacion: {ex.Message}");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en GetDatosConfirmacion ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Inner Exception StackTrace: {ex.InnerException.StackTrace}");
+                }
+                
+                Console.WriteLine("=== FIN ERROR ===");
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
     }
 } 

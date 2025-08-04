@@ -561,16 +561,36 @@ namespace DimmedAPI.BO
                 }
 
                 Equipment equipment = await GetByCodeAsync(code);
-                List<EntryRequestAssembly> dataEquipmentLines = await _bcConn.GetEntryReqAssembly("lylassemblyolines", equipment.Code, "");
-                List<EntryRequestAssembly> dataEquipment = await _bcConn.GetEntryReqAssembly("lylassemblyeq", equipment.Code, "");
-                if(dataEquipmentLines != null)
-                    foreach (var eq in dataEquipmentLines)
-                    {
-                        if (!dataEquipment.Exists(x => x.Code == eq.Code))
+                List<EntryRequestAssembly> dataEquipment = new List<EntryRequestAssembly>();
+                
+                try
+                {
+                    // Try the original endpoints first
+                    List<EntryRequestAssembly> dataEquipmentLines = await _bcConn.GetEntryReqAssembly("lylassemblyolines", equipment.Code, "");
+                    dataEquipment = await _bcConn.GetEntryReqAssembly("lylassemblyeq", equipment.Code, "");
+                    
+                    if(dataEquipmentLines != null)
+                        foreach (var eq in dataEquipmentLines)
                         {
-                            dataEquipment.Add(eq);
+                            if (!dataEquipment.Exists(x => x.Code == eq.Code))
+                            {
+                                dataEquipment.Add(eq);
+                            }
                         }
+                }
+                catch (Exception ex)
+                {
+                    // If lylassemblyolines fails, try using lylassembly as fallback
+                    if (ex.Message.Contains("NotFound") || ex.Message.Contains("BadRequest_NotFound"))
+                    {
+                        dataEquipment = await _bcConn.GetEntryReqAssembly("lylassembly", equipment.Code, "");
                     }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                
                 return dataEquipment;
             }
             catch (ArgumentException)
@@ -604,17 +624,35 @@ namespace DimmedAPI.BO
 
                 Equipment equipment = await GetEquipmentByCode(code);
 
-                List<EntryRequestAssembly> dataEquipmentLines = await _bcConn.GetEntryReqAssembly("lylassemblyolines", equipment.Code, "");
-                List<EntryRequestAssembly> dataEquipment = await _bcConn.GetEntryReqAssembly("lylassemblyeq", equipment.Code, "");
+                List<EntryRequestAssembly> dataEquipment = new List<EntryRequestAssembly>();
                 
-                if(dataEquipmentLines != null)
-                    foreach (var eq in dataEquipmentLines)
-                    {
-                        if (!dataEquipment.Exists(x => x.Code == eq.Code))
+                try
+                {
+                    // Try the original endpoints first
+                    List<EntryRequestAssembly> dataEquipmentLines = await _bcConn.GetEntryReqAssembly("lylassemblyolines", equipment.Code, "");
+                    dataEquipment = await _bcConn.GetEntryReqAssembly("lylassemblyeq", equipment.Code, "");
+                    
+                    if(dataEquipmentLines != null)
+                        foreach (var eq in dataEquipmentLines)
                         {
-                            dataEquipment.Add(eq);
+                            if (!dataEquipment.Exists(x => x.Code == eq.Code))
+                            {
+                                dataEquipment.Add(eq);
+                            }
                         }
+                }
+                catch (Exception ex)
+                {
+                    // If lylassemblyolines fails, try using lylassembly as fallback
+                    if (ex.Message.Contains("NotFound") || ex.Message.Contains("BadRequest_NotFound"))
+                    {
+                        dataEquipment = await _bcConn.GetEntryReqAssembly("lylassembly", equipment.Code, "");
                     }
+                    else
+                    {
+                        throw;
+                    }
+                }
 
                 // Filtrar por locationCode
                 var filteredInventory = dataEquipment
@@ -661,17 +699,35 @@ namespace DimmedAPI.BO
                     throw new Exception($"El equipo con código {code} no pertenece a la sede {branchCode}. Sede actual: {equipment.Branch}");
                 }
 
-                List<EntryRequestAssembly> dataEquipmentLines = await _bcConn.GetEntryReqAssembly("lylassemblyolines", equipment.Code, "");
-                List<EntryRequestAssembly> dataEquipment = await _bcConn.GetEntryReqAssembly("lylassemblyeq", equipment.Code, "");
+                List<EntryRequestAssembly> dataEquipment = new List<EntryRequestAssembly>();
                 
-                if(dataEquipmentLines != null)
-                    foreach (var eq in dataEquipmentLines)
-                    {
-                        if (!dataEquipment.Exists(x => x.Code == eq.Code))
+                try
+                {
+                    // Try the original endpoints first
+                    List<EntryRequestAssembly> dataEquipmentLines = await _bcConn.GetEntryReqAssembly("lylassemblyolines", equipment.Code, "");
+                    dataEquipment = await _bcConn.GetEntryReqAssembly("lylassemblyeq", equipment.Code, "");
+                    
+                    if(dataEquipmentLines != null)
+                        foreach (var eq in dataEquipmentLines)
                         {
-                            dataEquipment.Add(eq);
+                            if (!dataEquipment.Exists(x => x.Code == eq.Code))
+                            {
+                                dataEquipment.Add(eq);
+                            }
                         }
+                }
+                catch (Exception ex)
+                {
+                    // If lylassemblyolines fails, try using lylassembly as fallback
+                    if (ex.Message.Contains("NotFound") || ex.Message.Contains("BadRequest_NotFound"))
+                    {
+                        dataEquipment = await _bcConn.GetEntryReqAssembly("lylassembly", equipment.Code, "");
                     }
+                    else
+                    {
+                        throw;
+                    }
+                }
 
                 // Filtrar por locationCode
                 var filteredInventory = dataEquipment
@@ -695,22 +751,78 @@ namespace DimmedAPI.BO
             try
             {
                 Equipment equipment = await GetByIdAsync(equipmentId);
-                List<EntryRequestAssembly> dataEquipmentLines = await _bcConn.GetEntryReqAssembly("lylassemblyolines", equipment.Code, "");
-                List<EntryRequestAssembly> dataEquipment = await _bcConn.GetEntryReqAssembly("lylassemblyeq", equipment.Code, "");
-                if(dataEquipmentLines != null)
-                    foreach (var eq in dataEquipmentLines)
-                    {
-                        if (!dataEquipment.Exists(x => x.Code == eq.Code))
+                
+                // Try using lylassembly first (which seems to be working based on other controllers)
+                List<EntryRequestAssembly> dataEquipment = new List<EntryRequestAssembly>();
+                
+                try
+                {
+                    // Try the original endpoints first
+                    List<EntryRequestAssembly> dataEquipmentLines = await _bcConn.GetEntryReqAssembly("lylassemblyolines", equipment.Code, "");
+                    dataEquipment = await _bcConn.GetEntryReqAssembly("lylassemblyeq", equipment.Code, "");
+                    
+                    if(dataEquipmentLines != null)
+                        foreach (var eq in dataEquipmentLines)
                         {
-                            dataEquipment.Add(eq);
+                            if (!dataEquipment.Exists(x => x.Code == eq.Code))
+                            {
+                                dataEquipment.Add(eq);
+                            }
                         }
+                }
+                catch (Exception ex)
+                {
+                    // If lylassemblyolines fails, try using lylassembly as fallback
+                    if (ex.Message.Contains("NotFound") || ex.Message.Contains("BadRequest_NotFound"))
+                    {
+                        dataEquipment = await _bcConn.GetEntryReqAssembly("lylassembly", equipment.Code, "");
                     }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                
                 return dataEquipment;
             }
             catch (Exception)
             {
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Determina qué endpoint de ensamble está disponible
+        /// </summary>
+        /// <param name="equipmentCode">Código del equipo</param>
+        /// <returns>El nombre del endpoint disponible</returns>
+        private async Task<string> GetAvailableAssemblyEndpoint(string equipmentCode)
+        {
+            // Lista de endpoints a probar en orden de preferencia
+            string[] endpointsToTry = { "lylassembly", "lylassemblyV2", "lylassemblyolines", "lylassemblyeq" };
+            
+            foreach (string endpoint in endpointsToTry)
+            {
+                try
+                {
+                    var testResult = await _bcConn.GetEntryReqAssembly(endpoint, equipmentCode, "");
+                    if (testResult != null && testResult.Count > 0)
+                    {
+                        return endpoint;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Si el error es NotFound, continuar con el siguiente endpoint
+                    if (!ex.Message.Contains("NotFound") && !ex.Message.Contains("BadRequest_NotFound"))
+                    {
+                        throw; // Re-lanzar otros tipos de errores
+                    }
+                }
+            }
+            
+            // Si ningún endpoint funciona, usar lylassembly como fallback
+            return "lylassembly";
         }
 
         public async Task<List<Equipment>> GetAllEquipmentCodes(int? take = null)

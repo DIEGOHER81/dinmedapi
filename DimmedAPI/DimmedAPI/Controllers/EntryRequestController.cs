@@ -1864,5 +1864,162 @@ namespace DimmedAPI.Controllers
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
             }
         }
+
+        // GET: api/EntryRequest/ordenes-despacho
+        [HttpGet("ordenes-despacho")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<ActionResult<IEnumerable<EntryRequestOrdenesDespachoDTO>>> GetOrdenesDespacho(
+            [FromQuery] string companyCode,
+            [FromQuery] int? branchId = null,
+            [FromQuery] DateTime? dateIni = null,
+            [FromQuery] DateTime? dateEnd = null,
+            [FromQuery] DateTime? deliveryDate = null,
+            [FromQuery] string? filterText = null)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO GetOrdenesDespacho ===");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+                Console.WriteLine($"BranchId: {branchId}");
+                Console.WriteLine($"DateIni: {dateIni}");
+                Console.WriteLine($"DateEnd: {dateEnd}");
+                Console.WriteLine($"DeliveryDate: {deliveryDate}");
+                Console.WriteLine($"FilterText: {filterText}");
+                
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+                
+                // Ejecutar el procedimiento almacenado
+                var sql = "EXEC GET_ENTRYREQUEST_3110 @BRANCHID, @DATEINI, @DATEEND, @DELIVERYDATE, @FILTERTEXT";
+                Console.WriteLine($"Ejecutando SQL: {sql}");
+                Console.WriteLine($"Parámetros:");
+                Console.WriteLine($"  @BRANCHID: {branchId?.ToString() ?? "NULL"}");
+                Console.WriteLine($"  @DATEINI: {dateIni?.Date.ToString("yyyy-MM-dd") ?? "NULL"}");
+                Console.WriteLine($"  @DATEEND: {dateEnd?.Date.ToString("yyyy-MM-dd") ?? "NULL"}");
+                Console.WriteLine($"  @DELIVERYDATE: {deliveryDate?.Date.ToString("yyyy-MM-dd") ?? "NULL"}");
+                Console.WriteLine($"  @FILTERTEXT: {filterText ?? "NULL"}");
+
+                // Ejecutar el procedimiento almacenado usando DbCommand
+                using var command = companyContext.Database.GetDbConnection().CreateCommand();
+                command.CommandText = sql;
+                command.CommandType = System.Data.CommandType.Text;
+                
+                // Agregar parámetros
+                var parameters = new[]
+                {
+                    new { Name = "@BRANCHID", Value = branchId ?? (object)DBNull.Value },
+                    new { Name = "@DATEINI", Value = dateIni?.Date ?? (object)DBNull.Value },
+                    new { Name = "@DATEEND", Value = dateEnd?.Date ?? (object)DBNull.Value },
+                    new { Name = "@DELIVERYDATE", Value = deliveryDate?.Date ?? (object)DBNull.Value },
+                    new { Name = "@FILTERTEXT", Value = filterText ?? (object)DBNull.Value }
+                };
+                
+                foreach (var param in parameters)
+                {
+                    var parameter = command.CreateParameter();
+                    parameter.ParameterName = param.Name;
+                    parameter.Value = param.Value;
+                    command.Parameters.Add(parameter);
+                }
+                
+                companyContext.Database.OpenConnection();
+                using var reader = await command.ExecuteReaderAsync();
+                
+                var resultados = new List<EntryRequestOrdenesDespachoDTO>();
+                
+                while (await reader.ReadAsync())
+                {
+                    var item = new EntryRequestOrdenesDespachoDTO
+                    {
+                        Id = GetSafeInt32(reader, "Id"),
+                        Date = GetSafeDateTime(reader, "Date"),
+                        Service = GetSafeString(reader, "Service"),
+                        IdOrderType = GetSafeInt32(reader, "IdOrderType"),
+                        DeliveryPriority = GetSafeString(reader, "DeliveryPriority"),
+                        IdCustomer = GetSafeInt32(reader, "IdCustomer"),
+                        InsurerType = GetSafeInt32(reader, "InsurerType"),
+                        Insurer = GetSafeInt32(reader, "Insurer"),
+                        IdMedic = GetSafeInt32(reader, "IdMedic"),
+                        IdPatient = GetSafeInt32(reader, "IdPatient"),
+                        Applicant = GetSafeString(reader, "Applicant"),
+                        IdATC = GetSafeInt32(reader, "IdATC"),
+                        LimbSide = GetSafeString(reader, "LimbSide"),
+                        DeliveryDate = GetSafeDateTime(reader, "DeliveryDate"),
+                        OrderObs = GetSafeString(reader, "OrderObs"),
+                        SurgeryTime = GetSafeInt32(reader, "SurgeryTime"),
+                        SurgeryInit = GetSafeDateTime(reader, "SurgeryInit"),
+                        SurgeryEnd = GetSafeDateTime(reader, "SurgeryEnd"),
+                        Status = GetSafeString(reader, "Status"),
+                        IdTraceStates = GetSafeInt32(reader, "IdTraceStates"),
+                        SurgeryInitTime = GetSafeInt32(reader, "SurgeryInitTime"),
+                        SurgeryEndTime = GetSafeInt32(reader, "SurgeryEndTime"),
+                        BranchId = GetSafeInt32(reader, "BranchId"),
+                        DeliveryAddress = GetSafeString(reader, "DeliveryAddress"),
+                        PurchaseOrder = GetSafeString(reader, "PurchaseOrder"),
+                        AtcConsumed = GetSafeBoolean(reader, "AtcConsumed"),
+                        IsSatisfied = GetSafeBoolean(reader, "IsSatisfied"),
+                        Observations = GetSafeString(reader, "Observations"),
+                        AuxLog = GetSafeInt32(reader, "AuxLog"),
+                        Notification = GetSafeBoolean(reader, "Notification"),
+                        IdCancelReason = GetSafeInt32(reader, "IdCancelReason"),
+                        CancelReason = GetSafeString(reader, "CancelReason"),
+                        IdCancelDetail = GetSafeInt32(reader, "IdCancelDetail"),
+                        CancelDetail = GetSafeString(reader, "CancelDetail"),
+                        IsReplacement = GetSafeBoolean(reader, "IsReplacement"),
+                        AssemblyComponents = GetSafeBoolean(reader, "AssemblyComponents"),
+                        obsMaint = GetSafeString(reader, "obsMaint"),
+                        priceGroup = GetSafeString(reader, "priceGroup"),
+                        traceState = GetSafeString(reader, "traceState"),
+                        CustomerName = GetSafeString(reader, "CustomerName"),
+                        Contact = GetSafeString(reader, "Contact"),
+                        PatientName = GetSafeString(reader, "PatientName"),
+                        MedicName = GetSafeString(reader, "MedicName"),
+                        InsurerName = GetSafeString(reader, "InsurerName"),
+                        InsurerTypeName = GetSafeString(reader, "InsurerTypeName"),
+                        Branch = GetSafeString(reader, "Branch"),
+                        IsRemLot = GetSafeBoolean(reader, "IsRemLot"),
+                        ATCName = GetSafeString(reader, "ATCName"),
+                        equipos = GetSafeString(reader, "equipos"),
+                        Componentes = GetSafeString(reader, "Componentes"),
+                        RemCustomer = GetSafeString(reader, "RemCustomer"),
+                        ShortDesc = GetSafeString(reader, "ShortDesc")
+                    };
+                    resultados.Add(item);
+                }
+
+                Console.WriteLine($"Consulta completada. Registros encontrados: {resultados.Count}");
+                Console.WriteLine("=== FIN GetOrdenesDespacho ===");
+                
+                return Ok(resultados);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"ArgumentException en GetOrdenesDespacho: {ex.Message}");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en GetOrdenesDespacho ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Inner Exception StackTrace: {ex.InnerException.StackTrace}");
+                }
+                
+                Console.WriteLine("=== FIN ERROR ===");
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
     }
 } 

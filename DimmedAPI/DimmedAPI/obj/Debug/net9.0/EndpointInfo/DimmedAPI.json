@@ -5006,6 +5006,92 @@
         }
       }
     },
+    "/api/EntryRequest/ordenes-despacho": {
+      "get": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "branchId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "dateIni",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateEnd",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "deliveryDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "filterText",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestOrdenesDespachoDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestOrdenesDespachoDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestOrdenesDespachoDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/EntryRequestComponents/consultar-bc": {
       "get": {
         "tags": [
@@ -14010,6 +14096,240 @@
             "$ref": "#/components/schemas/Users"
           },
           "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestOrdenesDespachoDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "service": {
+            "type": "string",
+            "nullable": true
+          },
+          "idOrderType": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "deliveryPriority": {
+            "type": "string",
+            "nullable": true
+          },
+          "idCustomer": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "insurerType": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "insurer": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idMedic": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "idPatient": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "applicant": {
+            "type": "string",
+            "nullable": true
+          },
+          "idATC": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "limbSide": {
+            "type": "string",
+            "nullable": true
+          },
+          "deliveryDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "orderObs": {
+            "type": "string",
+            "nullable": true
+          },
+          "surgeryTime": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "surgeryInit": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "surgeryEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "idTraceStates": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "surgeryInitTime": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "surgeryEndTime": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "branchId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "deliveryAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseOrder": {
+            "type": "string",
+            "nullable": true
+          },
+          "atcConsumed": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isSatisfied": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "observations": {
+            "type": "string",
+            "nullable": true
+          },
+          "auxLog": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "notification": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "idCancelReason": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "cancelReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "idCancelDetail": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "cancelDetail": {
+            "type": "string",
+            "nullable": true
+          },
+          "isReplacement": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "assemblyComponents": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "obsMaint": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "traceState": {
+            "type": "string",
+            "nullable": true
+          },
+          "customerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "contact": {
+            "type": "string",
+            "nullable": true
+          },
+          "patientName": {
+            "type": "string",
+            "nullable": true
+          },
+          "medicName": {
+            "type": "string",
+            "nullable": true
+          },
+          "insurerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "insurerTypeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "branch": {
+            "type": "string",
+            "nullable": true
+          },
+          "isRemLot": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "atcName": {
+            "type": "string",
+            "nullable": true
+          },
+          "equipos": {
+            "type": "string",
+            "nullable": true
+          },
+          "componentes": {
+            "type": "string",
+            "nullable": true
+          },
+          "remCustomer": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortDesc": {
             "type": "string",
             "nullable": true
           }

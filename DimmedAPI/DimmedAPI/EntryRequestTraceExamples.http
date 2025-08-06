@@ -1,0 +1,68 @@
+### EntryRequestTrace API Examples
+
+### 1. Obtener todos los traces (sin parámetros)
+GET {{baseUrl}}/api/EntryRequestTrace?companyCode=COMP001
+
+### 2. Obtener trace básico (solo con RQID)
+GET {{baseUrl}}/api/EntryRequestTrace?companyCode=COMP001&rqId=10113
+
+### 3. Obtener trace con todos los parámetros
+GET {{baseUrl}}/api/EntryRequestTrace?companyCode=COMP001&rqId=10113&branchId=1&dateIni=2024-01-01&dateEnd=2024-12-31
+
+### 4. Obtener trace con solo branchId
+GET {{baseUrl}}/api/EntryRequestTrace?companyCode=COMP001&rqId=10113&branchId=1
+
+### 5. Obtener trace con fechas
+GET {{baseUrl}}/api/EntryRequestTrace?companyCode=COMP001&rqId=10113&dateIni=2024-01-01&dateEnd=2024-12-31
+
+### 6. Obtener todos los traces usando POST (sin filtros)
+POST {{baseUrl}}/api/EntryRequestTrace/filter?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "rqId": null,
+  "branchId": null,
+  "dateIni": null,
+  "dateEnd": null
+}
+
+### 7. Obtener trace usando POST con filtro básico
+POST {{baseUrl}}/api/EntryRequestTrace/filter?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "rqId": 10113
+}
+
+### 8. Obtener trace usando POST con filtro completo
+POST {{baseUrl}}/api/EntryRequestTrace/filter?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "rqId": 10113,
+  "branchId": 1,
+  "dateIni": "2024-01-01T00:00:00",
+  "dateEnd": "2024-12-31T23:59:59"
+}
+
+### 9. Obtener trace usando POST con filtro parcial
+POST {{baseUrl}}/api/EntryRequestTrace/filter?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "rqId": 10113,
+  "branchId": 1
+}
+
+### 10. Limpiar cache
+DELETE {{baseUrl}}/api/EntryRequestTrace/cache
+
+### 11. Error - Sin companyCode
+GET {{baseUrl}}/api/EntryRequestTrace?rqId=10113
+
+### 12. Error - rqId inválido
+GET {{baseUrl}}/api/EntryRequestTrace?companyCode=COMP001&rqId=0
+
+### Variables de entorno (agregar al archivo .http o configurar en el IDE)
+# @baseUrl = https://localhost:7001
+# @baseUrl = https://api.example.com 

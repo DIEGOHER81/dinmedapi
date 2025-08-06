@@ -56,6 +56,7 @@ builder.Services.AddScoped<IntBCConex, bcConn>();
 builder.Services.AddScoped<ICustomerBO, CustomerBO>();
 builder.Services.AddScoped<IEquipmentBO, EquipmentBO>();
 builder.Services.AddScoped<ICustomerAddressBO, CustomerAddressBO>();
+builder.Services.AddScoped<EntryRequestTraceBO>();
 
 // Register Dynamic Connection Service
 builder.Services.AddScoped<IDynamicConnectionService, DynamicConnectionService>();

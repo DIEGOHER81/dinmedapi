@@ -3710,6 +3710,32 @@
     ]
   },
   {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestDetailsController",
+    "Method": "GetCalendarDispatch",
+    "RelativePath": "api/EntryRequestDetails/calendar-dispatch",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.DTOs.CalendarDispatchResponseDTO, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "DimmedAPI.Controllers.EntryrequestServiceController",
     "Method": "GetAll",
     "RelativePath": "api/EntryrequestService",

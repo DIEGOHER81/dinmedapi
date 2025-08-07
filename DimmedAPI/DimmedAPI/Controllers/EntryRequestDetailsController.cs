@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using Microsoft.Data.SqlClient;
 
 namespace DimmedAPI.Controllers
 {
@@ -244,6 +245,37 @@ namespace DimmedAPI.Controllers
             companyContext.EntryRequestDetails.Remove(entity);
             await companyContext.SaveChangesAsync();
             return NoContent();
+        }
+
+        // GET: api/EntryRequestDetails/calendar-dispatch?companyCode=xxx
+        [HttpGet("calendar-dispatch")]
+        public async Task<ActionResult<IEnumerable<CalendarDispatchResponseDTO>>> GetCalendarDispatch([FromQuery] string companyCode)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+                return BadRequest("El código de compañía es requerido");
+
+            using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+            
+            var pendingDispatch = await companyContext.EntryRequestDetails
+                .Include(erd => erd.IdEquipmentNavigation)
+                .Include(erd => erd.IdEntryReqNavigation)
+                    .ThenInclude(er => er.IdCustomerNavigation)
+                .Where(erd => erd.status != "DESPACHADO")
+                .OrderByDescending(erd => erd.IdEntryReq)
+                .Select(erd => new CalendarDispatchResponseDTO
+                {
+                    ResourceId = erd.IdEquipmentNavigation.Id,
+                    Code = erd.IdEquipmentNavigation.Code,
+                    Name = erd.IdEquipmentNavigation.Name,
+                    DateIni = erd.DateIni,
+                    DateEnd = erd.DateEnd,
+                    Client = erd.IdEntryReqNavigation.IdCustomerNavigation.FullName,
+                    Status = erd.status,
+                    EquipmentStatus = erd.IdEquipmentNavigation.Status
+                })
+                .ToListAsync();
+
+            return Ok(pendingDispatch);
         }
     }
 } 

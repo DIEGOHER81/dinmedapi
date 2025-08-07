@@ -5,14 +5,10 @@ namespace DimmedAPI.Entidades
     [Table("Customer")]
     public class Customer
     {
-        /*
         public Customer()
         {
-            EntryRequests = new HashSet<EntryRequests>();
             ShipAddress = new HashSet<CustomerAddress>();
-            CustomerContacts = new List<CustomerContact>(); // NotMapped, uso interno
         }
-        */
         public int Id { get; set; }
         public string? Identification { get; set; }
         public int IdType { get; set; }
@@ -45,7 +41,7 @@ namespace DimmedAPI.Entidades
         public string? PaymentTermsCode { get; set; }
 
         // Relación con CustomerAddress (uno-a-muchos)
-        // public virtual ICollection<CustomerAddress> ShipAddress { get; set; }
+        public virtual ICollection<CustomerAddress> ShipAddress { get; set; }
 
         // Propiedad no mapeada a la base de datos (uso en vista o lógica interna)
         //[NotMapped]

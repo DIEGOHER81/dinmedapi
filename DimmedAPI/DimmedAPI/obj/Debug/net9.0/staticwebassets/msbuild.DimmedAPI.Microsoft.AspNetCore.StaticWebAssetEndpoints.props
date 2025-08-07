@@ -1,0 +1,52 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/DimmedAPI/uploads/logos/logo_1_20250715022611.mzeoh2p5h5.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\logos\logo_1_20250715022611.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"mzeoh2p5h5"},{"Name":"integrity","Value":"sha256-HtVA1XpRp\u002BWozp2yw2DbphAeIS/KBsBjgvxhdnNmap8="},{"Name":"label","Value":"_content/DimmedAPI/uploads/logos/logo_1_20250715022611.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"7941"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022HtVA1XpRp\u002BWozp2yw2DbphAeIS/KBsBjgvxhdnNmap8=\u0022"},{"Name":"Last-Modified","Value":"Thu, 07 Aug 2025 13:34:12 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DimmedAPI/uploads/logos/logo_1_20250715022611.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\logos\logo_1_20250715022611.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-HtVA1XpRp\u002BWozp2yw2DbphAeIS/KBsBjgvxhdnNmap8="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"7941"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022HtVA1XpRp\u002BWozp2yw2DbphAeIS/KBsBjgvxhdnNmap8=\u0022"},{"Name":"Last-Modified","Value":"Thu, 07 Aug 2025 13:34:12 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DimmedAPI/uploads/logos/logo_1_20250724161706.jowd7u0kou.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\logos\logo_1_20250724161706.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"jowd7u0kou"},{"Name":"integrity","Value":"sha256-s4WphzbP9x1L/eSW/\u002BWzXj7jRAt2N7JDuI1NrVfLlLc="},{"Name":"label","Value":"_content/DimmedAPI/uploads/logos/logo_1_20250724161706.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"6122"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022s4WphzbP9x1L/eSW/\u002BWzXj7jRAt2N7JDuI1NrVfLlLc=\u0022"},{"Name":"Last-Modified","Value":"Thu, 07 Aug 2025 13:34:12 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DimmedAPI/uploads/logos/logo_1_20250724161706.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\logos\logo_1_20250724161706.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-s4WphzbP9x1L/eSW/\u002BWzXj7jRAt2N7JDuI1NrVfLlLc="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"6122"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022s4WphzbP9x1L/eSW/\u002BWzXj7jRAt2N7JDuI1NrVfLlLc=\u0022"},{"Name":"Last-Modified","Value":"Thu, 07 Aug 2025 13:34:12 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DimmedAPI/uploads/logos/logo_1_20250804113014.jowd7u0kou.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\logos\logo_1_20250804113014.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"jowd7u0kou"},{"Name":"integrity","Value":"sha256-s4WphzbP9x1L/eSW/\u002BWzXj7jRAt2N7JDuI1NrVfLlLc="},{"Name":"label","Value":"_content/DimmedAPI/uploads/logos/logo_1_20250804113014.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"6122"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022s4WphzbP9x1L/eSW/\u002BWzXj7jRAt2N7JDuI1NrVfLlLc=\u0022"},{"Name":"Last-Modified","Value":"Thu, 07 Aug 2025 13:34:12 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DimmedAPI/uploads/logos/logo_1_20250804113014.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\logos\logo_1_20250804113014.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-s4WphzbP9x1L/eSW/\u002BWzXj7jRAt2N7JDuI1NrVfLlLc="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"6122"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022s4WphzbP9x1L/eSW/\u002BWzXj7jRAt2N7JDuI1NrVfLlLc=\u0022"},{"Name":"Last-Modified","Value":"Thu, 07 Aug 2025 13:34:12 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DimmedAPI/uploads/logos/logo_2_20250715022441.2mopwcdtug.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\logos\logo_2_20250715022441.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"2mopwcdtug"},{"Name":"integrity","Value":"sha256-2ihV3bOUunV0RhnBqTcbgGGRstEP/NwZwlbnnnycluE="},{"Name":"label","Value":"_content/DimmedAPI/uploads/logos/logo_2_20250715022441.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"58445"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00222ihV3bOUunV0RhnBqTcbgGGRstEP/NwZwlbnnnycluE=\u0022"},{"Name":"Last-Modified","Value":"Thu, 07 Aug 2025 13:34:12 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DimmedAPI/uploads/logos/logo_2_20250715022441.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\logos\logo_2_20250715022441.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-2ihV3bOUunV0RhnBqTcbgGGRstEP/NwZwlbnnnycluE="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"58445"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00222ihV3bOUunV0RhnBqTcbgGGRstEP/NwZwlbnnnycluE=\u0022"},{"Name":"Last-Modified","Value":"Thu, 07 Aug 2025 13:34:12 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+  </ItemGroup>
+</Project>

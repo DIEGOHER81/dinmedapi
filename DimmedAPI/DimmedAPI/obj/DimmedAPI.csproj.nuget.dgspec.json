@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj": {}
+    "F:\\PROJECTS\\Dinmed\\Backend\\dinmedapi\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj": {}
   },
   "projects": {
-    "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj": {
+    "F:\\PROJECTS\\Dinmed\\Backend\\dinmedapi\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj",
+        "projectUniqueName": "F:\\PROJECTS\\Dinmed\\Backend\\dinmedapi\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj",
         "projectName": "DimmedAPI",
-        "projectPath": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj",
-        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\obj\\",
+        "projectPath": "F:\\PROJECTS\\Dinmed\\Backend\\dinmedapi\\DimmedAPI\\DimmedAPI\\DimmedAPI.csproj",
+        "packagesPath": "C:\\Users\\DIEGOHER\\.nuget\\packages\\",
+        "outputPath": "F:\\PROJECTS\\Dinmed\\Backend\\dinmedapi\\DimmedAPI\\DimmedAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\DIEGOHER\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Users\\user\\Downloads": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -45,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net9.0": {
@@ -97,7 +96,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

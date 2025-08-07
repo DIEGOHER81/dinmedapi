@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "F:\\PROJECTS\\Dinmed\\Backend\\dinmedapi\\DimmedAPI\\DimmedAPI\\wwwroot\\uploads\\logos\\logo_1_20250715022611.png",
+      "PackagePath": "staticwebassets\\uploads\\logos\\logo_1_20250715022611.png"
+    },
+    {
+      "Id": "F:\\PROJECTS\\Dinmed\\Backend\\dinmedapi\\DimmedAPI\\DimmedAPI\\wwwroot\\uploads\\logos\\logo_1_20250724161706.png",
+      "PackagePath": "staticwebassets\\uploads\\logos\\logo_1_20250724161706.png"
+    },
+    {
+      "Id": "F:\\PROJECTS\\Dinmed\\Backend\\dinmedapi\\DimmedAPI\\DimmedAPI\\wwwroot\\uploads\\logos\\logo_1_20250804113014.png",
+      "PackagePath": "staticwebassets\\uploads\\logos\\logo_1_20250804113014.png"
+    },
+    {
+      "Id": "F:\\PROJECTS\\Dinmed\\Backend\\dinmedapi\\DimmedAPI\\DimmedAPI\\wwwroot\\uploads\\logos\\logo_2_20250715022441.png",
+      "PackagePath": "staticwebassets\\uploads\\logos\\logo_2_20250715022441.png"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.DimmedAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.DimmedAPI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.DimmedAPI.props",
+      "PackagePath": "build\\DimmedAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildMultiTargeting.DimmedAPI.props",
+      "PackagePath": "buildMultiTargeting\\DimmedAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildTransitive.DimmedAPI.props",
+      "PackagePath": "buildTransitive\\DimmedAPI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

@@ -12893,6 +12893,13 @@
           "paymentTermsCode": {
             "type": "string",
             "nullable": true
+          },
+          "shipAddress": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomerAddress"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -14409,6 +14416,16 @@
           },
           "customer": {
             "$ref": "#/components/schemas/Customer"
+          },
+          "patient": {
+            "$ref": "#/components/schemas/Patient"
+          },
+          "customerAddresses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomerAddress"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

@@ -882,6 +882,8 @@ namespace DimmedAPI.Controllers
                 // Construir la consulta base
                 var query = companyContext.EntryRequests
                     .Include(er => er.IdCustomerNavigation) // Incluir la relación con Customer
+                    .Include(er => er.IdPatientNavigation) // Incluir la relación con Patient
+                    .Include(er => er.IdCustomerNavigation.ShipAddress) // Incluir las direcciones del cliente
                     .AsQueryable();
 
                 // Aplicar filtros dinámicamente
@@ -1048,7 +1050,9 @@ namespace DimmedAPI.Controllers
                         IsReplacement = er.IsReplacement,
                         AssemblyComponents = er.AssemblyComponents,
                         priceGroup = er.priceGroup,
-                        Customer = er.IdCustomerNavigation
+                        Customer = er.IdCustomerNavigation,
+                        Patient = er.IdPatientNavigation,
+                        CustomerAddresses = er.IdCustomerNavigation != null ? er.IdCustomerNavigation.ShipAddress : null
                     })
                     .ToListAsync();
 

@@ -51,5 +51,11 @@ namespace DimmedAPI.DTOs
         
         // Relación con CustomerAddress (colección de direcciones del cliente)
         public ICollection<CustomerAddress>? CustomerAddresses { get; set; }
+        
+        // Relación con Medic
+        public Medic? Medic { get; set; }
+        
+        // Relación con CustomerContact (contactos del cliente)
+        public ICollection<CustomerContact>? CustomerContacts { get; set; }
     }
 } 

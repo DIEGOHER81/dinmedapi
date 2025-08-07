@@ -883,6 +883,7 @@ namespace DimmedAPI.Controllers
                 var query = companyContext.EntryRequests
                     .Include(er => er.IdCustomerNavigation) // Incluir la relación con Customer
                     .Include(er => er.IdPatientNavigation) // Incluir la relación con Patient
+                    .Include(er => er.IdMedicNavigation) // Incluir la relación con Medic
                     .Include(er => er.IdCustomerNavigation.ShipAddress) // Incluir las direcciones del cliente
                     .AsQueryable();
 
@@ -1052,11 +1053,29 @@ namespace DimmedAPI.Controllers
                         priceGroup = er.priceGroup,
                         Customer = er.IdCustomerNavigation,
                         Patient = er.IdPatientNavigation,
-                        CustomerAddresses = er.IdCustomerNavigation != null ? er.IdCustomerNavigation.ShipAddress : null
+                        Medic = er.IdMedicNavigation,
+                        CustomerAddresses = er.IdCustomerNavigation != null ? er.IdCustomerNavigation.ShipAddress : null,
+                        CustomerContacts = null // Se llenará después de la consulta principal
                     })
                     .ToListAsync();
 
                 Console.WriteLine($"Consulta completada. Registros encontrados: {entryRequestsFiltered.Count}");
+                
+                // Obtener todos los contactos de clientes para esta compañía
+                var customerContacts = await companyContext.CustomerContact.ToListAsync();
+                
+                // Asignar los contactos correspondientes a cada EntryRequest
+                foreach (var entryRequest in entryRequestsFiltered)
+                {
+                    if (entryRequest.Customer != null)
+                    {
+                        // Buscar contactos que coincidan con el nombre del cliente
+                        entryRequest.CustomerContacts = customerContacts
+                            .Where(cc => cc.CustomerName == entryRequest.Customer.Name)
+                            .ToList();
+                    }
+                }
+                
                 Console.WriteLine("=== FIN GetEntryRequestsFiltered ===");
                 
                 return Ok(entryRequestsFiltered);

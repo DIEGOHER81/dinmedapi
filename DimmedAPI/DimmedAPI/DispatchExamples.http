@@ -1,0 +1,28 @@
+### Dispatch Examples
+
+# Marcar como despachado un pedido
+POST {{baseUrl}}/api/EntryRequest/dispatch?IdEntryReq=1&companyCode=COMP001
+Content-Type: application/json
+
+###
+
+# Marcar como despachado un pedido (sin companyCode - debería fallar)
+POST {{baseUrl}}/api/EntryRequest/dispatch?IdEntryReq=1
+Content-Type: application/json
+
+###
+
+# Marcar como despachado un pedido (ID inválido - debería fallar)
+POST {{baseUrl}}/api/EntryRequest/dispatch?IdEntryReq=0&companyCode=COMP001
+Content-Type: application/json
+
+###
+
+# Marcar como despachado un pedido inexistente
+POST {{baseUrl}}/api/EntryRequest/dispatch?IdEntryReq=99999&companyCode=COMP001
+Content-Type: application/json
+
+###
+
+# Variables para el archivo .http
+@baseUrl = https://localhost:7001

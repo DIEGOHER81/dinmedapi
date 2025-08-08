@@ -1,3 +1,6 @@
-'DimmedAPI/DimmedAPI/bin/' 
+# Ignorar compilados .NET
 DimmedAPI/DimmedAPI/bin/
-DimmedAPI/DimmedAPI/appsettings.json
+DimmedAPI/DimmedAPI/obj/
+*.dll
+*.exe
+*.pdb

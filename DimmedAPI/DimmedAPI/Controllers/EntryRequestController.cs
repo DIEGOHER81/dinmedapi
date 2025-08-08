@@ -15,16 +15,19 @@ namespace DimmedAPI.Controllers
     {
         private readonly ApplicationDBContext _context;
         private readonly IDynamicConnectionService _dynamicConnectionService;
+        private readonly IDynamicBCConnectionService _dynamicBCConnectionService;
         private readonly IOutputCacheStore _outputCacheStore;
         private const string cacheTag = "entryrequest";
 
         public EntryRequestController(
             ApplicationDBContext context,
             IDynamicConnectionService dynamicConnectionService,
+            IDynamicBCConnectionService dynamicBCConnectionService,
             IOutputCacheStore outputCacheStore)
         {
             _context = context;
             _dynamicConnectionService = dynamicConnectionService;
+            _dynamicBCConnectionService = dynamicBCConnectionService;
             _outputCacheStore = outputCacheStore;
         }
 
@@ -197,6 +200,241 @@ namespace DimmedAPI.Controllers
             }
             catch (Exception ex)
             {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Consulta básica de pedido por id con todas sus relaciones
+        /// </summary>
+        /// <param name="id">Id del registro</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>Objeto EntryRequests con todas sus relaciones</returns>
+        // GET: api/EntryRequest/{id}/with-details
+        [HttpGet("{id}/with-details")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<ActionResult<EntryRequests>> GetByIdWithDetails(int id, [FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== GetByIdWithDetails INICIO ===");
+                Console.WriteLine($"ID: {id}, CompanyCode: {companyCode}");
+                
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("ERROR: CompanyCode está vacío");
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                if (id == 0)
+                {
+                    Console.WriteLine("ERROR: ID es 0");
+                    return BadRequest("El ID no puede ser 0");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de compañía obtenido correctamente");
+                
+                // Obtener la EntryRequest básica
+                var dataEntry = await companyContext.EntryRequests
+                    .Include(er => er.IdCustomerNavigation)
+                    .Include(er => er.IdMedicNavigation)
+                    .Include(er => er.IdPatientNavigation)
+                    .Include(er => er.IdAtcNavigation)
+                    .Include(er => er.Branch)
+                    .Include(er => er.InsurerNavigation)
+                    .Include(er => er.InsurerTypeNavigation)
+                    .Include(er => er.IdTraceStatesNavigation)
+                    .FirstOrDefaultAsync(er => er.Id == id);
+
+                Console.WriteLine($"EntryRequest encontrada: {dataEntry != null}");
+                if (dataEntry != null)
+                {
+                    Console.WriteLine($"EntryRequest ID: {dataEntry.Id}");
+                }
+
+                if (dataEntry == null)
+                {
+                    Console.WriteLine($"ERROR: No se encontró EntryRequest con ID {id}");
+                    return NotFound($"No se encontró la solicitud de entrada con ID {id}");
+                }
+
+                // Obtener los detalles de la EntryRequest
+                var details = await companyContext.EntryRequestDetails
+                    .Include(erd => erd.IdEquipmentNavigation)
+                    .Where(x => x.IdEntryReq == id)
+                    .ToListAsync();
+
+                Console.WriteLine($"Details encontrados: {details?.Count ?? 0}");
+
+                if (details != null && details.Any())
+                {
+                    dataEntry.EntryRequestDetails = details;
+                    Console.WriteLine($"Details asignados a EntryRequest: {dataEntry.EntryRequestDetails.Count}");
+                    
+                    // Obtener los ensambles de la EntryRequest
+                    var dataAssembly = await companyContext.EntryRequestAssembly
+                        .Where(x => x.EntryRequestId == id)
+                        .OrderByDescending(x => x.QuantityConsumed)
+                        .ToListAsync();
+
+                    Console.WriteLine($"Assemblies encontrados: {dataAssembly?.Count ?? 0}");
+
+                    if (dataAssembly != null && dataAssembly.Any())
+                    {
+                        dataEntry.EntryRequestAssembly = dataAssembly;
+                        Console.WriteLine($"Assemblies asignados a EntryRequest: {dataEntry.EntryRequestAssembly.Count}");
+
+                        // Asignar los ensambles a cada detalle correspondiente
+                        foreach (var detail in dataEntry.EntryRequestDetails)
+                        {
+                            detail.EntryRequestAssembly = dataAssembly
+                                .Where(y => y.EntryRequestDetailId == detail.Id)
+                                .ToList();
+                        }
+                        Console.WriteLine("Assemblies asignados a cada detalle");
+                    }
+                }
+
+                // Obtener los componentes de la EntryRequest
+                var dataComponents = await companyContext.EntryRequestComponents
+                    .Where(x => x.IdEntryReq == id)
+                    .ToListAsync();
+
+                Console.WriteLine($"Components encontrados: {dataComponents?.Count ?? 0}");
+
+                if (dataComponents != null && dataComponents.Any())
+                {
+                    dataEntry.EntryRequestComponents = dataComponents;
+                    Console.WriteLine($"Components asignados a EntryRequest: {dataEntry.EntryRequestComponents.Count}");
+                }
+
+                Console.WriteLine($"=== GetByIdWithDetails FINAL ===");
+                Console.WriteLine($"EntryRequest final - Details: {dataEntry.EntryRequestDetails?.Count ?? 0}");
+                Console.WriteLine($"EntryRequest final - Assemblies: {dataEntry.EntryRequestAssembly?.Count ?? 0}");
+                Console.WriteLine($"EntryRequest final - Components: {dataEntry.EntryRequestComponents?.Count ?? 0}");
+
+                return Ok(dataEntry);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"ArgumentException en GetByIdWithDetails: {ex.Message}");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR en GetByIdWithDetails: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todas las Entry Requests con todas sus relaciones
+        /// </summary>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>Lista de EntryRequests con todas sus relaciones</returns>
+        // GET: api/EntryRequest/with-details
+        [HttpGet("with-details")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<ActionResult<IEnumerable<EntryRequests>>> GetAllEntryRequestsWithDetails([FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO GetAllEntryRequestsWithDetails ===");
+                Console.WriteLine($"CompanyCode recibido: {companyCode}");
+                
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+                
+                // Obtener todas las EntryRequests con sus relaciones básicas
+                var entryRequests = await companyContext.EntryRequests
+                    .Include(er => er.IdCustomerNavigation)
+                    .Include(er => er.IdMedicNavigation)
+                    .Include(er => er.IdPatientNavigation)
+                    .Include(er => er.IdAtcNavigation)
+                    .Include(er => er.Branch)
+                    .Include(er => er.InsurerNavigation)
+                    .Include(er => er.InsurerTypeNavigation)
+                    .Include(er => er.IdTraceStatesNavigation)
+                    .ToListAsync();
+
+                Console.WriteLine($"Total de EntryRequests obtenidas: {entryRequests.Count}");
+
+                // Para cada EntryRequest, obtener sus detalles, ensambles y componentes
+                foreach (var entryRequest in entryRequests)
+                {
+                    // Obtener los detalles de la EntryRequest
+                    var details = await companyContext.EntryRequestDetails
+                        .Include(erd => erd.IdEquipmentNavigation)
+                        .Where(x => x.IdEntryReq == entryRequest.Id)
+                        .ToListAsync();
+
+                    if (details != null && details.Any())
+                    {
+                        entryRequest.EntryRequestDetails = details;
+
+                        // Obtener los ensambles de la EntryRequest
+                        var dataAssembly = await companyContext.EntryRequestAssembly
+                            .Where(x => x.EntryRequestId == entryRequest.Id)
+                            .OrderByDescending(x => x.QuantityConsumed)
+                            .ToListAsync();
+
+                        if (dataAssembly != null && dataAssembly.Any())
+                        {
+                            entryRequest.EntryRequestAssembly = dataAssembly;
+
+                            // Asignar los ensambles a cada detalle correspondiente
+                            foreach (var detail in entryRequest.EntryRequestDetails)
+                            {
+                                detail.EntryRequestAssembly = dataAssembly
+                                    .Where(y => y.EntryRequestDetailId == detail.Id)
+                                    .ToList();
+                            }
+                        }
+                    }
+
+                    // Obtener los componentes de la EntryRequest
+                    var dataComponents = await companyContext.EntryRequestComponents
+                        .Where(x => x.IdEntryReq == entryRequest.Id)
+                        .ToListAsync();
+
+                    if (dataComponents != null && dataComponents.Any())
+                    {
+                        entryRequest.EntryRequestComponents = dataComponents;
+                    }
+                }
+
+                Console.WriteLine("=== FIN GetAllEntryRequestsWithDetails ===");
+                
+                return Ok(entryRequests);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"ArgumentException en GetAllEntryRequestsWithDetails: {ex.Message}");
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en GetAllEntryRequestsWithDetails ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                }
+                
+                Console.WriteLine("=== FIN ERROR ===");
+                
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
             }
         }
@@ -2044,6 +2282,450 @@ namespace DimmedAPI.Controllers
                 
                 Console.WriteLine("=== FIN ERROR ===");
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Consulta si un pedido contiene faltantes
+        /// </summary>
+        /// <param name="IdEntryReq">Id del registro del pedido</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>ValidDispatchResponseDTO Response</returns>
+        [HttpGet("valid-dispatch")]
+        public async Task<ActionResult<ValidDispatchResponseDTO>> ValidDispatch([FromQuery] int IdEntryReq, [FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== ValidDispatch INICIO ===");
+                Console.WriteLine($"IdEntryReq: {IdEntryReq}, CompanyCode: {companyCode}");
+                
+                var response = new ValidDispatchResponseDTO
+                {
+                    IsSuccess = true,
+                    Result = null,
+                    Message = "SAVE"
+                };
+
+                if (IdEntryReq == 0)
+                {
+                    Console.WriteLine("ERROR: IdEntryReq es 0");
+                    response.IsSuccess = false;
+                    response.Message = "MODEL_NOT_VALID";
+                    return BadRequest(response);
+                }
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("ERROR: CompanyCode está vacío");
+                    response.IsSuccess = false;
+                    response.Message = "El código de compañía es requerido";
+                    return BadRequest(response);
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de compañía obtenido correctamente");
+                
+                // Crear un EquipmentBO con el contexto específico de la compañía
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var equipmentBO = new BO.EquipmentBO(companyContext, bcConn);
+                Console.WriteLine("EquipmentBO creado correctamente");
+
+                // Obtener la Entry Request con todos sus detalles
+                Console.WriteLine("Llamando a GetByIdWithDetails...");
+                var dataResult = await GetByIdWithDetails(IdEntryReq, companyCode);
+                Console.WriteLine($"GetByIdWithDetails completado. Result: {dataResult.Result}");
+                
+                // Verificar si el resultado es exitoso
+                if (dataResult.Result is OkObjectResult okResult)
+                {
+                    var entryRequest = okResult.Value as EntryRequests;
+                    Console.WriteLine($"EntryRequest extraída del OkObjectResult: {entryRequest != null}");
+                    
+                    if (entryRequest == null)
+                    {
+                        Console.WriteLine("ERROR: No se pudo extraer EntryRequest del OkObjectResult");
+                        response.IsSuccess = false;
+                        response.Message = "Entry Request no encontrada";
+                        return NotFound(response);
+                    }
+                    
+                    Console.WriteLine($"EntryRequest ID: {entryRequest.Id}");
+                    Console.WriteLine($"EntryRequest Details Count: {entryRequest.EntryRequestDetails?.Count ?? 0}");
+                    
+                    if (entryRequest?.EntryRequestDetails != null && entryRequest.EntryRequestDetails.Count > 0)
+                    {
+                        Console.WriteLine($"Procesando {entryRequest.EntryRequestDetails.Count} detalles...");
+                        
+                        foreach (var detail in entryRequest.EntryRequestDetails)
+                        {
+                            Console.WriteLine($"Procesando detalle ID: {detail.Id}, Equipment ID: {detail.IdEquipment}");
+                            
+                            List<EntryRequestAssembly> inventory = await equipmentBO.getAInventory(detail.IdEquipment);
+                            Console.WriteLine($"Inventory obtenido: {inventory?.Count ?? 0} elementos");
+                            
+                            if (inventory != null)
+                            {
+                                bool vld = inventory.Exists(x => x.LocationCode == x.Location_Code_ile && ((x.Quantity - x.ReservedQuantity) > 0));
+                                Console.WriteLine($"Validación de inventario: {vld}");
+                                
+                                if (vld)
+                                {
+                                    response.Message = "FALTANTES";
+                                    Console.WriteLine("Se encontraron faltantes");
+                                }
+                            }
+                            else
+                            {
+                                response.Message = "FALTANTES";
+                                Console.WriteLine("Inventory es null - faltantes");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No hay detalles en la EntryRequest");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"ERROR: Result no es OkObjectResult, es: {dataResult.Result?.GetType().Name}");
+                    response.IsSuccess = false;
+                    response.Message = "Error al obtener Entry Request";
+                    return BadRequest(response);
+                }
+
+                Console.WriteLine($"=== ValidDispatch FINAL ===");
+                Console.WriteLine($"Response Message: {response.Message}");
+                Console.WriteLine($"Response IsSuccess: {response.IsSuccess}");
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR en ValidDispatch: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                
+                var response = new ValidDispatchResponseDTO
+                {
+                    IsSuccess = false,
+                    Result = null,
+                    Message = ex.Message,
+                    ErrorDetails = ex.StackTrace?.Length > 200 ? ex.StackTrace.Substring(0, 200) : ex.StackTrace
+                };
+                return StatusCode(500, response);
+            }
+        }
+
+        /// <summary>
+        /// Método de sincronización de productos de un pedido a CRM
+        /// </summary>
+        /// <param name="entryRequestId">ID del Entry Request a sincronizar</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>SincronizarProductosCRMResponseDTO Response</returns>
+        [HttpPost("sincronizar-productos-crm")]
+        public async Task<ActionResult<SincronizarProductosCRMResponseDTO>> SincronizarProductosCRM([FromBody] int entryRequestId, [FromQuery] string companyCode)
+        {
+            try
+            {
+                var response = new SincronizarProductosCRMResponseDTO
+                {
+                    IsSuccess = true,
+                    Result = null,
+                    Message = "SAVE",
+                    EntryRequestId = entryRequestId
+                };
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    response.IsSuccess = false;
+                    response.Message = "El código de compañía es requerido";
+                    return BadRequest(response);
+                }
+
+                if (entryRequestId == 0)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "El ID del Entry Request es requerido";
+                    return BadRequest(response);
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                
+                // Crear un EquipmentBO con el contexto específico de la compañía
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var equipmentBO = new BO.EquipmentBO(companyContext, bcConn);
+
+                // Obtener la Entry Request con todos sus detalles
+                var dataPedidoResult = await GetByIdWithDetails(entryRequestId, companyCode);
+                
+                if (dataPedidoResult.Result is not OkObjectResult okResult)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Error al obtener Entry Request";
+                    return BadRequest(response);
+                }
+
+                var entryRequest = okResult.Value as EntryRequests;
+                
+                if (entryRequest == null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Entry Request no encontrada";
+                    return NotFound(response);
+                }
+                
+                // Sincronizar productos a CRM
+                string result = await equipmentBO.CRMProductsSyncronize(entryRequest);
+                
+                response.Message = result;
+                response.TotalProductsSynchronized = entryRequest?.EntryRequestDetails?.Count;
+                
+                // Agregar información de la Entry Request
+                response.EntryRequestInfo = $"Entry Request #{entryRequest.Id} - {entryRequest.Service} - {entryRequest.DeliveryPriority}";
+                
+                // Agregar detalles de los productos sincronizados
+                if (entryRequest?.EntryRequestDetails != null && entryRequest.EntryRequestDetails.Any())
+                {
+                    response.ProductosSincronizados = new List<ProductoSincronizadoDTO>();
+                    
+                    foreach (var detail in entryRequest.EntryRequestDetails)
+                    {
+                        if (detail.IdEquipmentNavigation != null)
+                        {
+                            var producto = new ProductoSincronizadoDTO
+                            {
+                                Id = detail.IdEquipmentNavigation.Id,
+                                Code = detail.IdEquipmentNavigation.Code,
+                                Name = detail.IdEquipmentNavigation.Name,
+                                ShortName = detail.IdEquipmentNavigation.ShortName,
+                                Status = detail.IdEquipmentNavigation.Status,
+                                ProductLine = detail.IdEquipmentNavigation.ProductLine,
+                                Branch = detail.IdEquipmentNavigation.Branch,
+                                Brand = detail.IdEquipmentNavigation.Brand,
+                                Model = detail.IdEquipmentNavigation.Model,
+                                Type = detail.IdEquipmentNavigation.Type,
+                                SystemIdBC = detail.IdEquipmentNavigation.SystemIdBC
+                            };
+                            
+                            response.ProductosSincronizados.Add(producto);
+                        }
+                    }
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new SincronizarProductosCRMResponseDTO
+                {
+                    IsSuccess = false,
+                    Result = null,
+                    Message = ex.Message,
+                    ErrorDetails = ex.StackTrace?.Length > 200 ? ex.StackTrace.Substring(0, 200) : ex.StackTrace,
+                    EntryRequestId = entryRequestId
+                };
+                return StatusCode(500, response);
+            }
+        }
+
+        /// <summary>
+        /// Marcar como despachado un pedido
+        /// </summary>
+        /// <param name="IdEntryReq">Id del registro de pedido</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>ActionResult Response</returns>
+        [HttpPost("dispatch")]
+        public async Task<ActionResult<object>> Dispatch(int IdEntryReq, [FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO Dispatch ===");
+                Console.WriteLine($"IdEntryReq: {IdEntryReq}, CompanyCode: {companyCode}");
+
+                var response = new
+                {
+                    IsSuccess = true,
+                    Result = (object)null,
+                    Message = "SAVE"
+                };
+
+                var ordersMessage = "";
+
+                if (IdEntryReq == 0)
+                {
+                    Console.WriteLine("ERROR: IdEntryReq es 0");
+                    return BadRequest(new
+                    {
+                        IsSuccess = false,
+                        Result = (object)null,
+                        Message = "MODEL_NOT_VALID"
+                    });
+                }
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("ERROR: CompanyCode está vacío");
+                    return BadRequest(new
+                    {
+                        IsSuccess = false,
+                        Result = (object)null,
+                        Message = "El código de compañía es requerido"
+                    });
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de compañía obtenido correctamente");
+
+                // Obtener la Entry Request con todos sus detalles
+                var data = await companyContext.EntryRequests
+                    .Include(er => er.EntryRequestComponents)
+                    .Include(er => er.EntryRequestDetails)
+                        .ThenInclude(erd => erd.IdEquipmentNavigation)
+                    .FirstOrDefaultAsync(er => er.Id == IdEntryReq);
+
+                if (data == null)
+                {
+                    Console.WriteLine("ERROR: No se encontró la Entry Request");
+                    return NotFound(new
+                    {
+                        IsSuccess = false,
+                        Result = (object)null,
+                        Message = "No se encontró el pedido especificado"
+                    });
+                }
+
+                // Validar que todos los componentes tengan lote asignado
+                if (data.EntryRequestComponents != null && data.EntryRequestComponents.Count > 0)
+                {
+                    foreach (var component in data.EntryRequestComponents)
+                    {
+                        if (string.IsNullOrEmpty(component.Lot) || component.Lot == "0")
+                        {
+                            Console.WriteLine("ERROR: Componente sin lote asignado");
+                            return BadRequest(new
+                            {
+                                IsSuccess = false,
+                                Result = (object)null,
+                                Message = "No puede despachar, existen componentes que no tienen asignado lote"
+                            });
+                        }
+                    }
+
+                    // Validar que se haya generado pedido de ensamble
+                    if (data.AssemblyComponents != true)
+                    {
+                        Console.WriteLine("ERROR: No se ha generado pedido de ensamble");
+                        return BadRequest(new
+                        {
+                            IsSuccess = false,
+                            Result = (object)null,
+                            Message = "No puede despachar, debe generar pedido de ensamble para los componentes"
+                        });
+                    }
+                }
+
+                // Validar que no haya conflictos con otros pedidos
+                var validation = await companyContext.EntryRequestDetails
+                    .Include(erd => erd.IdEntryReqNavigation)
+                    .Include(erd => erd.IdEquipmentNavigation)
+                    .Where(x => (x.IdEntryReqNavigation.Status == "DESPACHADO" || 
+                                x.IdEntryReqNavigation.Status == "ATC_CONS" || 
+                                x.IdEntryReqNavigation.Status == "DISPATCH_PAR") && 
+                               x.IdEntryReqNavigation.Id != IdEntryReq && 
+                               x.IsComponent == false)
+                    .ToListAsync();
+
+                if (validation.Any())
+                {
+                    var validationList = validation.ToList();
+                    foreach (var detail in data.EntryRequestDetails)
+                    {
+                        var eqValidation = validationList.Find(x => x.IdEquipment == detail.IdEquipment && 
+                                                                   x.TraceState != "PROCESADO" && 
+                                                                   x.TraceState != "PEDIDO PROCESADO");
+                        if (eqValidation != null)
+                        {
+                            ordersMessage += $"El equipo {eqValidation.IdEquipmentNavigation.Code} ya se encuentra en el pedido {eqValidation.IdEntryReqNavigation.Id} en estado {eqValidation.IdEntryReqNavigation.Status}; ";
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(ordersMessage))
+                    {
+                        Console.WriteLine($"ERROR: Conflictos encontrados - {ordersMessage}");
+                        return BadRequest(new
+                        {
+                            IsSuccess = false,
+                            Result = (object)null,
+                            Message = ordersMessage
+                        });
+                    }
+                }
+
+                // Actualizar estados de los detalles
+                foreach (var detail in data.EntryRequestDetails)
+                {
+                    if (detail.status == "DISPATCH_PAR" || detail.status == "Pendiente")
+                    {
+                        detail.status = "DESPACHADO";
+                        detail.DateLoadState = DateTime.Now;
+                        companyContext.EntryRequestDetails.Update(detail);
+                    }
+                }
+
+                // Actualizar estados de los componentes
+                if (data.EntryRequestComponents != null && data.EntryRequestComponents.Count > 0)
+                {
+                    foreach (var component in data.EntryRequestComponents)
+                    {
+                        if (component.status == "DISPATCH_PAR" || component.status == "Pendiente")
+                        {
+                            component.status = "DESPACHADO";
+                            companyContext.EntryRequestComponents.Update(component);
+                        }
+                    }
+                }
+
+                // Actualizar estado del pedido principal
+                data.Status = "DESPACHADO";
+                companyContext.EntryRequests.Update(data);
+
+                // Guardar cambios
+                await companyContext.SaveChangesAsync();
+
+                // Crear registro en el historial
+                var historyEntry = new EntryRequestHistory
+                {
+                    IdEntryRequest = data.Id,
+                    Description = "Pedido Despachado.",
+                    Information = $"Pedido: {data.Id}",
+                    DateLoad = DateTime.Now,
+                    UserId = 1, // TODO: Obtener el ID del usuario actual
+                    Location = "WEB"
+                };
+
+                companyContext.EntryRequestHistory.Add(historyEntry);
+                await companyContext.SaveChangesAsync();
+
+                Console.WriteLine("=== FIN Dispatch ===");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en Dispatch ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                Console.WriteLine("=== FIN ERROR ===");
+
+                return StatusCode(500, new
+                {
+                    IsSuccess = false,
+                    Result = (object)null,
+                    Message = ex.Message
+                });
             }
         }
     }

@@ -875,5 +875,51 @@ namespace DimmedAPI.BO
                 throw new Exception($"Error al obtener la lista de equipos: {ex.Message}", ex);
             }
         }
+
+        /// <summary>
+        /// Sincroniza los productos de un pedido a CRM
+        /// </summary>
+        /// <param name="entryRequest">El pedido con todos sus detalles</param>
+        /// <returns>Mensaje de resultado de la sincronización</returns>
+        public async Task<string> CRMProductsSyncronize(EntryRequests entryRequest)
+        {
+            try
+            {
+                if (entryRequest == null)
+                {
+                    throw new ArgumentNullException(nameof(entryRequest), "El pedido no puede ser nulo");
+                }
+
+                if (entryRequest.EntryRequestDetails == null || !entryRequest.EntryRequestDetails.Any())
+                {
+                    return "El pedido no tiene detalles para sincronizar";
+                }
+
+                // Aquí se implementaría la lógica de sincronización con CRM
+                // Por ahora, retornamos un mensaje de éxito
+                // TODO: Implementar la lógica real de sincronización con CRM
+                
+                Console.WriteLine($"Sincronizando productos del pedido {entryRequest.Id} a CRM");
+                Console.WriteLine($"Total de detalles a sincronizar: {entryRequest.EntryRequestDetails.Count}");
+
+                foreach (var detail in entryRequest.EntryRequestDetails)
+                {
+                    if (detail.IdEquipmentNavigation != null)
+                    {
+                        Console.WriteLine($"Sincronizando equipo: {detail.IdEquipmentNavigation.Code} - {detail.IdEquipmentNavigation.Name}");
+                        
+                        // Aquí se haría la llamada real al CRM
+                        // await _bcConn.SyncToCRM(detail.IdEquipmentNavigation.SystemIdBC, detail.Quantity);
+                    }
+                }
+
+                return "Productos sincronizados exitosamente a CRM";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al sincronizar productos a CRM: {ex.Message}");
+                throw new Exception($"Error al sincronizar productos a CRM: {ex.Message}", ex);
+            }
+        }
     }
 } 

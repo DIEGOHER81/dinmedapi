@@ -2559,6 +2559,37 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
+    "Method": "GetByIdWithDetails",
+    "RelativePath": "api/EntryRequest/{id}/with-details",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.Entidades.EntryRequests",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
     "Method": "GetEntryRequestBasic",
     "RelativePath": "api/EntryRequest/basic/{id}",
     "HttpMethod": "GET",
@@ -2732,6 +2763,27 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
+    "Method": "Dispatch",
+    "RelativePath": "api/EntryRequest/dispatch",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdEntryReq",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
@@ -3176,6 +3228,37 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
+    "Method": "SincronizarProductosCRM",
+    "RelativePath": "api/EntryRequest/sincronizar-productos-crm",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entryRequestId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.DTOs.SincronizarProductosCRMResponseDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
     "Method": "GetEntryRequestsSummary",
     "RelativePath": "api/EntryRequest/summary",
     "HttpMethod": "GET",
@@ -3202,6 +3285,37 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
+    "Method": "ValidDispatch",
+    "RelativePath": "api/EntryRequest/valid-dispatch",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdEntryReq",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.DTOs.ValidDispatchResponseDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
     "Method": "VerificarConfiguracionCompania",
     "RelativePath": "api/EntryRequest/VerificarConfiguracionCompania",
     "HttpMethod": "GET",
@@ -3215,6 +3329,32 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
+    "Method": "GetAllEntryRequestsWithDetails",
+    "RelativePath": "api/EntryRequest/with-details",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.Entidades.EntryRequests, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestAssemblyController",

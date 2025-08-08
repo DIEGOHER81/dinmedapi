@@ -3100,6 +3100,27 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
+    "Method": "GenerateXLSXAsync",
+    "RelativePath": "api/EntryRequest/generate-xlsx",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdEntryReq",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
     "Method": "GetOrdenesDespacho",
     "RelativePath": "api/EntryRequest/ordenes-despacho",
     "HttpMethod": "GET",

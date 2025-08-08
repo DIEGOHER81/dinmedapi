@@ -481,9 +481,6 @@ D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\runtimes\w
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
-D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
-D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
@@ -511,3 +508,9 @@ D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\DimmedAPI.
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\DimmedAPI.genruntimeconfig.cache
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\ref\DimmedAPI.dll
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\EPPlus.dll
+D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\EPPlus.Interfaces.dll
+D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\EPPlus.System.Drawing.dll
+D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\Microsoft.IO.RecyclableMemoryStream.dll
+D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\runtimes\win\lib\net7.0\Microsoft.Win32.SystemEvents.dll
+D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll

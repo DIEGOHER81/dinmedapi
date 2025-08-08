@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using DimmedAPI.DTOs;
 using System.Collections.Generic;
 using System.Data;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace DimmedAPI.Controllers
 {
@@ -2527,6 +2529,563 @@ namespace DimmedAPI.Controllers
                     EntryRequestId = entryRequestId
                 };
                 return StatusCode(500, response);
+            }
+        }
+
+        /// <summary>
+        /// Generar excel de remisión
+        /// </summary>
+        /// <param name="IdEntryReq">Id del pedido</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>FileResult</returns>
+        [HttpGet("generate-xlsx")]
+        public async Task<FileResult> GenerateXLSXAsync([FromQuery] int IdEntryReq, [FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO GenerateXLSXAsync ===");
+                Console.WriteLine($"IdEntryReq: {IdEntryReq}");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    throw new ArgumentException("El código de compañía es requerido");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+
+                // Obtener la solicitud de entrada con sus relaciones básicas
+                var dataInformation = await companyContext.EntryRequests
+                    .Include(er => er.IdCustomerNavigation)
+                    .Include(er => er.IdPatientNavigation)
+                    .Include(er => er.IdMedicNavigation)
+                    .Include(er => er.IdAtcNavigation)
+                    .Include(er => er.EntryRequestDetails)
+                        .ThenInclude(erd => erd.IdEquipmentNavigation)
+                    .Include(er => er.EntryRequestComponents)
+                    .FirstOrDefaultAsync(er => er.Id == IdEntryReq);
+
+                if (dataInformation == null)
+                {
+                    Console.WriteLine($"No se encontró la solicitud de entrada con ID: {IdEntryReq}");
+                    throw new ArgumentException($"No se encontró la solicitud de entrada con ID: {IdEntryReq}");
+                }
+
+                // Obtener los ensambles de la EntryRequest
+                var dataAssembly = await companyContext.EntryRequestAssembly
+                    .Where(x => x.EntryRequestId == IdEntryReq)
+                    .OrderByDescending(x => x.QuantityConsumed)
+                    .ToListAsync();
+
+                Console.WriteLine($"Assemblies encontrados: {dataAssembly?.Count ?? 0}");
+
+                if (dataAssembly != null && dataAssembly.Any())
+                {
+                    dataInformation.EntryRequestAssembly = dataAssembly;
+                    Console.WriteLine($"Assemblies asignados a EntryRequest: {dataInformation.EntryRequestAssembly.Count}");
+
+                    // Asignar los ensambles a cada detalle correspondiente
+                    foreach (var detail in dataInformation.EntryRequestDetails)
+                    {
+                        detail.EntryRequestAssembly = dataAssembly
+                            .Where(y => y.EntryRequestDetailId == detail.Id)
+                            .ToList();
+                    }
+                    Console.WriteLine("Assemblies asignados a cada detalle");
+                }
+
+                Console.WriteLine($"Solicitud encontrada: {dataInformation.Id}");
+                Console.WriteLine($"Cliente: {dataInformation.IdCustomerNavigation?.Name}");
+                Console.WriteLine($"Paciente: {dataInformation.IdPatientNavigation?.Name}");
+
+                // Configurar EPPlus para uso no comercial
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+                int index = 17;
+                decimal totalQuantity;
+                var workbook = new ExcelPackage();
+                var worksheet = workbook.Workbook.Worksheets.Add("Sheet1");
+
+                string deliveryAddress = dataInformation.DeliveryAddress ?? string.Empty;
+                List<string> details = new List<string>();
+                List<string> detailsZero = new List<string>();
+
+                // Configurar estilos del encabezado
+                worksheet.Cells[1, 1].Style.Font.Bold = true;
+                worksheet.Cells[1, 1].Style.Font.Size = 30;
+                worksheet.Cells[2, 1].Value = "";
+                worksheet.Cells[2, 1].Style.Font.Bold = true;
+                worksheet.Cells[2, 1].Style.Font.Size = 30;
+                worksheet.Cells[1, 5].Value = "REMISIÓN P-" + IdEntryReq.ToString();
+                worksheet.Cells[1, 5].Style.Font.Bold = true;
+
+                // Información del cliente y paciente
+                worksheet.Cells[5, 1].Value = "Cliente Pagador:";
+                worksheet.Cells[5, 1].Style.Font.Bold = true;
+                worksheet.Cells[6, 1].Value = "Nit:";
+                worksheet.Cells[6, 1].Style.Font.Bold = true;
+                worksheet.Cells[7, 1].Value = "Direccion:";
+                worksheet.Cells[7, 1].Style.Font.Bold = true;
+                worksheet.Cells[8, 1].Value = "Telefono";
+                worksheet.Cells[8, 1].Style.Font.Bold = true;
+                worksheet.Cells[9, 1].Value = "Ciudad";
+                worksheet.Cells[9, 1].Style.Font.Bold = true;
+                worksheet.Cells[5, 4].Value = "Paciente:";
+                worksheet.Cells[5, 4].Style.Font.Bold = true;
+                worksheet.Cells[6, 4].Value = "Cedula Paciente:";
+                worksheet.Cells[6, 4].Style.Font.Bold = true;
+                worksheet.Cells[7, 4].Value = "Dir. Entrega:";
+                worksheet.Cells[7, 4].Style.Font.Bold = true;
+                worksheet.Cells[8, 4].Value = "Nombre Solicitante";
+                worksheet.Cells[8, 4].Style.Font.Bold = true;
+                worksheet.Cells[9, 4].Value = "Doctor";
+                worksheet.Cells[9, 4].Style.Font.Bold = true;
+                worksheet.Cells[10, 4].Value = "Oden de Compra";
+                worksheet.Cells[10, 4].Style.Font.Bold = true;
+                worksheet.Cells[11, 4].Value = "Historia Clinica";
+                worksheet.Cells[11, 4].Style.Font.Bold = true;
+
+                // Datos del cliente
+                worksheet.Cells[5, 2].Value = dataInformation.IdCustomerNavigation?.Name ?? "";
+                worksheet.Cells[5, 2].Style.Font.Bold = true;
+                worksheet.Cells[6, 2].Value = dataInformation.IdCustomerNavigation?.Identification ?? "";
+                worksheet.Cells[7, 2].Value = dataInformation.IdCustomerNavigation?.Address ?? "";
+                worksheet.Cells[8, 2].Value = dataInformation.IdCustomerNavigation?.Phone ?? "";
+                worksheet.Cells[9, 2].Value = dataInformation.IdCustomerNavigation?.City ?? "";
+
+                // Datos del paciente
+                worksheet.Cells[5, 5].Value = $"{dataInformation.IdPatientNavigation?.Name ?? ""} {dataInformation.IdPatientNavigation?.LastName ?? ""}";
+                worksheet.Cells[6, 5].Value = dataInformation.IdPatientNavigation?.Identification ?? "";
+                worksheet.Cells[7, 5].Value = deliveryAddress;
+                worksheet.Cells[8, 5].Value = dataInformation.Applicant ?? "";
+                worksheet.Cells[9, 5].Value = $"{dataInformation.IdMedicNavigation?.Name ?? ""} {dataInformation.IdMedicNavigation?.LastName ?? ""}";
+                worksheet.Cells[10, 5].Value = dataInformation.PurchaseOrder ?? "";
+                worksheet.Cells[11, 5].Value = dataInformation.IdPatientNavigation?.MedicalRecord ?? "";
+
+                // Información del asesor técnico
+                worksheet.Cells[13, 1].Value = "Asesor Tecnico";
+                worksheet.Cells[13, 1].Style.Font.Bold = true;
+                worksheet.Cells[13, 2].Value = "Fecha de Entrega";
+                worksheet.Cells[13, 2].Style.Font.Bold = true;
+                worksheet.Cells[13, 3].Value = "Fecha de Cirugia";
+                worksheet.Cells[13, 3].Style.Font.Bold = true;
+                worksheet.Cells[13, 4].Value = "Hora de Cirugía";
+                worksheet.Cells[13, 4].Style.Font.Bold = true;
+                worksheet.Cells[13, 5].Value = "Fecha de Recogida";
+                worksheet.Cells[13, 5].Style.Font.Bold = true;
+
+                index = index + 1;
+                if (dataInformation.IdAtcNavigation != null && dataInformation.IdAtcNavigation.Name != null)
+                {
+                    worksheet.Cells[14, 1].Value = dataInformation.IdAtcNavigation.Name;
+                }
+                else
+                {
+                    worksheet.Cells[14, 1].Value = " ";
+                }
+                worksheet.Cells[14, 2].Value = dataInformation.DeliveryDate.ToString("dd/MM/yyyy");
+                worksheet.Cells[14, 3].Value = dataInformation.SurgeryInit?.ToString("dd/MM/yyyy") ?? "";
+                worksheet.Cells[14, 4].Value = dataInformation.SurgeryInit?.ToString("hh:mm tt") ?? "";
+                worksheet.Cells[14, 5].Value = dataInformation.SurgeryEnd?.ToString("dd/MM/yyyy") ?? "";
+
+                // Componentes adicionales
+                if (dataInformation.EntryRequestComponents != null && dataInformation.EntryRequestComponents.Any())
+                {
+                    index = index + 1;
+                    worksheet.Cells[index, 1].Value = "COMPONENTES ADICIONALES";
+                    worksheet.Cells[index, 1].Style.Font.Bold = true;
+
+                    index = index + 1;
+                    worksheet.Cells[index, 1].Value = "REF";
+                    worksheet.Cells[index, 1].Style.Font.Bold = true;
+                    worksheet.Cells[index, 2].Value = "Descripción";
+                    worksheet.Cells[index, 2].Style.Font.Bold = true;
+                    worksheet.Cells[index, 3].Value = "INVIMA";
+                    worksheet.Cells[index, 3].Style.Font.Bold = true;
+                    worksheet.Cells[index, 4].Value = "LOTE";
+                    worksheet.Cells[index, 4].Style.Font.Bold = true;
+                    worksheet.Cells[index, 5].Value = "Cant. LT";
+                    worksheet.Cells[index, 5].Style.Font.Bold = true;
+                    worksheet.Cells[index, 6].Value = "Cant. Total";
+                    worksheet.Cells[index, 6].Style.Font.Bold = true;
+                    worksheet.Cells[index, 7].Value = "Precio U.";
+                    worksheet.Cells[index, 7].Style.Font.Bold = true;
+                    worksheet.Cells[index, 8].Value = "IVA";
+                    worksheet.Cells[index, 8].Style.Font.Bold = true;
+                    worksheet.Cells[index, 9].Value = "Gasto";
+                    worksheet.Cells[index, 9].Style.Font.Bold = true;
+
+                    index = index + 1;
+
+                    foreach (var CompoD in dataInformation.EntryRequestComponents)
+                    {
+                        decimal totalQuantityAd = dataInformation.EntryRequestComponents.Where(x => x.ItemNo == CompoD.ItemNo).Sum(x => (decimal)(x.Quantity ?? 0));
+
+                        worksheet.Cells[index, 1].Value = CompoD.ItemNo;
+                        worksheet.Cells[index, 2].Value = CompoD.ItemName;
+                        worksheet.Cells[index, 3].Value = CompoD.Invima;
+                        worksheet.Cells[index, 6].Value = totalQuantityAd;
+                        index = index + 1;
+
+                        foreach (var CompoDdub in dataInformation.EntryRequestComponents)
+                        {
+                            if (CompoDdub.ItemNo == CompoD.ItemNo)
+                            {
+                                worksheet.Cells[index, 1].Value = "";
+                                worksheet.Cells[index, 2].Value = "";
+                                worksheet.Cells[index, 3].Value = "";
+                                worksheet.Cells[index, 4].Value = CompoD.Lot;
+                                worksheet.Cells[index, 5].Value = CompoD.Quantity;
+                                if (CompoD.UnitPrice != null)
+                                {
+                                    decimal UP = (decimal)CompoD.UnitPrice;
+                                    worksheet.Cells[index, 7].Value = string.Format("{0:n0}", UP);
+                                }
+                                else
+                                    worksheet.Cells[index, 7].Value = "0";
+                                if (CompoD.UnitPrice != null && CompoD.UnitPrice != 0 && CompoD.TaxCode != "V_ARTVENTAEXC" && dataInformation.IdCustomerNavigation?.ExIva == true)
+                                {
+                                    decimal IVA = ((decimal)CompoD.UnitPrice) * (decimal)0.19;
+                                    worksheet.Cells[index, 8].Value = string.Format("{0:n0}", IVA);
+                                }
+                                else
+                                {
+                                    worksheet.Cells[index, 8].Value = "0";
+                                }
+                                worksheet.Cells[index, 9].Value = "0";
+                                index = index + 1;
+                            }
+                        }
+                    }
+                }
+
+                // Equipos y sus componentes
+                foreach (var eq in dataInformation.EntryRequestDetails)
+                {
+                    worksheet.Cells[index, 1].Value = eq.IdEquipmentNavigation?.Code ?? "";
+                    worksheet.Cells[index, 1].Style.Font.Bold = true;
+                    worksheet.Cells[index, 2].Value = eq.IdEquipmentNavigation?.Name ?? "";
+                    worksheet.Cells[index, 2].Style.Font.Bold = true;
+                    worksheet.Cells[index, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[index, 8].Value = "# Cajas";
+                    worksheet.Cells[index, 8].Style.Font.Bold = true;
+                    worksheet.Cells[index, 9].Value = eq.IdEquipmentNavigation?.NoBoxes ?? 0;
+                    index += 1;
+
+                    if (eq.EntryRequestAssembly != null)
+                    {
+                        worksheet.Cells[index, 1].Value = "REF";
+                        worksheet.Cells[index, 1].Style.Font.Bold = true;
+                        worksheet.Cells[index, 2].Value = "Descripción";
+                        worksheet.Cells[index, 2].Style.Font.Bold = true;
+                        worksheet.Cells[index, 3].Value = "INVIMA";
+                        worksheet.Cells[index, 3].Style.Font.Bold = true;
+                        worksheet.Cells[index, 4].Value = "LOTE";
+                        worksheet.Cells[index, 4].Style.Font.Bold = true;
+                        worksheet.Cells[index, 5].Value = "Cant. LT";
+                        worksheet.Cells[index, 5].Style.Font.Bold = true;
+                        worksheet.Cells[index, 6].Value = "Cant. Total";
+                        worksheet.Cells[index, 6].Style.Font.Bold = true;
+                        worksheet.Cells[index, 7].Value = "Precio U.";
+                        worksheet.Cells[index, 7].Style.Font.Bold = true;
+                        worksheet.Cells[index, 8].Value = "IVA";
+                        worksheet.Cells[index, 8].Style.Font.Bold = true;
+                        worksheet.Cells[index, 9].Value = "Gasto";
+                        worksheet.Cells[index, 9].Style.Font.Bold = true;
+
+                        if (eq.EntryRequestAssembly != null && eq.EntryRequestAssembly.Count > 0)
+                        {
+                            var validq = new List<EntryRequestAssembly>();
+                            if (dataInformation.Id > 9597)
+                                validq = eq.EntryRequestAssembly.OrderBy(x => x.Position).ToList();
+                            else
+                                validq = eq.EntryRequestAssembly.OrderBy(x => x.LineNo).ToList();
+
+                            foreach (var subDetail in validq)
+                            {
+                                totalQuantity = (decimal)validq.Where(x => x.Code == subDetail.Code).Sum(x => x.ReservedQuantity ?? 0);
+
+                                if (!details.Contains(subDetail.Code))
+                                {
+                                    details.Add(subDetail.Code);
+                                    if (totalQuantity > 0)
+                                    {
+                                        index += 1;
+                                        worksheet.Cells[index, 1].Value = subDetail.Code;
+                                        worksheet.Cells[index, 2].Value = subDetail.Description;
+                                        worksheet.Cells[index, 6].Value = totalQuantity;
+                                        worksheet.Cells[index, 8].Value = "";
+                                        index = index + 1;
+
+                                        foreach (var equ in validq)
+                                        {
+                                            if (equ.Code == subDetail.Code)
+                                            {
+                                                if (!string.IsNullOrEmpty(equ.Lot))
+                                                {
+                                                    worksheet.Cells[index, 1].Value = "";
+                                                    worksheet.Cells[index, 2].Value = "";
+                                                    worksheet.Cells[index, 3].Value = equ.Invima;
+                                                    worksheet.Cells[index, 4].Value = equ.Lot;
+                                                    worksheet.Cells[index, 5].Value = equ.ReservedQuantity;
+                                                    if (equ.UnitPrice != null)
+                                                    {
+                                                        decimal UP = (decimal)equ.UnitPrice;
+                                                        worksheet.Cells[index, 7].Value = string.Format("{0:n0}", UP);
+                                                    }
+                                                    else
+                                                        worksheet.Cells[index, 7].Value = equ.UnitPrice;
+
+                                                    if (equ.UnitPrice != null && equ.UnitPrice != 0 && equ.TaxCode != "V_ARTVENTAEXC" && dataInformation.IdCustomerNavigation?.ExIva == true)
+                                                    {
+                                                        decimal IVA = ((decimal)equ.UnitPrice) * (decimal)0.19;
+                                                        worksheet.Cells[index, 8].Value = string.Format("{0:n0}", IVA);
+                                                    }
+                                                    else
+                                                    {
+                                                        worksheet.Cells[index, 8].Value = "0";
+                                                    }
+                                                    worksheet.Cells[index, 9].Value = "0";
+                                                    index = index + 1;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                index = index + 2;
+                worksheet.Cells[index, 1].Value = "Lista de Equipos";
+                worksheet.Cells[index, 1].Style.Font.Bold = true;
+                index = index + 2;
+
+                foreach (var eq in dataInformation.EntryRequestDetails)
+                {
+                    worksheet.Cells[index, 1].Value = "id Master";
+                    worksheet.Cells[index, 1].Style.Font.Bold = true;
+                    worksheet.Cells[index, 2].Value = "Nombre del Master";
+                    worksheet.Cells[index, 2].Style.Font.Bold = true;
+                    worksheet.Cells[index, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    index = index + 1;
+
+                    worksheet.Cells[index, 1].Value = eq.IdEquipmentNavigation?.Id ?? 0;
+                    worksheet.Cells[index, 2].Value = eq.IdEquipmentNavigation?.Name ?? "";
+                    worksheet.Cells[index, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                }
+
+                index = index + 2;
+                worksheet.Cells[index, 1].Value = "RECIBIDO Y CONFORME POR";
+                worksheet.Cells[index, 1].Style.Font.Bold = true;
+                worksheet.Cells[index, 4].Value = "AUXILIAR SUPLEMEDICOS";
+                worksheet.Cells[index, 4].Style.Font.Bold = true;
+                worksheet.Cells[index, 7].Value = "ASESOR TECNICO";
+                worksheet.Cells[index, 7].Style.Font.Bold = true;
+
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "(FIRMA Y SELLO DEL CLIENTE)";
+                worksheet.Cells[index, 1].Style.Font.Bold = true;
+                worksheet.Cells[index, 4].Value = "QUE ENTREGA";
+                worksheet.Cells[index, 4].Style.Font.Bold = true;
+                worksheet.Cells[index, 7].Value = "ASESOR TECNICO";
+                worksheet.Cells[index, 7].Style.Font.Bold = true;
+
+                index = index + 2;
+                worksheet.Cells[index, 1].Value = "RECIBIDO Y CONFORME POR";
+                worksheet.Cells[index, 1].Style.Font.Bold = true;
+                worksheet.Cells[index, 4].Value = "AUXILIAR SUPLEMEDICOS";
+                worksheet.Cells[index, 4].Style.Font.Bold = true;
+                worksheet.Cells[index, 7].Value = "ASESOR TECNICO";
+                worksheet.Cells[index, 7].Style.Font.Bold = true;
+
+                index = index + 2;
+                worksheet.Cells[index, 1].Value = "Area de Distribución";
+                worksheet.Cells[index, 1].Style.Font.Bold = true;
+                worksheet.Cells[index, 5].Value = "Area de Lavado";
+                worksheet.Cells[index, 5].Style.Font.Bold = true;
+
+                index = index + 1;
+                worksheet.Cells[index, 3].Value = "SI";
+                worksheet.Cells[index, 4].Value = "NO";
+                worksheet.Cells[index, 8].Value = "SI";
+                worksheet.Cells[index, 9].Value = "NO";
+
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "Lleva brocas";
+                worksheet.Cells[index, 5].Value = "Lleva sustitutos oseos";
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "Recibe brocas";
+                worksheet.Cells[index, 5].Value = "Recibe sustitutos oseos";
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "Lleva baterias";
+                worksheet.Cells[index, 5].Value = "Recibe baterias";
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "Lleva manometro";
+                worksheet.Cells[index, 5].Value = "Recibe manometro";
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "Cuantas cajas entrega";
+                worksheet.Cells[index, 5].Value = "Cuantos equipos recibe";
+
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "Responsable";
+                worksheet.Cells[index, 5].Value = "Responsable";
+
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "Observaciones";
+                worksheet.Cells[index, 5].Value = "Observaciones";
+
+                index = index + 2;
+                worksheet.Cells[index, 1].Value = "METODOS DE ESTERILIZACION";
+                worksheet.Cells[index, 1].Style.Font.Bold = true;
+                worksheet.Cells[index, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "MARCA";
+                worksheet.Cells[index, 2].Value = "TIPO DE PIEZAS";
+                worksheet.Cells[index, 3].Value = "METODO DE ESTERILIZACIÓN";
+                worksheet.Cells[index, 4].Value = "TEMPERATURA DE ESTERILIZACIÓN";
+                worksheet.Cells[index, 5].Value = "TIEMPO DE CICLO";
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "IMEDICOM";
+                worksheet.Cells[index, 2].Value = "NEUMATICO";
+                worksheet.Cells[index, 3].Value = "VAPOR / BAJA TEMPERATURA";
+                worksheet.Cells[index, 4].Value = "134° /50°";
+                worksheet.Cells[index, 5].Value = "1 HORA";
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "DESOUTTER";
+                worksheet.Cells[index, 2].Value = "NEUMATICO";
+                worksheet.Cells[index, 3].Value = "VAPOR / BAJA TEMPERATURA";
+                worksheet.Cells[index, 4].Value = "134° /50°";
+                worksheet.Cells[index, 5].Value = "1 HORA";
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "MICROAIRE";
+                worksheet.Cells[index, 2].Value = "NEUMATICO";
+                worksheet.Cells[index, 3].Value = "VAPOR / BAJA TEMPERATURA";
+                worksheet.Cells[index, 4].Value = "134° /50°";
+                worksheet.Cells[index, 5].Value = "1 HORA";
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "ZIMMER";
+                worksheet.Cells[index, 2].Value = "ELECTRICO";
+                worksheet.Cells[index, 3].Value = "VAPOR";
+                worksheet.Cells[index, 4].Value = "134° /50°";
+                worksheet.Cells[index, 5].Value = "1 HORA";
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "SURCIC AP";
+                worksheet.Cells[index, 2].Value = "ELECTRICO";
+                worksheet.Cells[index, 3].Value = "BAJA TEMPERTURA";
+                worksheet.Cells[index, 4].Value = "50° ";
+                worksheet.Cells[index, 5].Value = "1 HORA";
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "MICRO AIRE ELECTRICA";
+                worksheet.Cells[index, 2].Value = "ELECTRICO";
+                worksheet.Cells[index, 3].Value = "VAPOR / BAJA TEMPERATURA";
+                worksheet.Cells[index, 4].Value = "134° /50°";
+                worksheet.Cells[index, 5].Value = "1 HORA";
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "BATERIA DE MICRO AIRE ";
+                worksheet.Cells[index, 2].Value = "ELECTRICO";
+                worksheet.Cells[index, 3].Value = "BAJA TEMPERTURA";
+                worksheet.Cells[index, 4].Value = "50°";
+                worksheet.Cells[index, 5].Value = "CICLO RAPIDO";
+                index = index + 1;
+                worksheet.Cells[index, 1].Value = "BATERIA DE ZIMMER";
+                worksheet.Cells[index, 2].Value = "ELECTRICO";
+                worksheet.Cells[index, 3].Value = "NO ESTERILIZAR";
+                worksheet.Cells[index, 4].Value = "N/A";
+                worksheet.Cells[index, 5].Value = "N/A";
+
+                index = index + 2;
+                worksheet.Cells[index, 1].Value = "CANTIDADES EN 0";
+                worksheet.Cells[index, 1].Style.Font.Bold = true;
+                worksheet.Cells[index, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                index = index + 1;
+
+                foreach (var equ in dataInformation.EntryRequestDetails)
+                {
+                    if (equ.EntryRequestAssembly != null && equ.EntryRequestAssembly.Count > 0)
+                    {
+                        foreach (var eq in equ.EntryRequestAssembly)
+                        {
+                            decimal totalQuantityZero = (decimal)equ.EntryRequestAssembly.Where(x => x.Code == eq.Code).Sum(x => x.ReservedQuantity ?? 0);
+                            if (totalQuantityZero <= 0)
+                            {
+                                if (!detailsZero.Contains(equ.IdEquipmentNavigation?.Code ?? ""))
+                                {
+                                    index = index + 1;
+                                    detailsZero.Add(equ.IdEquipmentNavigation?.Code ?? "");
+                                    worksheet.Cells[index, 1].Value = equ.IdEquipmentNavigation?.Code ?? "";
+                                    worksheet.Cells[index, 1].Style.Font.Bold = true;
+                                    worksheet.Cells[index, 2].Value = equ.IdEquipmentNavigation?.Name ?? "";
+                                    worksheet.Cells[index, 2].Style.Font.Bold = true;
+                                    worksheet.Cells[index, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                                    index = index + 1;
+                                    worksheet.Cells[index, 1].Value = "REF";
+                                    worksheet.Cells[index, 1].Style.Font.Bold = true;
+                                    worksheet.Cells[index, 2].Value = "Descripción";
+                                    worksheet.Cells[index, 2].Style.Font.Bold = true;
+                                    worksheet.Cells[index, 3].Value = "INVIMA";
+                                    worksheet.Cells[index, 3].Style.Font.Bold = true;
+                                    worksheet.Cells[index, 4].Value = "LOTE";
+                                    worksheet.Cells[index, 4].Style.Font.Bold = true;
+                                    worksheet.Cells[index, 5].Value = "Cant. LT";
+                                    worksheet.Cells[index, 5].Style.Font.Bold = true;
+                                    worksheet.Cells[index, 6].Value = "Precio U.";
+                                    worksheet.Cells[index, 6].Style.Font.Bold = true;
+                                    worksheet.Cells[index, 7].Value = "IVA";
+                                    worksheet.Cells[index, 7].Style.Font.Bold = true;
+                                }
+                                if (eq.EntryRequestDetailId == equ.Id)
+                                {
+                                    index = index + 1;
+                                    worksheet.Cells[index, 1].Value = eq.Code;
+                                    worksheet.Cells[index, 2].Value = eq.Description;
+                                    worksheet.Cells[index, 3].Value = eq.Invima;
+                                    worksheet.Cells[index, 4].Value = eq.Lot;
+                                    worksheet.Cells[index, 5].Value = eq.ReservedQuantity;
+                                    if (eq.UnitPrice != null)
+                                    {
+                                        decimal UP = (decimal)eq.UnitPrice;
+                                        worksheet.Cells[index, 7].Value = string.Format("{0:n0}", UP);
+                                    }
+                                    else
+                                        worksheet.Cells[index, 7].Value = "0";
+                                    if (eq.UnitPrice != null && eq.UnitPrice != 0 && eq.TaxCode != "V_ARTVENTAEXC" && dataInformation.IdCustomerNavigation?.ExIva == true)
+                                    {
+                                        decimal IVA = ((decimal)eq.UnitPrice) * (decimal)0.19;
+                                        worksheet.Cells[index, 8].Value = string.Format("{0:n0}", IVA);
+                                    }
+                                    else
+                                    {
+                                        worksheet.Cells[index, 8].Value = "0";
+                                    }
+                                    worksheet.Cells[index, 9].Value = "";
+                                }
+                            }
+                        }
+                    }
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    Console.WriteLine("=== FIN GenerateXLSXAsync ===");
+                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"remision_{IdEntryReq}.xlsx");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en GenerateXLSXAsync ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                Console.WriteLine("=== FIN ERROR ===");
+                throw;
             }
         }
 

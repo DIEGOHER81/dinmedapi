@@ -1,0 +1,11 @@
+### Generate XLSX - Remisión
+GET {{baseUrl}}/api/EntryRequest/generate-xlsx?IdEntryReq=1&companyCode=COMP001
+
+### Generate XLSX - Remisión (otro pedido)
+GET {{baseUrl}}/api/EntryRequest/generate-xlsx?IdEntryReq=123&companyCode=COMP002
+
+### Generate XLSX - Sin companyCode (debe fallar)
+GET {{baseUrl}}/api/EntryRequest/generate-xlsx?IdEntryReq=1
+
+### Generate XLSX - Pedido inexistente (debe fallar)
+GET {{baseUrl}}/api/EntryRequest/generate-xlsx?IdEntryReq=99999&companyCode=COMP001

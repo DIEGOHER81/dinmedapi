@@ -10,5 +10,6 @@ namespace DimmedAPI.DTOs
         public decimal Quantity { get; set; }
         public decimal QuantityConsumed { get; set; }
         public int IdEntryReq { get; set; }
+        public int Id { get; set; }
     }
 }

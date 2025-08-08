@@ -313,19 +313,20 @@ namespace DimmedAPI.Controllers
                     }
                 }
 
-                // Ejecutar la consulta y mapear a DTO
-                var result = await query
-                    .Where(x => x.Assembly != null) // Solo incluir registros que tengan ensambles
-                    .Select(x => new EntryRequestAssemblyDetailDTO
-                    {
-                        Code = x.Assembly.Code,
-                        Description = x.Assembly.Description,
-                        Lot = x.Assembly.Lot,
-                        AssemblyNo = x.Assembly.AssemblyNo,
-                        Quantity = x.Assembly.Quantity,
-                        QuantityConsumed = x.Assembly.QuantityConsumed ?? 0
-                    })
-                    .ToListAsync();
+                                 // Ejecutar la consulta y mapear a DTO
+                 var result = await query
+                     .Where(x => x.Assembly != null) // Solo incluir registros que tengan ensambles
+                     .Select(x => new EntryRequestAssemblyDetailDTO
+                     {
+                         Id = x.Assembly.Id,
+                         Code = x.Assembly.Code,
+                         Description = x.Assembly.Description,
+                         Lot = x.Assembly.Lot,
+                         AssemblyNo = x.Assembly.AssemblyNo,
+                         Quantity = x.Assembly.Quantity,
+                         QuantityConsumed = x.Assembly.QuantityConsumed ?? 0
+                     })
+                     .ToListAsync();
 
                 Console.WriteLine($"Resultados obtenidos: {result.Count}");
 
@@ -488,21 +489,22 @@ namespace DimmedAPI.Controllers
                     }
                 }
 
-                // Ejecutar la consulta y mapear a DTO
-                var result = await query
-                    .Where(x => x.Component != null) // Solo incluir registros que tengan componentes
-                    .Select(x => new EntryRequestComponentDetailDTO
-                    {
-                        EntryRequestId = x.EntryRequest.Id,
-                        RequestNumber = x.EntryRequest.Id.ToString(),
-                        ComponentId = x.Component.Id,
-                        ComponentCode = x.Component.ItemNo,
-                        ComponentDescription = x.Component.ItemName,
-                        Quantity = x.Component.Quantity ?? 0,
-                        QuantityConsumed = x.Component.QuantityConsumed ?? 0,
-                        IdEntryReq = x.Component.IdEntryReq
-                    })
-                    .ToListAsync();
+                                 // Ejecutar la consulta y mapear a DTO
+                 var result = await query
+                     .Where(x => x.Component != null) // Solo incluir registros que tengan componentes
+                     .Select(x => new EntryRequestComponentDetailDTO
+                     {
+                         EntryRequestId = x.EntryRequest.Id,
+                         RequestNumber = x.EntryRequest.Id.ToString(),
+                         ComponentId = x.Component.Id,
+                         ComponentCode = x.Component.ItemNo,
+                         ComponentDescription = x.Component.ItemName,
+                         Quantity = x.Component.Quantity ?? 0,
+                         QuantityConsumed = x.Component.QuantityConsumed ?? 0,
+                         IdEntryReq = x.Component.IdEntryReq,
+                         Id = x.Component.Id
+                     })
+                     .ToListAsync();
 
                 Console.WriteLine($"Resultados obtenidos: {result.Count}");
 
@@ -590,6 +592,112 @@ namespace DimmedAPI.Controllers
                 
                 Console.WriteLine("=== FIN ERROR ===");
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Actualiza la cantidad consumida de un ensamble específico
+        /// </summary>
+        /// <param name="id">ID del ensamble a actualizar</param>
+        /// <param name="quantityConsumed">Nueva cantidad consumida</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>Resultado de la actualización</returns>
+        [HttpPatch("{id}/quantity-consumed")]
+        public async Task<ActionResult<UpdateResponseDTO>> UpdateQuantityConsumed(
+            int id,
+            [FromBody] decimal quantityConsumed,
+            [FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO UpdateQuantityConsumed ===");
+                Console.WriteLine($"ID del ensamble: {id}");
+                Console.WriteLine($"Nueva cantidad consumida: {quantityConsumed}");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                if (quantityConsumed < 0)
+                {
+                    Console.WriteLine("Error: La cantidad consumida no puede ser negativa");
+                    return BadRequest("La cantidad consumida no puede ser negativa");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+
+                // Buscar el ensamble por ID
+                var assembly = await companyContext.EntryRequestAssembly
+                    .FirstOrDefaultAsync(era => era.Id == id);
+
+                if (assembly == null)
+                {
+                    Console.WriteLine($"No se encontró el ensamble con ID: {id}");
+                    return NotFound($"No se encontró el ensamble con ID: {id}");
+                }
+
+                Console.WriteLine($"Ensemble encontrado: ID={assembly.Id}, Code={assembly.Code}, AssemblyNo={assembly.AssemblyNo}");
+                Console.WriteLine($"Cantidad actual: {assembly.Quantity}, Cantidad consumida actual: {assembly.QuantityConsumed}");
+
+                // Validar que la cantidad consumida no exceda la cantidad total
+                if (quantityConsumed > assembly.Quantity)
+                {
+                    Console.WriteLine($"Error: La cantidad consumida ({quantityConsumed}) no puede exceder la cantidad total ({assembly.Quantity})");
+                    return BadRequest(new { 
+                        message = "La cantidad consumida no puede exceder la cantidad total",
+                        currentQuantity = assembly.Quantity,
+                        requestedQuantityConsumed = quantityConsumed
+                    });
+                }
+
+                // Actualizar la cantidad consumida
+                var previousQuantityConsumed = assembly.QuantityConsumed;
+                assembly.QuantityConsumed = quantityConsumed;
+
+                // Guardar los cambios
+                await companyContext.SaveChangesAsync();
+
+                Console.WriteLine($"Cantidad consumida actualizada exitosamente");
+                Console.WriteLine($"Valor anterior: {previousQuantityConsumed}, Nuevo valor: {quantityConsumed}");
+
+                var response = new UpdateResponseDTO
+                {
+                    Success = true,
+                    Message = "Cantidad consumida actualizada exitosamente",
+                    Id = assembly.Id,
+                    PreviousValue = previousQuantityConsumed,
+                    NewValue = quantityConsumed,
+                    UpdatedAt = DateTime.UtcNow
+                };
+
+                Console.WriteLine("=== FIN UpdateQuantityConsumed ===");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en UpdateQuantityConsumed ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Inner Exception StackTrace: {ex.InnerException.StackTrace}");
+                }
+                
+                Console.WriteLine("=== FIN ERROR ===");
+                return StatusCode(500, new UpdateResponseDTO
+                {
+                    Success = false,
+                    Message = $"Error interno del servidor: {ex.Message}",
+                    UpdatedAt = DateTime.UtcNow
+                });
             }
         }
 

@@ -62,8 +62,7 @@
               "RelativeToolTip": "DimmedAPI\\Entidades\\EntryRequestAssembly.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAIwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-08T09:32:37.418Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-08T09:32:37.418Z"
             },
             {
               "$type": "Document",
@@ -73,7 +72,7 @@
               "RelativeDocumentMoniker": "DimmedAPI\\Controllers\\EntryRequestAssemblyController.cs",
               "ToolTip": "D:\\dimmed\\DEVDinmedAPI\\dinmedapi\\DimmedAPI\\DimmedAPI\\Controllers\\EntryRequestAssemblyController.cs",
               "RelativeToolTip": "DimmedAPI\\Controllers\\EntryRequestAssemblyController.cs",
-              "ViewState": "AgIAADMBAAAAAAAAAAAwwC4BAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAHYBAAAAAAAAAAAwwC4BAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-08T08:19:40.655Z",
               "EditorCaption": ""
@@ -88,8 +87,7 @@
               "RelativeToolTip": "DimmedAPI\\Controllers\\EntryRequestController.cs",
               "ViewState": "AgIAAFYHAAAAAAAAAAAqwGwHAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-07T15:04:29.212Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-07T15:04:29.212Z"
             },
             {
               "$type": "Document",
@@ -113,8 +111,7 @@
               "RelativeToolTip": "DimmedAPI\\BO\\EquipmentBO.cs",
               "ViewState": "AgIAAOICAAAAAAAAAAAewOwCAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-04T17:54:03.74Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-04T17:54:03.74Z"
             }
           ]
         }

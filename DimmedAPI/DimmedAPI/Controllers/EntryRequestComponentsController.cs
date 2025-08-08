@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using DimmedAPI.Services;
 using DimmedAPI.BO;
 using DimmedAPI.Entidades;
+using DimmedAPI.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.OutputCaching;
 using System.Threading.Tasks;
@@ -762,6 +763,115 @@ namespace DimmedAPI.Controllers
             {
                 var detalle = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 return BadRequest(new { mensaje = "Error al crear componente local", detalle });
+            }
+        }
+
+        /// <summary>
+        /// Actualiza la cantidad consumida de un componente específico
+        /// </summary>
+        /// <param name="id">ID del componente a actualizar</param>
+        /// <param name="quantityConsumed">Nueva cantidad consumida</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>Resultado de la actualización</returns>
+        [HttpPatch("{id}/quantity-consumed")]
+        public async Task<ActionResult<UpdateResponseDTO>> UpdateQuantityConsumed(
+            int id,
+            [FromBody] decimal quantityConsumed,
+            [FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO UpdateQuantityConsumed (EntryRequestComponents) ===");
+                Console.WriteLine($"ID del componente: {id}");
+                Console.WriteLine($"Nueva cantidad consumida: {quantityConsumed}");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                if (quantityConsumed < 0)
+                {
+                    Console.WriteLine("Error: La cantidad consumida no puede ser negativa");
+                    return BadRequest("La cantidad consumida no puede ser negativa");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+
+                // Buscar el componente por ID
+                var component = await companyContext.EntryRequestComponents
+                    .FirstOrDefaultAsync(erc => erc.Id == id);
+
+                if (component == null)
+                {
+                    Console.WriteLine($"No se encontró el componente con ID: {id}");
+                    return NotFound($"No se encontró el componente con ID: {id}");
+                }
+
+                Console.WriteLine($"Componente encontrado: ID={component.Id}, ItemNo={component.ItemNo}, AssemblyNo={component.AssemblyNo}");
+                Console.WriteLine($"Cantidad actual: {component.Quantity}, Cantidad consumida actual: {component.QuantityConsumed}");
+
+                // Validar que la cantidad consumida no exceda la cantidad total
+                if (quantityConsumed > (component.Quantity ?? 0))
+                {
+                    Console.WriteLine($"Error: La cantidad consumida ({quantityConsumed}) no puede exceder la cantidad total ({component.Quantity})");
+                    return BadRequest(new { 
+                        message = "La cantidad consumida no puede exceder la cantidad total",
+                        currentQuantity = component.Quantity,
+                        requestedQuantityConsumed = quantityConsumed
+                    });
+                }
+
+                // Actualizar la cantidad consumida
+                var previousQuantityConsumed = component.QuantityConsumed;
+                component.QuantityConsumed = quantityConsumed;
+
+                // Guardar los cambios
+                await companyContext.SaveChangesAsync();
+
+                Console.WriteLine($"Cantidad consumida actualizada exitosamente");
+                Console.WriteLine($"Valor anterior: {previousQuantityConsumed}, Nuevo valor: {quantityConsumed}");
+
+                // Invalidar caché después de actualizar
+                await _outputCacheStore.EvictByTagAsync(cacheTag, default);
+
+                var response = new UpdateResponseDTO
+                {
+                    Success = true,
+                    Message = "Cantidad consumida actualizada exitosamente",
+                    Id = component.Id,
+                    PreviousValue = previousQuantityConsumed,
+                    NewValue = quantityConsumed,
+                    UpdatedAt = DateTime.UtcNow
+                };
+
+                Console.WriteLine("=== FIN UpdateQuantityConsumed (EntryRequestComponents) ===");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en UpdateQuantityConsumed (EntryRequestComponents) ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Inner Exception StackTrace: {ex.InnerException.StackTrace}");
+                }
+                
+                Console.WriteLine("=== FIN ERROR ===");
+                return StatusCode(500, new UpdateResponseDTO
+                {
+                    Success = false,
+                    Message = $"Error interno del servidor: {ex.Message}",
+                    UpdatedAt = DateTime.UtcNow
+                });
             }
         }
 

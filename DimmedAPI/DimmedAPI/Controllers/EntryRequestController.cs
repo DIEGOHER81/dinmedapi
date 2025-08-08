@@ -884,6 +884,7 @@ namespace DimmedAPI.Controllers
                     .Include(er => er.IdCustomerNavigation) // Incluir la relación con Customer
                     .Include(er => er.IdPatientNavigation) // Incluir la relación con Patient
                     .Include(er => er.IdMedicNavigation) // Incluir la relación con Medic
+                    .Include(er => er.IdAtcNavigation) // Incluir la relación con Employee/ATC
                     .Include(er => er.IdCustomerNavigation.ShipAddress) // Incluir las direcciones del cliente
                     .AsQueryable();
 
@@ -1054,6 +1055,7 @@ namespace DimmedAPI.Controllers
                         Customer = er.IdCustomerNavigation,
                         Patient = er.IdPatientNavigation,
                         Medic = er.IdMedicNavigation,
+                        Employee = er.IdAtcNavigation,
                         CustomerAddresses = er.IdCustomerNavigation != null ? er.IdCustomerNavigation.ShipAddress : null,
                         CustomerContacts = null // Se llenará después de la consulta principal
                     })

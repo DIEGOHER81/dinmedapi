@@ -55,6 +55,9 @@ namespace DimmedAPI.DTOs
         // Relación con Medic
         public Medic? Medic { get; set; }
         
+        // Relación con Employee/ATC
+        public Employee? Employee { get; set; }
+        
         // Relación con CustomerContact (contactos del cliente)
         public ICollection<CustomerContact>? CustomerContacts { get; set; }
     }

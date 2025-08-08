@@ -64,6 +64,26 @@ namespace DimmedAPI
 
         public DbSet<FollowType> FollowType { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
+            // Configurar el mapeo de EntryRequestAssembly
+            modelBuilder.Entity<EntryRequestAssembly>(entity =>
+            {
+                entity.ToTable("EntryRequestAssembly");
+                entity.HasKey(e => e.Id);
+                
+                // Configurar la propiedad EntryRequestDetailId para que mapee a la columna correcta
+                entity.Property(e => e.EntryRequestDetailId)
+                    .HasColumnName("EntryRequestDetailId");
+                
+                // Configurar la relación con EntryRequestDetails
+                entity.HasOne(e => e.EntryRequestDetail)
+                    .WithMany()
+                    .HasForeignKey(e => e.EntryRequestDetailId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+        }
     }
 }

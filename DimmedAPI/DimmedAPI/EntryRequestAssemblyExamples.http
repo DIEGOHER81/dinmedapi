@@ -1,0 +1,56 @@
+### EntryRequestAssemblyAPI Examples
+
+### Obtener todos los ensambles
+GET {{baseUrl}}/api/EntryRequestAssembly?companyCode=COMP001
+Content-Type: application/json
+
+### Obtener ensamble por ID
+GET {{baseUrl}}/api/EntryRequestAssembly/1?companyCode=COMP001
+Content-Type: application/json
+
+### Filtrar ensambles - por lote
+GET {{baseUrl}}/api/EntryRequestAssembly/filtro?companyCode=COMP001&lot=LOT123
+Content-Type: application/json
+
+### Filtrar ensambles - por código
+GET {{baseUrl}}/api/EntryRequestAssembly/filtro?companyCode=COMP001&code=ASSEMBLY-001
+Content-Type: application/json
+
+### Filtrar ensambles - por solicitud de entrada
+GET {{baseUrl}}/api/EntryRequestAssembly/filtro?companyCode=COMP001&entryRequestId=22
+Content-Type: application/json
+
+### Filtrar ensambles - múltiples criterios
+GET {{baseUrl}}/api/EntryRequestAssembly/filtro?companyCode=COMP001&lot=LOT123&entryRequestId=22&assemblyNo=EQ-001
+Content-Type: application/json
+
+### Obtener ensambles con detalles (solo consumidos > 0)
+GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/22/with-details?companyCode=COMP001&quantityConsumedFilter=greater
+Content-Type: application/json
+
+### Obtener ensambles con detalles (solo consumidos = 0)
+GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/22/with-details?companyCode=COMP001&quantityConsumedFilter=zero
+Content-Type: application/json
+
+### Obtener ensambles con detalles (todos)
+GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/22/with-details?companyCode=COMP001&quantityConsumedFilter=all
+Content-Type: application/json
+
+### Obtener componentes (solo consumidos > 0)
+GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/22/components?companyCode=COMP001&quantityConsumedFilter=greater
+Content-Type: application/json
+
+### Obtener componentes (solo consumidos = 0)
+GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/22/components?companyCode=COMP001&quantityConsumedFilter=zero
+Content-Type: application/json
+
+### Obtener componentes (todos)
+GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/22/components?companyCode=COMP001&quantityConsumedFilter=all
+Content-Type: application/json
+
+### Ejemplos con diferentes IDs de solicitud
+GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/25/with-details?companyCode=COMP001
+Content-Type: application/json
+
+GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/30/components?companyCode=COMP002
+Content-Type: application/json

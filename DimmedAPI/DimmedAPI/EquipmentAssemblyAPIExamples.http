@@ -1,0 +1,29 @@
+### EquipmentAssemblyAPI Examples
+
+### Obtener el ensamble de un equipo
+GET {{baseUrl}}/api/EquipmentAssemblyAPI/assembly/EQ-001?companyCode=COMP001&salesPrice=PRICE001
+Content-Type: application/json
+
+### Obtener el ensamble de un equipo (versión 2)
+GET {{baseUrl}}/api/EquipmentAssemblyAPI/assembly-v2/EQ-001?companyCode=COMP001&salesPrice=PRICE001
+Content-Type: application/json
+
+### Obtener las líneas de ensamble de un equipo
+GET {{baseUrl}}/api/EquipmentAssemblyAPI/assembly-lines/EQ-001?companyCode=COMP001
+Content-Type: application/json
+
+### Obtener el ensamble de equipo específico
+GET {{baseUrl}}/api/EquipmentAssemblyAPI/equipment-assembly/EQ-001?companyCode=COMP001
+Content-Type: application/json
+
+### Ejemplos con diferentes códigos de equipo
+GET {{baseUrl}}/api/EquipmentAssemblyAPI/assembly/EQ-002?companyCode=COMP001
+Content-Type: application/json
+
+GET {{baseUrl}}/api/EquipmentAssemblyAPI/assembly/EQ-003?companyCode=COMP002
+Content-Type: application/json
+
+### Ejemplo sin salesPrice (opcional)
+GET {{baseUrl}}/api/EquipmentAssemblyAPI/assembly/EQ-001?companyCode=COMP001
+Content-Type: application/json
+

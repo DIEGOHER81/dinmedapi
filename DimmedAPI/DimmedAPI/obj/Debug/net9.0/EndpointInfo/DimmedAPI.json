@@ -5271,6 +5271,334 @@
         }
       }
     },
+    "/api/EntryRequestAssembly": {
+      "get": {
+        "tags": [
+          "EntryRequestAssembly"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestAssemblyResponseDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestAssemblyResponseDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestAssemblyResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EntryRequestAssembly/{id}": {
+      "get": {
+        "tags": [
+          "EntryRequestAssembly"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestAssemblyResponseDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestAssemblyResponseDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestAssemblyResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EntryRequestAssembly/filtro": {
+      "get": {
+        "tags": [
+          "EntryRequestAssembly"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lot",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assemblyNo",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "entryRequestId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "entryRequestDetailId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestAssemblyResponseDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestAssemblyResponseDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestAssemblyResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EntryRequestAssembly/entry-request/{entryRequestId}/with-details": {
+      "get": {
+        "tags": [
+          "EntryRequestAssembly"
+        ],
+        "parameters": [
+          {
+            "name": "entryRequestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "quantityConsumedFilter",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "greater"
+            }
+          },
+          {
+            "name": "assemblyNo",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestAssemblyDetailDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestAssemblyDetailDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestAssemblyDetailDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EntryRequestAssembly/entry-request/{entryRequestId}/components": {
+      "get": {
+        "tags": [
+          "EntryRequestAssembly"
+        ],
+        "parameters": [
+          {
+            "name": "entryRequestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "quantityConsumedFilter",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "greater"
+            }
+          },
+          {
+            "name": "assemblyNo",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestComponentDetailDTO"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestComponentDetailDTO"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EntryRequestComponentDetailDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/EntryRequestComponents/consultar-bc": {
       "get": {
         "tags": [
@@ -13691,11 +14019,7 @@
             "type": "integer",
             "format": "int32"
           },
-          "idEntryReqDetail": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "idEntryReqDetailNavigation": {
+          "entryRequestDetail": {
             "$ref": "#/components/schemas/EntryRequestDetails"
           },
           "code": {
@@ -13776,7 +14100,8 @@
           },
           "lineNo": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "position": {
             "type": "integer",
@@ -13793,7 +14118,8 @@
             "nullable": true
           },
           "lowTurnover": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "isComponent": {
             "type": "boolean",
@@ -13811,6 +14137,197 @@
           "locationCode": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestAssemblyDetailDTO": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "lot": {
+            "type": "string",
+            "nullable": true
+          },
+          "assemblyNo": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "quantityConsumed": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestAssemblyResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortDesc": {
+            "type": "string",
+            "nullable": true
+          },
+          "invima": {
+            "type": "string",
+            "nullable": true
+          },
+          "lot": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "unitPrice": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "assemblyNo": {
+            "type": "string",
+            "nullable": true
+          },
+          "entryRequestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "entryRequestDetailId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "quantityConsumed": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "expirationDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "reservedQuantity": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "location_Code_ile": {
+            "type": "string",
+            "nullable": true
+          },
+          "classification": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "lineNo": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "position": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "quantity_ile": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "taxCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "lowTurnover": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isComponent": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "rsFechaVencimiento": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "rsClasifRegistro": {
+            "type": "string",
+            "nullable": true
+          },
+          "locationCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestComponentDetailDTO": {
+        "type": "object",
+        "properties": {
+          "entryRequestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "requestNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "componentId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "componentCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "componentDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "quantityConsumed": {
+            "type": "number",
+            "format": "double"
+          },
+          "idEntryReq": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -14552,6 +15069,9 @@
           },
           "medic": {
             "$ref": "#/components/schemas/Medic"
+          },
+          "employee": {
+            "$ref": "#/components/schemas/Employee"
           },
           "customerContacts": {
             "type": "array",

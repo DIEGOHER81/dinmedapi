@@ -5,6 +5,7 @@ using DinkToPdf;
 using DinkToPdf.Contracts;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace DimmedAPI.Services
 {
@@ -14,23 +15,27 @@ namespace DimmedAPI.Services
         private readonly ICustomerBO _customerBO;
         private readonly IEmployeeBO _employeeBO;
         private readonly IConverter _converter;
+        private readonly IDynamicConnectionService _dynamicConnectionService;
 
         public PdfService(
             IWebHostEnvironment env,
             ICustomerBO customerBO,
             IEmployeeBO employeeBO,
-            IConverter converter)
+            IConverter converter,
+            IDynamicConnectionService dynamicConnectionService)
         {
             _env = env;
             _customerBO = customerBO;
             _employeeBO = employeeBO;
             _converter = converter;
+            _dynamicConnectionService = dynamicConnectionService;
         }
 
         /// <summary>
         /// Genera un PDF de remisión a partir de una solicitud de entrada
         /// </summary>
         /// <param name="entryRequests">Objeto EntryRequests datos del pedido</param>
+        /// <param name="companyCode">Código de la compañía</param>
         /// <param name="lot">Imprimir lote 1: si, 0: no</param>
         /// <param name="price">Imprimir precio 1: si, 0: no</param>
         /// <param name="code">Imprimir codigo corto 1: si, 0: no</param>
@@ -38,7 +43,7 @@ namespace DimmedAPI.Services
         /// <param name="option">Imprimir solo lo despachado en el momento 1: si, 0: no</param>
         /// <param name="regSan">Imprimir registro sanitario 1: si, 0: no</param>
         /// <returns>Array de bytes del PDF generado</returns>
-        public async Task<byte[]> GenerateRemisionPdfAsync(EntryRequests entryRequests, int lot, int price, int code, int duedate, int option, int regSan)
+        public async Task<byte[]> GenerateRemisionPdfAsync(EntryRequests entryRequests, string companyCode, int lot, int price, int code, int duedate, int option, int regSan)
         {
             var startTime = DateTime.Now;
             try
@@ -47,7 +52,7 @@ namespace DimmedAPI.Services
                 Console.WriteLine($"Parámetros: Lot={lot}, Price={price}, Code={code}, DueDate={duedate}, Option={option}, RegSan={regSan}");
                 
                 // Generar el HTML de la remisión
-                string htmlContent = await GenerateRemisionHtmlAsync(entryRequests, lot, price, code, duedate, option, regSan);
+                string htmlContent = await GenerateRemisionHtmlAsync(entryRequests, companyCode, lot, price, code, duedate, option, regSan);
                 
                 Console.WriteLine($"HTML generado exitosamente. Longitud: {htmlContent?.Length ?? 0} caracteres");
                 
@@ -151,7 +156,7 @@ namespace DimmedAPI.Services
         /// <summary>
         /// Genera el HTML de la remisión
         /// </summary>
-        private async Task<string> GenerateRemisionHtmlAsync(EntryRequests entryRequests, int lot, int price, int code, int duedate, int option, int regSan)
+        private async Task<string> GenerateRemisionHtmlAsync(EntryRequests entryRequests, string companyCode, int lot, int price, int code, int duedate, int option, int regSan)
         {
             try
             {
@@ -221,17 +226,47 @@ namespace DimmedAPI.Services
 
                 if (!string.IsNullOrEmpty(entryRequests.Applicant) && customer != null)
                 {
-                    if (customer.ShipAddress != null && customer.ShipAddress.Count > 0)
+                    // Obtener el contexto de la compañía usando el companyCode proporcionado
+                    var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                    
+                    // Obtener las direcciones del cliente usando el contexto dinámico
+                    try
                     {
-                        var DA = customer.ShipAddress.FirstOrDefault(x => x.Code == entryRequests.DeliveryAddress);
-                        if (DA != null)
-                            deliveryAddress = DA.Name;
+                        var customerAddresses = await companyContext.CustomerAddress
+                            .Where(ca => ca.CustomerId == customer.Id)
+                            .ToListAsync();
+                        
+                        if (customerAddresses != null && customerAddresses.Count > 0)
+                        {
+                            var DA = customerAddresses.FirstOrDefault(x => x.Code == entryRequests.DeliveryAddress);
+                            if (DA != null)
+                                deliveryAddress = DA.Name;
+                        }
                     }
-                    if (customer.CustomerContacts != null && customer.CustomerContacts.Count > 0)
+                    catch (Exception ex)
                     {
-                        var CC = customer.CustomerContacts.FirstOrDefault(x => x.Code == entryRequests.Applicant);
-                        if (CC != null)
-                            applicant = CC.Name;
+                        Console.WriteLine($"Error obteniendo direcciones del cliente: {ex.Message}");
+                        // Continuar sin las direcciones si hay error
+                    }
+
+                    // Obtener los contactos del cliente usando el contexto dinámico
+                    try
+                    {
+                        var customerContacts = await companyContext.CustomerContact
+                            .Where(cc => cc.CustomerName == customer.Name)
+                            .ToListAsync();
+                        
+                        if (customerContacts != null && customerContacts.Count > 0)
+                        {
+                            var CC = customerContacts.FirstOrDefault(x => x.Code == entryRequests.Applicant);
+                            if (CC != null)
+                                applicant = CC.Name;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error obteniendo contactos del cliente: {ex.Message}");
+                        // Continuar sin los contactos si hay error
                     }
                 }
 

@@ -8,7 +8,6 @@ namespace DimmedAPI.Entidades
         public Customer()
         {
             ShipAddress = new HashSet<CustomerAddress>();
-            CustomerContacts = new HashSet<CustomerContact>();
         }
         public int Id { get; set; }
         public string? Identification { get; set; }
@@ -44,8 +43,9 @@ namespace DimmedAPI.Entidades
         // Relación con CustomerAddress (uno-a-muchos)
         public virtual ICollection<CustomerAddress> ShipAddress { get; set; }
 
-        // Relación con CustomerContact (uno-a-muchos)
-        public virtual ICollection<CustomerContact> CustomerContacts { get; set; } = new HashSet<CustomerContact>();
+        // Propiedad no mapeada a la base de datos (uso en vista o lógica interna)
+        //[NotMapped]
+        // public ICollection<CustomerContact> CustomerContacts { get; set; }
 
         // Relación con EntryRequests (uno-a-muchos)
         //public virtual ICollection<EntryRequests> EntryRequests { get; set; }

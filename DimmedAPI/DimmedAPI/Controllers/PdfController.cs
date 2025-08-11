@@ -72,7 +72,7 @@ namespace DimmedAPI.Controllers
 
                 // Generar el PDF
                 byte[] pdfBytes = await _pdfService.GenerateRemisionPdfAsync(
-                    entryRequest, lot, price, code, duedate, option, regSan);
+                    entryRequest, companyCode, lot, price, code, duedate, option, regSan);
 
                 // Retornar el PDF como archivo
                 string fileName = $"Remision_P-{id}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
@@ -123,6 +123,7 @@ namespace DimmedAPI.Controllers
                 // Generar el PDF
                 byte[] pdfBytes = await _pdfService.GenerateRemisionPdfAsync(
                     entryRequest, 
+                    request.CompanyCode,
                     request.Lot, 
                     request.Price, 
                     request.Code, 

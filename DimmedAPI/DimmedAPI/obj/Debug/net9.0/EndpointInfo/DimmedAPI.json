@@ -13824,13 +13824,6 @@
               "$ref": "#/components/schemas/CustomerAddress"
             },
             "nullable": true
-          },
-          "customerContacts": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CustomerContact"
-            },
-            "nullable": true
           }
         },
         "additionalProperties": false

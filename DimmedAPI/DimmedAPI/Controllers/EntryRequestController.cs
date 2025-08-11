@@ -2746,7 +2746,7 @@ namespace DimmedAPI.Controllers
                                 }
                                 else
                                     worksheet.Cells[index, 7].Value = "0";
-                                if (CompoD.UnitPrice != null && CompoD.UnitPrice != 0 && CompoD.TaxCode != "V_ARTVENTAEXC" && (dataInformation.IdCustomerNavigation?.ExIva ?? false))
+                                if (CompoD.UnitPrice != null && CompoD.UnitPrice != 0 && CompoD.TaxCode != "V_ARTVENTAEXC" && dataInformation.IdCustomerNavigation?.ExIva == true)
                                 {
                                     decimal IVA = ((decimal)CompoD.UnitPrice) * (decimal)0.19;
                                     worksheet.Cells[index, 8].Value = string.Format("{0:n0}", IVA);
@@ -2839,7 +2839,7 @@ namespace DimmedAPI.Controllers
                                                     else
                                                         worksheet.Cells[index, 7].Value = equ.UnitPrice;
 
-                                                    if (equ.UnitPrice != null && equ.UnitPrice != 0 && equ.TaxCode != "V_ARTVENTAEXC" && (dataInformation.IdCustomerNavigation?.ExIva ?? false))
+                                                    if (equ.UnitPrice != null && equ.UnitPrice != 0 && equ.TaxCode != "V_ARTVENTAEXC" && dataInformation.IdCustomerNavigation?.ExIva == true)
                                                     {
                                                         decimal IVA = ((decimal)equ.UnitPrice) * (decimal)0.19;
                                                         worksheet.Cells[index, 8].Value = string.Format("{0:n0}", IVA);
@@ -3054,7 +3054,7 @@ namespace DimmedAPI.Controllers
                                     }
                                     else
                                         worksheet.Cells[index, 7].Value = "0";
-                                    if (eq.UnitPrice != null && eq.UnitPrice != 0 && eq.TaxCode != "V_ARTVENTAEXC" && (dataInformation.IdCustomerNavigation?.ExIva ?? false))
+                                    if (eq.UnitPrice != null && eq.UnitPrice != 0 && eq.TaxCode != "V_ARTVENTAEXC" && dataInformation.IdCustomerNavigation?.ExIva == true)
                                     {
                                         decimal IVA = ((decimal)eq.UnitPrice) * (decimal)0.19;
                                         worksheet.Cells[index, 8].Value = string.Format("{0:n0}", IVA);

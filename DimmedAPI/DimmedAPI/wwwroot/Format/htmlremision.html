@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="es-col">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    
+    <div class="tabla_principal">
+        <style>
+            * {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 11px;
+            }
+
+            div.header {
+                display: block;
+                text-align: center;
+            }
+
+            @page {
+                @top-center {
+                    content: element(header)
+                }
+            }
+
+            table {
+                width: 100%;
+                padding: 0;
+                margin: 0;
+                border: 1px solid transparent;
+            }
+
+            body {
+                margin: 0mm;
+            }
+
+            td {
+                padding: 0pt !important;
+                margin: 0pt !important;
+            }
+
+            .detailsTable td {
+                padding: 0pt;
+                margin: 0pt;
+            }
+
+            .headerTable thead tr th, .headerTable tbody tr td {
+                border: 0.2px solid #000000;
+                padding: 0px;
+                margin: 0px;
+            }
+            
+            .headerTable thead tr th[style*="border:none"], 
+            .headerTable tbody tr td[style*="border:none"],
+            .headerTable thead tr th[style*="border: transparent"], 
+            .headerTable tbody tr td[style*="border: transparent"],
+            .headerTable thead tr th[style*="border: 0"], 
+            .headerTable tbody tr td[style*="border: 0"] {
+                border: none !important;
+            }
+
+            .detailsTable tbody tr td, #tabla5 {
+                padding: 0px;
+                margin: 0px;
+            }
+
+            .table_adicional tr td {
+                font-size: 10px !important;
+                padding: 3px !important;
+            }
+
+            .negrita {
+                font-weight: bold;
+                font-size: 10px;
+                padding: 0px;
+                margin: 0px;
+            }
+
+            .customer_border,
+            .customer_name_border,
+            .patient_border,
+            .patient_name_border {
+                padding: 0px;
+                margin: 0px;
+            }
+
+            .border_top {
+                border-top: 1px solid;
+            }
+
+            .element_border {
+                border: none !important;
+                margin: 0;
+                padding: 0px;
+            }
+            
+            .element_border[style*="border:none"],
+            .element_border[style*="border: transparent"],
+            .element_border[style*="border: 0"] {
+                border: none !important;
+            }
+
+            .tabla_principal {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .tabla_elementos {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .azul {
+                background-color: #93C4F5 !important;
+                font-weight: bold;
+                width: 25%;
+            }
+
+            .azul10 {
+                background-color: #93C4F5 !important;
+                font-weight: bold;
+                width: 10%;
+            }
+
+            .opcion {
+                padding: 5px;
+                background-color: #93C4F5 !important;
+                border-radius: 10px;
+                text-align: left;
+            }
+
+            .text_centro {
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            .remition {
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .table_info {
+                text-align: center;
+                font-size: 10px;
+                padding: 0px;
+                margin: 0px;
+                border-bottom: 1px solid;
+                border-left: 1px solid;
+            }
+
+            .yes_option,
+            .no_option {
+                text-align: center;
+                padding: 0px;
+                margin: 0px;
+            }
+
+            .firma_field {
+                font-size: 10px;
+                padding: 0px;
+                margin: 0px;
+            }
+
+            .table_firmas_section {
+                text-align: center;
+                width: 100%;
+                padding: 0px;
+                margin: 0px;
+            }
+
+            .line_firma {
+                width: 300px;
+                padding: 0px;
+                margin: 0px;
+            }
+
+            .tabla_derecha,
+            .tabla_izquierda {
+                border: 0.5px solid #000;
+            }
+            
+            .tabla_derecha[style*="border:none"],
+            .tabla_izquierda[style*="border:none"],
+            .tabla_derecha[style*="border: transparent"],
+            .tabla_izquierda[style*="border: transparent"],
+            .tabla_derecha[style*="border: 0"],
+            .tabla_izquierda[style*="border: 0"] {
+                border: none !important;
+            }
+
+            .general_table {
+                padding: 0px;
+                margin: 0px;
+            }
+
+            .table_elements {
+                font-size: 10px;
+            }
+
+            .bkColor {
+                background-color: #CCCCCC !important;
+                -webkit-print-color-adjust: exact;
+            }
+
+            @media print {
+                * {
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 11px;
+                }
+
+                body {
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                }
+
+                @page {
+                    size: A4;
+                    margin: 0.5in;
+                }
+
+                .pagebreak {
+                    page-break-before: always !important;
+                    break-before: page !important;
+                    page-break-after: avoid !important;
+                    break-after: avoid !important;
+                    margin-top: 0 !important;
+                    margin-bottom: 0 !important;
+                    padding-top: 0 !important;
+                    padding-bottom: 0 !important;
+                    height: 0 !important;
+                    overflow: hidden !important;
+                    display: block !important;
+                }
+
+                /* Estilo para el pie de página que aparecerá antes de cada pagebreak */
+                .page-footer {
+                    width: 100%;
+                    position: relative;
+                    bottom: 0;
+                    margin-top: 0;
+                    margin-bottom: 0;
+                    padding-bottom: 0.1in; /* Reducido */
+                    text-align: center;
+                    font-size: 9px; /* Reducido */
+                    line-height: 1.0; /* Reducido */
+                    page-break-inside: avoid !important;
+                    break-inside: avoid !important;
+                    page-break-after: avoid !important;
+                    break-after: avoid !important;
+                }
+
+                .page-footer-content {
+                    margin-bottom: 3px; /* Reducido */
+                    line-height: 1.0; /* Reducido */
+                    text-align: center;
+                }
+
+                /* Contenedor principal para manejar el layout de página */
+                .page-container {
+                    min-height: 100vh;
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .page-content {
+                    flex: 1;
+                }
+
+                /* Estilos específicos para formato carta */
+                @media print {
+                    body {
+                        margin: 0;
+                        padding: 0;
+                        font-size: 12pt;
+                        line-height: 1.2;
+                    }
+                    
+                    .page-footer {
+                        position: absolute;
+                        bottom: 0.1in; /* Reducido para que esté más pegado al final */
+                        left: 0.5in;
+                        right: 0.5in;
+                        width: calc(100% - 1in);
+                        background: white;
+                        border-top: 1px solid #ccc;
+                        padding-top: 0.02in; /* Reducido aún más */
+                        padding-bottom: 0.02in; /* Reducido */
+                    }
+                    
+                    .page-footer-content {
+                        font-size: 7pt; /* Reducido aún más */
+                        line-height: 0.9; /* Reducido */
+                        margin: 0;
+                        padding: 0;
+                    }
+
+                    /* Asegurar que el contenido no se superponga con el pie de página */
+                    .tabla_principal {
+                        margin-bottom: 0.5in;
+                    }
+                }
+
+                /* Estilos para vista previa en pantalla */
+                @media screen {
+                    .page-footer {
+                        border-top: 1px solid #ccc;
+                        padding-top: 10px;
+                        margin-top: 20px;
+                    }
+                }
+
+                /* Estilos adicionales para mejor formato de carta */
+                body {
+                    font-family: 'Times New Roman', serif;
+                    line-height: 1.15;
+                }
+
+                /* Asegurar que el pie de página siempre esté al final */
+                .page-footer {
+                    position: relative;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    background: white;
+                    z-index: 1000;
+                }
+
+                /* Mejorar la legibilidad del texto del pie de página */
+                .page-footer-content {
+                    font-size: 8pt; /* Reducido */
+                    line-height: 1.0; /* Reducido */
+                    color: #333;
+                    font-weight: normal;
+                }
+
+                table.report-container {
+                    page-break-after: always !important;
+                    break-after: page !important;
+                }
+
+                thead.report-header {
+                    display: table-header-group;
+                }
+
+                tfoot.report-footer {
+                    display: table-footer-group;
+                }
+
+                /* Asegurar que las tablas no se dividan en páginas */
+                table {
+                    page-break-inside: avoid !important;
+                    break-inside: avoid !important;
+                }
+
+                /* Asegurar que las filas de tabla no se dividan */
+                tr {
+                    page-break-inside: avoid !important;
+                    break-inside: avoid !important;
+                }
+
+                /* Asegurar que las celdas no se dividan */
+                td, th {
+                    page-break-inside: avoid !important;
+                    break-inside: avoid !important;
+                }
+
+                /* Forzar salto de página antes de elementos específicos */
+                .force-page-break {
+                    page-break-before: always !important;
+                    break-before: page !important;
+                }
+
+                /* Evitar salto de página después de encabezados */
+                h1, h2, h3, h4, h5, h6 {
+                    page-break-after: avoid !important;
+                    break-after: avoid !important;
+                }
+
+                .azul {
+                    background-color: #93C4F5 !important;
+                    font-weight: bold;
+                    width: 25%;
+                }
+
+                .azul10 {
+                    background-color: #93C4F5 !important;
+                    font-weight: bold;
+                    width: 10%;
+                }
+
+                .opcion {
+                    padding: 5px;
+                    background-color: #93C4F5 !important;
+                    border-radius: 10px;
+                    text-align: left;
+                }
+
+                .text_centro {
+                    text-align: center;
+                    vertical-align: middle;
+                }
+
+                table {
+                    width: 100%;
+                    padding: 0;
+                    margin: 0;
+                }
+
+                body {
+                    margin: 0mm;
+                }
+
+                td {
+                    padding: 0pt !important;
+                    margin: 0pt !important;
+                }
+
+                .detailsTable td {
+                    padding: 0pt;
+                    margin: 0pt;
+                }
+
+                .headerTable thead tr th, .headerTable tbody tr td {
+                    border: 0.5px solid #000000;
+                    padding: 0px;
+                    margin: 0px;
+                }
+                
+                .headerTable thead tr th[style*="border:none"], 
+                .headerTable tbody tr td[style*="border:none"],
+                .headerTable thead tr th[style*="border: transparent"], 
+                .headerTable tbody tr td[style*="border: transparent"],
+                .headerTable thead tr th[style*="border: 0"], 
+                .headerTable tbody tr td[style*="border: 0"] {
+                    border: none !important;
+                }
+
+                .detailsTable tbody tr td, #tabla5 {
+                    padding: 0px;
+                    margin: 0px;
+                }
+
+                .negrita {
+                    font-weight: bold;
+                    font-size: 10px;
+                    padding: 0px;
+                    margin: 0px;
+                }
+
+                .customer_border,
+                .customer_name_border,
+                .patient_border,
+                .patient_name_border {
+                    padding: 0px;
+                    margin: 0px;
+                }
+
+                .element_border {
+                    border: none !important;
+                    margin: 0;
+                    padding: 0px;
+                }
+                
+                .element_border[style*="border:none"],
+                .element_border[style*="border: transparent"],
+                .element_border[style*="border: 0"] {
+                    border: none !important;
+                }
+
+                .tabla_principal {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .tabla_elementos {
+                    width: 100%;
+                    justify-content: center;
+                }
+
+                .bkColor {
+                    background-color: #CCCCCC !important;
+                    -webkit-print-color-adjust: exact;
+                }
+
+                .remition {
+                    font-size: 18px;
+                    font-weight: bold;
+                }
+
+                .td_border_rigth {
+                    border-right: 1px solid;
+                }
+
+                .table_info {
+                    text-align: center;
+                    font-size: 10px;
+                    padding: 0px;
+                    margin: 0px;
+                    border-bottom: 1px solid;
+                    border-left: 1px solid;
+                }
+
+                .yes_option,
+                .no_option {
+                    text-align: center;
+                    padding: 0px;
+                    margin: 0px;
+                }
+
+                .firma_field {
+                    font-size: 10px;
+                    padding: 0px;
+                    margin: 0px;
+                }
+
+                .table_firmas_section {
+                    text-align: center;
+                    width: 100%;
+                    padding: 0px;
+                    margin: 0px;
+                }
+
+                .line_firma {
+                    width: 300px;
+                    padding: 0px;
+                    margin: 0px;
+                }
+
+                .tabla_derecha,
+                .tabla_izquierda {
+                    border: 1px solid #000;
+                }
+                
+                .tabla_derecha[style*="border:none"],
+                .tabla_izquierda[style*="border:none"],
+                .tabla_derecha[style*="border: transparent"],
+                .tabla_izquierda[style*="border: transparent"],
+                .tabla_derecha[style*="border: 0"],
+                .tabla_izquierda[style*="border: 0"] {
+                    border: none !important;
+                }
+
+                .general_table {
+                    padding: 0px;
+                    margin: 0px;
+                }
+
+                .table_elements {
+                    font-size: 10px;
+                }
+
+                #content {
+                    display: table;
+                }
+
+                #page-number:after {
+                    content: "Pagina " counter(page);
+                    counter-increment: page;
+                }
+
+
+                /*  #pageFooter {
+                    display: table-footer-group;
+                }
+
+                    #pageFooter:after {
+                        counter-increment: page;
+                        content: "Page " counter(page);
+                        left: 0;
+                        top: 100%;
+                        white-space: nowrap;
+                        z-index: 20;
+                        -moz-border-radius: 5px;
+                        -moz-box-shadow: 0px 0px 4px #222;
+                        background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
+                    }*/
+            }
+        </style>
+        <table class="table header general_table>" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="border:none">
+                </td>
+            </tr>
+        </table>
+        <table class="report-container">
+            <thead class="report-header">
+                <tr>
+                    <td>
+                        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <!--<img class="mb-5" src="https://supledemo.azurewebsites.net../template/img/suplemedicos.png" height="65" width="200" style="vertical-align: top;" /><br />-->
+                                        <img class="mb-5" src="https://supledemo.azurewebsites.net/template/img/logo.png" height="65" width="200" style="vertical-align: top;" /><br />
+                                        <span style="margin-left:25px"><strong>Nit: 8110417843 </strong><br /><br /></span>
+                                    </td>
+                                    <td class="element_border remition negrita" scope="col" colspan="2" style="text-align: right; vertical-align: top;">REMISIÓN #NO#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr  style="background-color: #f0f0f0;">
+                    <th>
+                        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" style="border-top: 2px solid #1C69A8;height: 50px;">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">Cliente Pagador</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">#CUSTOMER_NAME#</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">Paciente:</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">#NOMBRE_PACIENTE#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Nit:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_NIT#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Cédula Paciente:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#PACIENTE_ID#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Dirección:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_ADDRESS#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Dir. Entrega:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#DELIVERY_ADDRESS#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Teléfono:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_PHONE#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Nombre solicitante:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#APPLICANT#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Ciudad:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_CITY#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Doctor:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#MECIC_NAME#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Orden de Compra:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#ORDER_NO#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Historia Clinica:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#HCPACIENTE#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </th>
+                </tr>
+
+                <tr>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th>
+                        <table class="table headerTable mt-2 tabla_elementos" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr HEIGHT="30">
+                                    <th class="table_info">ASESOR TECNICO</th>
+                                    <th class="table_info">FECHA DE ENTREGA </th>
+                                    <th class="table_info">FECHA DE CIRUGÍA </th>
+                                    <th class="table_info">HORA DE CIRUGÍA</th>
+                                    <th class="table_info">FECHA DE RECOGIDA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr HEIGHT="30">
+                                    <td class="table_info">#ATC#</td>
+                                    <td class="table_info">#DELIVERY_DATE#</td>
+                                    <td class="table_info">#SURGERY_DATE#</td>
+                                    <td class="table_info">#SURGERY_TIME#</td>
+                                    <td class="table_info">#SURGERY_END_DATE#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </th>
+                </tr>
+            </thead>
+
+
+            <tbody class="report-content">
+                <tr>
+                    <td>
+                        <!--TABLA #3-->
+                        <table class="table detailsTable tabla_elementos" cellpadding="0" cellspacing="0">
+                            <tbody>#DETAILS#</tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Pie de página que aparecerá al final de la página -->
+        <div class="page-footer">
+            <div class="page-footer-content"><br /> <br /> <br /> <br />MEDELLÍN: Cll 66A N. 43 - 02 Oficina 107 Centro Empresarial La Esmeralda. Itagüí Antioquia PBX (604) 3730700 Servicio al cliente: Telefono de Servicio 24 Horas: (604) 6049931 BOGOTA: (601) Calle 63 # 74B -42 Local 11. Telefono de Servicio 24 Horas: (601) 7440090<br /> CALI: AVENIDA ROOSEVELT # 25 - 32.Telefono de Servicio 24 Horas: (602) 4850210 <br />BARRANQUILLA:  Telefono de Servicio 24 Horas: (602)4850210 EMAIL servicioalcliente@diverquin.com.co <br /> Somos una Empresa comprometida con el cuidado del medio Ambiente.</div>
+            <div id="page-number"></div>
+        </div>
+        
+        <div class="pagebreak"> </div>
+        <br />
+        <!--TABLA 5-->
+        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+            <!--Particion de tablas-->
+            <thead class="report-header">
+                <tr>
+                    <td>
+                        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <img class="mb-5" src="https://supledemo.azurewebsites.net/template/img/logo.png" height="65" width="200" style="vertical-align: top;" /><br />
+                                        <span style="margin-left:25px"><strong>Nit: 8110417843 </strong><br /><br /></span>
+                                    </td>
+                                    <td class="element_border remition negrita" scope="col" colspan="2" style="text-align: right; vertical-align: top;">REMISIÓN #NO#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr  style="background-color: #f0f0f0;">
+                    <th>
+                        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+                            <!--Particion de tablas-->
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" style="border-top: 2px solid #1C69A8;height: 50px;">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;">Cliente Pagador</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;">#CUSTOMER_NAME#</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;">Paciente:</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;">#NOMBRE_PACIENTE#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;">Nit:</td>
+                                    <td class="element_border p-0" style="text-align: left;">#CUSTOMER_NIT#</td>
+                                    <td class="element_border p-0" style="text-align: left;">Cédula Paciente:</td>
+                                    <td class="element_border p-0" style="text-align: left;">#PACIENTE_ID#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;">Dirección:</td>
+                                    <td class="element_border p-0" style="text-align: left;">#CUSTOMER_ADDRESS#</td>
+                                    <td class="element_border p-0" style="text-align: left;">Dir. Entrega:</td>
+                                    <td class="element_border p-0" style="text-align: left;">#DELIVERY_ADDRESS#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;">Teléfono:</td>
+                                    <td class="element_border p-0" style="text-align: left;">#CUSTOMER_PHONE#</td>
+                                    <td class="element_border p-0" style="text-align: left;">Nombre solicitante:</td>
+                                    <td class="element_border p-0" style="text-align: left;">#APPLICANT#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;">Ciudad:</td>
+                                    <td class="element_border p-0" style="text-align: left;">#CUSTOMER_CITY#</td>
+                                    <td class="element_border p-0" style="text-align: left;">Doctor:</td>
+                                    <td class="element_border p-0" style="text-align: left;">#MECIC_NAME#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0" style="text-align: left;">Orden de Compra:</td>
+                                    <td class="element_border p-0" style="text-align: left;">#ORDER_NO#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0" style="text-align: left;">Historia Clinica:</td>
+                                    <td class="element_border p-0" style="text-align: left;">#HCPACIENTE#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </th>
+                </tr>
+
+                <tr>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th>
+                        <table class="table headerTable mt-2 tabla_elementos" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr HEIGHT="30">
+                                    <th class="table_info">ASESOR TECNICO</th>
+                                    <th class="table_info">FECHA DE ENTREGA </th>
+                                    <th class="table_info">FECHA DE CIRUGÍA </th>
+                                    <th class="table_info">HORA DE CIRUGÍA</th>
+                                    <th class="table_info">FECHA DE RECOGIDA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr HEIGHT="30">
+                                    <td class="table_info">#ATC#</td>
+                                    <td class="table_info">#DELIVERY_DATE#</td>
+                                    <td class="table_info">#SURGERY_DATE#</td>
+                                    <td class="table_info">#SURGERY_TIME#</td>
+                                    <td class="table_info">#SURGERY_END_DATE#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <table class="table table_elements tabla_elementos" id="tabla5" style="text-align: center;" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr HEIGHT="30">
+                    <td class="p-0 table_elements" colspan="5">LISTA DE EQUIPOS</td>
+                </tr>
+                <tr HEIGHT="30">
+                    <th class="p-0 table_elements" colspan="2" style="border-bottom: 1px solid #000000;">ID EQUIPO</th>
+                    <th class="p-0 table_elements" style="border-bottom: 1px solid #000000;">NOMBRE DEL EQUIPO</th>
+                    <th class="p-0 table_elements" colspan="2" style="border-bottom: 1px solid #000000;"># Cajas</th>
+                </tr>
+            </thead>
+            <tbody>#DETAILS_EQP#</tbody>
+        </table>
+        <br />
+        <br />
+        <br />
+        <table class="table table-borderless table_firmas_section tabla_elementos" style="text-align: center;border:0px!important;">
+            <tbody>
+                <tr HEIGHT="30">
+                    <td class="line_firma" style="border-bottom:1px solid #000;"></td>
+                    <td></td>
+                    <td class="line_firma" style="border-bottom:1px solid #000;"></td>
+                    <td></td>
+                    <td class="line_firma" style="border-bottom:1px solid #000;"></td>
+                </tr>
+                <tr HEIGHT="30">
+                    <td class="firma_field p-0">
+                        RECIBIDO CONFORME POR
+                    </td>
+                    <td></td>
+                    <td class="firma_field p-0">AUXILIAR SUPLEMEDICOS</td>
+                    <td></td>
+                    <td class="firma_field p-0">ASESOR TECNICO</td>
+                </tr>
+                <tr HEIGHT="30">
+                    <td class="firma_field p-0">
+                        (FIRMA Y SELLO DEL CLIENTE)
+                    </td>
+                    <td></td>
+                    <td class="firma_field p-0">QUE ENTREGA</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <br />
+        <br />
+        <table class="table table-borderless table_firmas_section tabla_elementos" style="text-align: center;">
+            <tbody>
+                <tr HEIGHT="30">
+                    <td class="line_firma" style="border-bottom:1px solid #000;"></td>
+                    <td></td>
+                    <td class="line_firma" style="border-bottom:1px solid #000;"></td>
+                    <td></td>
+                    <td class="line_firma" style="border-bottom:1px solid #000;"></td>
+                </tr>
+                <tr HEIGHT="30">
+                    <td class="firma_field p-0">
+                        CONFORME CON EL GASTO
+                    </td>
+                    <td></td>
+                    <td class="firma_field p-0">AUXILIAR SUPLEMEDICOS</td>
+                    <td></td>
+                    <td class="firma_field p-0">RECIBIDO CONFORME PARA</td>
+                </tr>
+                <tr HEIGHT="30">
+                    <td class="firma_field p-0">
+                        (FIRMA Y SELLO DEL CLIENTE)
+                    </td>
+                    <td></td>
+                    <td class="firma_field p-0">QUE RECIBE CONFORME</td>
+                    <td></td>
+                    <td class="firma_field p-0">ESTERILIZACION</td>
+                </tr>
+            </tbody>
+
+        </table>
+
+        <!-- Pie de página que aparecerá al final de la página -->
+        <div class="page-footer">
+            <div class="page-footer-content"><br /> <br /> <br /> <br />MEDELLÍN: Cll 66A N. 43 - 02 Oficina 107 Centro Empresarial La Esmeralda. Itagüí Antioquia PBX (604) 3730700 Servicio al cliente: Telefono de Servicio 24 Horas: (604) 6049931 BOGOTA: (601) Calle 63 # 74B -42 Local 11. Telefono de Servicio 24 Horas: (601) 7440090<br /> CALI: AVENIDA ROOSEVELT # 25 - 32.Telefono de Servicio 24 Horas: (602) 4850210 <br />BARRANQUILLA:  Telefono de Servicio 24 Horas: (602)4850210 EMAIL servicioalcliente@diverquin.com.co <br /> Somos una Empresa comprometida con el cuidado del medio Ambiente.</div>
+            <div id="page-number"></div>
+        </div>
+
+        <br />
+        <div class="pagebreak"> </div>
+        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+            <!--Particion de tablas-->
+            <thead class="report-header">
+                <tr>
+                    <td>
+                        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <img class="mb-5" src="https://supledemo.azurewebsites.net/template/img/logo.png" height="65" width="200" style="vertical-align: top;" /><br />
+                                        <span style="margin-left:25px"><strong>Nit: 8110417843 </strong><br /><br /></span>
+                                    </td>
+                                    <td class="element_border remition negrita" scope="col" colspan="2" style="text-align: right; vertical-align: top;">REMISIÓN #NO#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr  style="background-color: #f0f0f0;">
+                    <th>
+                        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+                            <!--Particion de tablas-->
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" style="border-top: 2px solid #1C69A8;height: 50px;">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">Cliente Pagador</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">#CUSTOMER_NAME#</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">Paciente:</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">#NOMBRE_PACIENTE#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Nit:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_NIT#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Cédula Paciente:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#PACIENTE_ID#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Dirección:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_ADDRESS#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Dir. Entrega:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#DELIVERY_ADDRESS#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Teléfono:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_PHONE#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Nombre solicitante:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#APPLICANT#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Ciudad:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_CITY#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Doctor:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#MECIC_NAME#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Orden de Compra:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#ORDER_NO#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Historia Clinica:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#HCPACIENTE#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </th>
+                </tr>
+
+                <tr>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th>
+                        <table class="table headerTable mt-2 tabla_elementos" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr HEIGHT="30">
+                                    <th class="table_info">ASESOR TECNICO</th>
+                                    <th class="table_info">FECHA DE ENTREGA </th>
+                                    <th class="table_info">FECHA DE CIRUGÍA </th>
+                                    <th class="table_info">HORA DE CIRUGÍA</th>
+                                    <th class="table_info">FECHA DE RECOGIDA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr HEIGHT="30">
+                                    <td class="table_info">#ATC#</td>
+                                    <td class="table_info">#DELIVERY_DATE#</td>
+                                    <td class="table_info">#SURGERY_DATE#</td>
+                                    <td class="table_info">#SURGERY_TIME#</td>
+                                    <td class="table_info">#SURGERY_END_DATE#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </th>
+                </tr>
+            </thead>
+            <!--<tbody>
+                <tr>
+                    <td class="element_border" scope="col" colspan="2"> <img class="mb-5" src="..../template/img/suplemedicos.png" height="65" width="200" /><br /> <span style="margin-left:25px"><strong>Nit: 8110417843 </strong><br /><br /></span></td>
+
+                    <td class="element_border remition negrita" scope="col" colspan="2" style="text-align:right;vertical-align:bottom;">REMISIÓN #NO#</td>
+                </tr>
+                <tr>
+                    <td scope="col" class="negrita element_border">Cliente Pagador</td>
+                    <td scope="col" class="negrita element_border">#CUSTOMER_NAME#</td>
+                    <td scope="col" class="negrita element_border">Paciente:</td>
+                    <td scope="col" class="negrita element_border">#NOMBRE_PACIENTE#</td>
+                </tr>
+                <tr>
+                    <td class="element_border p-0">Nit:</td>
+                    <td class="element_border p-0">#CUSTOMER_NIT#</td>
+                    <td class="element_border p-0">Cédula Paciente:</td>
+                    <td class="element_border p-0">#PACIENTE_ID#</td>
+                </tr>
+                <tr>
+                    <td class="element_border p-0">Dirección:</td>
+                    <td class="element_border p-0">#CUSTOMER_ADDRESS#</td>
+                    <td class="element_border p-0">Dir. Entrega:</td>
+                    <td class="element_border p-0">#DELIVERY_ADDRESS#</td>
+                </tr>
+                <tr>
+                    <td class="element_border p-0">Teléfono:</td>
+                    <td class="element_border p-0">#CUSTOMER_PHONE#</td>
+                    <td class="element_border p-0">Nombre solicitante:</td>
+                    <td class="element_border p-0">#APPLICANT#</td>
+                </tr>
+                <tr>
+                    <td class="element_border p-0">Ciudad:</td>
+                    <td class="element_border p-0">#CUSTOMER_CITY#</td>
+                    <td class="element_border p-0">Doctor:</td>
+                    <td class="element_border p-0">#MECIC_NAME#</td>
+                </tr>
+                <tr>
+                    <td class="element_border p-0"></td>
+                    <td class="element_border p-0"></td>
+                    <td class="element_border p-0">Orden de Compra:</td>
+                    <td class="element_border p-0">#ORDER_NO#</td>
+                </tr>
+                <tr>
+                    <td class="element_border p-0"></td>
+                    <td class="element_border p-0"></td>
+                    <td class="element_border p-0">Historia Clinica:</td>
+                    <td class="element_border p-0">#HCPACIENTE#</td>
+                </tr>
+            </tbody>-->
+        </table>
+        <table class="table">
+            <tbody>
+                <tr HEIGHT="30">
+                    <td>
+                        <table cellspacing="0" class="table table-bordered table_info tabla_derecha">
+                            <thead>
+                                <tr HEIGHT="30">
+                                    <th class="p-0 table_info" style="text-align: center;" colspan="3">AREA DISTRIBUCIÓN</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr HEIGHT="30">
+                                    <td class="table_info"></td>
+                                    <td class="yes_option table_info">SI</td>
+                                    <td class="no_option table_info">NO</td>
+                                </tr>
+                                <tr HEIGHT="30">
+                                    <td class="p-0 table_info">1. Lleva brocas</td>
+                                    <td class="table_info"></td>
+                                    <td class="table_info"></td>
+                                </tr>
+                                <tr HEIGHT="30">
+                                    <td class="p-0 table_info">2. Lleva sustitutos oseos</td>
+                                    <td class="table_info"></td>
+                                    <td class="table_info"></td>
+                                </tr>
+                                <tr HEIGHT="30">
+                                    <td class="p-0 table_info">3. Lleva baterias</td>
+                                    <td class="table_info"></td>
+                                    <td class="table_info"></td>
+                                </tr>
+                                <tr HEIGHT="30">
+                                    <td class="p-0 table_info">4. Lleva manometro</td>
+                                    <td class="table_info"></td>
+                                    <td class="table_info"></td>
+                                </tr>
+                                <tr HEIGHT="30">
+                                    <td class="p-0 table_info">5. Cuantas cajas entrega</td>
+                                    <td class="table_info"></td>
+                                    <td class="table_info"></td>
+                                </tr>
+                                <tr HEIGHT="30">
+                                    <td class="p-0 table_info" colspan="3">Responsable</td>
+                                </tr>
+                                <tr HEIGHT="30">
+                                    <td class="p-0 table_info" colspan="3">Observaciones</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <table cellspacing="0" class="table table-bordered table_info tabla_izquierda">
+                            <thead>
+                                <tr HEIGHT="30">
+                                    <th class="p-0 table_info" style="text-align: center;" colspan="3">AREA LAVADO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr HEIGHT="30" class="table_info">
+                                    <td class="table_info"></td>
+                                    <td class="yes_option table_info">SI</td>
+                                    <td class="no_option table_info">NO</td>
+                                </tr>
+                                <tr HEIGHT="30" class="table_info">
+                                    <td class="p-0 table_info">1. Recibe brocas</td>
+                                    <td class="table_info"></td>
+                                    <td class="table_info"></td>
+                                </tr>
+                                <tr HEIGHT="30" class="table_info">
+                                    <td class="p-0 table_info">2. Recibe sustitutos oseos</td>
+                                    <td class="table_info"></td>
+                                    <td class="table_info"></td>
+                                </tr>
+                                <tr HEIGHT="30" class="table_info">
+                                    <td class="p-0 table_info">3. Recibe baterias</td>
+                                    <td class="table_info"></td>
+                                    <td class="table_info"></td>
+                                </tr>
+                                <tr HEIGHT="30" class="table_info">
+                                    <td class="p-0 table_info">4. Recibe reguladores</td>
+                                    <td class="table_info"></td>
+                                    <td class="table_info"></td>
+                                </tr>
+                                <tr HEIGHT="30">
+                                    <td class="p-0 table_info">5. Cuantos equipos recibe</td>
+                                    <td class="table_info"></td>
+                                    <td class="table_info"></td>
+                                </tr>
+                                <tr HEIGHT="30" class="table_info">
+                                    <td class="p-0 table_info" colspan="3">Responsable</td>
+                                </tr>
+                                <tr HEIGHT="30" class="table_info">
+                                    <td class="p-0 table_info" colspan="3">Observaciones</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <table cellspacing="0" class="table table_info table-bordered" id="page-break">
+            <thead>
+                <tr HEIGHT="20">
+                    <th class="table_info" colspan="5">METODO DE ESTERILIZACION </th>
+                </tr>
+                <tr HEIGHT="20">
+                    <th class="table_info">MARCA </th>
+                    <th class="table_info">TIPO DE PIEZAS</th>
+                    <th class="table_info">METODO DE ESTERILIZACION </th>
+                    <th class="table_info">TEMPERATURA DE ESTERILIZACION </th>
+                    <th class="table_info td_border_rigth">TIEMPO DE CICLO</th>
+                </tr>
+            </thead>
+            <tbody class="table-bordered">
+                <tr HEIGHT="20">
+                    <td class="table_info">IMEDICOM </td>
+                    <td class="table_info">NEUMATICO</td>
+                    <td class="table_info">VAPOR / BAJA TEMPERATURA </td>
+                    <td class="table_info">134° /50° </td>
+                    <td class="table_info td_border_rigth">1 HORA</td>
+                </tr>
+                <tr HEIGHT="20">
+                    <td class="table_info">DESOUTTER </td>
+                    <td class="table_info">NEUMATICO</td>
+                    <td class="table_info">VAPOR / BAJA TEMPERATURA</td>
+                    <td class="table_info">134° /50°</td>
+                    <td class="table_info td_border_rigth">1 HORA</td>
+                </tr>
+                <tr HEIGHT="20">
+                    <td class="table_info">MICROAIRE </td>
+                    <td class="table_info">NEUMATICO</td>
+                    <td class="table_info">VAPOR / BAJA TEMPERATURA</td>
+                    <td class="table_info">134° /50°</td>
+                    <td class="table_info td_border_rigth">1 HORA</td>
+                </tr>
+                <tr HEIGHT="20">
+                    <td class="table_info">ZIMMER</td>
+                    <td class="table_info">ELECTRICO</td>
+                    <td class="table_info">VAPOR</td>
+                    <td class="table_info">134° /50° </td>
+                    <td class="table_info td_border_rigth">1 HORA</td>
+                </tr>
+                <tr HEIGHT="20">
+                    <td class="table_info">SURCIC AP</td>
+                    <td class="table_info">ELECTRICO</td>
+                    <td class="table_info">BAJA TEMPERTURA</td>
+                    <td class="table_info">50° </td>
+                    <td class="table_info td_border_rigth">1 HORA</td>
+                </tr>
+                <tr HEIGHT="20">
+                    <td class="table_info">MICRO AIRE ELECTRICA</td>
+                    <td class="table_info">ELECTRICO</td>
+                    <td class="table_info">VAPOR / BAJA TEMPERATURA</td>
+                    <td class="table_info">134° /50°</td>
+                    <td class="table_info td_border_rigth">1 HORA</td>
+                </tr>
+                <tr HEIGHT="20">
+                    <td class="table_info">BATERIA DE MICRO AIRE </td>
+                    <td class="table_info">ELECTRICO</td>
+                    <td class="table_info">BAJA TEMPERTURA</td>
+                    <td class="table_info">50°</td>
+                    <td class="table_info td_border_rigth">CICLO RAPIDO</td>
+                </tr>
+                <tr HEIGHT="20">
+                    <td class="table_info">BATERIA DE ZIMMER</td>
+                    <td class="table_info">ELECTRICO</td>
+                    <td class="table_info">NO ESTERILIZAR </td>
+                    <td class="table_info">N/A</td>
+                    <td class="table_info td_border_rigth">N/A</td>
+                </tr>
+                <tr HEIGHT="20">
+                    <td class="table_info">PIEZA DE MANO MEDEVO</td>
+                    <td class="table_info">ELECTRICO</td>
+                    <td class="table_info">VAPOR</td>
+                    <td class="table_info">134°</td>
+                    <td class="table_info td_border_rigth">DE 5 A 20 MINITOS</td>
+                </tr>
+                <tr HEIGHT="20">
+                    <td class="table_info">PIEZA DE MANO SHEAVER</td>
+                    <td class="table_info">ELECTRICO</td>
+                    <td class="table_info">VAPOR/PEROXIDO DE HIDROGENO</td>
+                    <td class="table_info">132-134°/50°</td>
+                    <td class="table_info td_border_rigth">35 Minutos/ 1 HORA</td>
+                </tr>
+                <tr HEIGHT="20">
+                    <td class="table_info">BATERIA DESOUTTER</td>
+                    <td class="table_info">ELECTRICO</td>
+                    <td class="table_info">NO ESTERILIZAR </td>
+                    <td class="table_info">N/A</td>
+                    <td class="table_info td_border_rigth">N/A</td>
+                </tr>
+            </tbody>
+
+
+        </table>
+        
+        <!-- Pie de página que aparecerá al final de la página -->
+        <div class="page-footer">
+            <div class="page-footer-content"><br /> <br /> <br /> <br />MEDELLÍN: Cll 66A N. 43 - 02 Oficina 107 Centro Empresarial La Esmeralda. Itagüí Antioquia PBX (604) 3730700 Servicio al cliente: Telefono de Servicio 24 Horas: (604) 6049931 BOGOTA: (601) Calle 63 # 74B -42 Local 11. Telefono de Servicio 24 Horas: (601) 7440090<br /> CALI: AVENIDA ROOSEVELT # 25 - 32.Telefono de Servicio 24 Horas: (602) 4850210 <br />BARRANQUILLA:  Telefono de Servicio 24 Horas: (602)4850210 EMAIL servicioalcliente@diverquin.com.co <br /> Somos una Empresa comprometida con el cuidado del medio Ambiente.</div>
+            <div id="page-number"></div>
+        </div>
+        
+        <br />
+        <div class="pagebreak"> </div>
+        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+            <!--Particion de tablas-->
+            <thead class="report-header">
+                <tr>
+                    <td>
+                        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <img class="mb-5" src="https://supledemo.azurewebsites.net/template/img/logo.png" height="65" width="200" style="vertical-align: top;" /><br />
+                                        <span style="margin-left:25px"><strong>Nit: 8110417843 </strong><br /><br /></span>
+                                    </td>
+                                    <td class="element_border remition negrita" scope="col" colspan="2" style="text-align: right; vertical-align: top;">REMISIÓN #NO#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr  style="background-color: #f0f0f0;">
+                    <th>
+                        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+                            <!--Particion de tablas-->
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" style="border-top: 2px solid #1C69A8;height: 50px;">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">Cliente Pagador</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">#CUSTOMER_NAME#</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">Paciente:</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">#NOMBRE_PACIENTE#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Nit:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_NIT#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Cédula Paciente:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#PACIENTE_ID#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Dirección:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_ADDRESS#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Dir. Entrega:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#DELIVERY_ADDRESS#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Teléfono:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_PHONE#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Nombre solicitante:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#APPLICANT#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Ciudad:</td>   
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_CITY#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Doctor:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#MECIC_NAME#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Orden de Compra:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#ORDER_NO#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Historia Clinica:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#HCPACIENTE#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </th>
+                </tr>
+
+                <tr>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th>
+                        <table class="table headerTable mt-2 tabla_elementos" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr HEIGHT="30">
+                                    <th class="table_info">ASESOR TECNICO</th>
+                                    <th class="table_info">FECHA DE ENTREGA </th>
+                                    <th class="table_info">FECHA DE CIRUGÍA </th>
+                                    <th class="table_info">HORA DE CIRUGÍA</th>
+                                    <th class="table_info">FECHA DE RECOGIDA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr HEIGHT="30">
+                                    <td class="table_info">#ATC#</td>
+                                    <td class="table_info">#DELIVERY_DATE#</td>
+                                    <td class="table_info">#SURGERY_DATE#</td>
+                                    <td class="table_info">#SURGERY_TIME#</td>
+                                    <td class="table_info">#SURGERY_END_DATE#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <table class="table table_elements tabla_elementos" id="tabla5" style="text-align: center;" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr HEIGHT="30">
+                    <th colspan="6">CANTIDADES EN CERO</th>
+                </tr>
+            </thead>
+            <tbody>#DETAILS_ZERO#</tbody>
+
+
+        </table>
+        
+        <!-- Pie de página que aparecerá al final de la página -->
+        <div class="page-footer">
+            <div class="page-footer-content"><br /> <br /> <br /> <br />MEDELLÍN: Cll 66A N. 43 - 02 Oficina 107 Centro Empresarial La Esmeralda. Itagüí Antioquia PBX (604) 3730700 Servicio al cliente: Telefono de Servicio 24 Horas: (604) 6049931 BOGOTA: (601) Calle 63 # 74B -42 Local 11. Telefono de Servicio 24 Horas: (601) 7440090<br /> CALI: AVENIDA ROOSEVELT # 25 - 32.Telefono de Servicio 24 Horas: (602) 4850210 <br />BARRANQUILLA:  Telefono de Servicio 24 Horas: (602)4850210 EMAIL servicioalcliente@diverquin.com.co <br /> Somos una Empresa comprometida con el cuidado del medio Ambiente.</div>
+            <div id="page-number"></div>
+        </div>
+        
+        <div class="pagebreak"> </div>
+        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+            <!--Particion de tablas-->
+            <thead class="report-header">
+                <tr>
+                    <td>
+                        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <img class="mb-5" src="https://supledemo.azurewebsites.net/template/img/logo.png" height="65" width="200" style="vertical-align: top;" /><br />
+                                        <span style="margin-left:25px"><strong>Nit: 8110417843 </strong><br /><br /></span>
+                                    </td>
+                                    <td class="element_border remition negrita" scope="col" colspan="2" style="text-align: right; vertical-align: top;">REMISIÓN #NO#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr  style="background-color: #f0f0f0;">
+                    <th>
+                        <table class="table header general_table headerpage tabla_elementos" cellpadding="0" cellspacing="0">
+                            <!--Particion de tablas-->
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" style="border-top: 2px solid #1C69A8;height: 50px;">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">Cliente Pagador</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">#CUSTOMER_NAME#</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">Paciente:</td>
+                                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">#NOMBRE_PACIENTE#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Nit:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_NIT#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Cédula Paciente:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#PACIENTE_ID#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Dirección:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_ADDRESS#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Dir. Entrega:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#DELIVERY_ADDRESS#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Teléfono:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_PHONE#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Nombre solicitante:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#APPLICANT#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Ciudad:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#CUSTOMER_CITY#</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Doctor:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#MECIC_NAME#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Orden de Compra:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#ORDER_NO#</td>
+                                </tr>
+                                <tr>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0"></td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">Historia Clinica:</td>
+                                    <td class="element_border p-0" style="text-align: left;border:none;">#HCPACIENTE#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </th>
+                </tr>
+
+                <tr>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th>
+                        <table class="table headerTable mt-2 tabla_elementos" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr HEIGHT="30">
+                                    <th class="table_info">ASESOR TECNICO</th>
+                                    <th class="table_info">FECHA DE ENTREGA </th>
+                                    <th class="table_info">FECHA DE CIRUGÍA </th>
+                                    <th class="table_info">HORA DE CIRUGÍA</th>
+                                    <th class="table_info">FECHA DE RECOGIDA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr HEIGHT="30">
+                                    <td class="table_info">#ATC#</td>
+                                    <td class="table_info">#DELIVERY_DATE#</td>
+                                    <td class="table_info">#SURGERY_DATE#</td>
+                                    <td class="table_info">#SURGERY_TIME#</td>
+                                    <td class="table_info">#SURGERY_END_DATE#</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+
+        <table class="table table_elements tabla_elementos" id="tabla5" style="text-align: center;" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr HEIGHT="30">
+                    <td class="p-0 table_elements" colspan="2">LISTA DE EQUIPOS</td>
+                </tr>
+                <tr HEIGHT="30">
+                    <th class="p-0 table_elements">ID MASTER</th>
+                    <th class="p-0 table_elements">NOMBRE DEL MASTER</th>
+                </tr>
+            </thead>
+            <tbody>#DETAILS_EQP#</tbody>
+        </table>
+        <br />
+        <table class="table detailsTable tabla_elementos" cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td>
+                        <p style="text-align:justify;">
+                            NOTA: Los implantes e instrumental deben ser esterilizados en la institución, previamente al uso en cirugía, exceptuando los implantes que ya se encuentran en empaque estéril. El método de esterilización recomendando por los fabricantes es vapor, otro método de esterilización podría afectar la apariencia de los dispositivos médicos y la reacción en los tejidos blandos del paciente, sin embargo, no afecta el funcionamiento biomecánico de estos.
+                            Todo implante usado en el procedimiento (así no quede implantado en el paciente) y todo implante estéril abierto total o parcialmente será cobrado.
+                        </p>
+                        <p style="text-align:justify;">
+                            NOTA 2: El cliente no debe retirar los precintos de seguridad de los contenedores con dispositivos medicos ESTÉRILES, de esta forma estamos garantizando la idoneidad y el inventario del equipo. Los responsables de retirar los precintos de seguridad son: Instrumentador quirúrgico y Auxiliar de distribución de Suplemedicos S.A.S.
+                        </p>
+                        <p style="font-size:14px;">
+                            SUPLEMEDICOS certifica que todos los equipos pasan por el proceso de lavado y control de calidad previamente a su distribución, que consta de:<br />
+                            1. Termolavado ultrasónico a aproximadamente 60°C con detergente enzimático MEDIZYME FAST®.<br />
+                            2. Enjuague con agua potable.<br />
+                            3. Pre-secado con aire comprimido y secado calor seco a aproximadamente 90°C por 15 a 20 minutos.<br />
+                            4. Inspección y control de calidad de todos las piezas.<br />
+                            5. Mantenimiento preventivo mensual de instrumental, que incluye desincrustación con INSTRUGLO L® y lubricación con CITRILUB EMULSIÓN®.<br />
+                        </p>
+                        <span>Observaciones:</span>
+                        <br />
+                        <br />
+                        <hr style="width: 90%;margin-left:10px;" />
+                        <br />
+                        <hr style="width: 90%;margin-left:10px;" />
+                        <br />
+                        <hr style="width: 90%;margin-left:10px;" />
+                        <!--<br />
+                        <hr style="width: 90%;margin-left:10px;">-->
+                    </td>
+                </tr>
+            </tbody>
+            
+            
+    
+            
+        </table>
+        
+        <!-- Pie de página que aparecerá al final de la página -->
+        <div class="page-footer">
+            <div class="page-footer-content"><br /> <br /> <br /> <br />MEDELLÍN: Cll 66A N. 43 - 02 Oficina 107 Centro Empresarial La Esmeralda. Itagüí Antioquia PBX (604) 3730700 Servicio al cliente: Telefono de Servicio 24 Horas: (604) 6049931 BOGOTA: (601) Calle 63 # 74B -42 Local 11. Telefono de Servicio 24 Horas: (601) 7440090<br /> CALI: AVENIDA ROOSEVELT # 25 - 32.Telefono de Servicio 24 Horas: (602) 4850210 <br />BARRANQUILLA:  Telefono de Servicio 24 Horas: (602)4850210 EMAIL servicioalcliente@diverquin.com.co <br /> Somos una Empresa comprometida con el cuidado del medio Ambiente.</div>
+            <div id="page-number"></div>
+        </div>
+        
+        <div class="pagebreak"> </div>
+        <table class="table detailsTable tabla_elementos" cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td class="table_info border_top" scope="col" rowspan="4" style="width:25%;"> <img src="https://supledemo.azurewebsites.net/template/img/logo.png" height="65" width="200" style="vertical-align: top;" /><br /> <span style="margin-left:25px"><strong>Nit: 8110417843 </strong><br /><br /></span></td>
+                    <td class="table_info remition negrita border_top" rowspan="4" scope="col" style="text-align:center;vertical-align:middle;width:50%;">Tarjeta de Implantación</td>
+                    <td class="table_info border_top text_centro">Código</td>
+                    <td class="table_info border_top text_centro td_border_rigth">DT-FR007</td>
+                </tr>
+                <tr>
+                    <td class="table_info text_centro">Versión</td>
+                    <td class="table_info text_centro td_border_rigth">1</td>
+                </tr>
+                <tr>
+                    <td class="table_info text_centro">Fecha</td>
+                    <td class="table_info text_centro td_border_rigth">19/05/2022</td>
+                </tr>
+                <tr>
+                    <td class="table_info text_centro">Página</td>
+                    <td class="table_info text_centro td_border_rigth">1 de 1</td>
+                </tr>
+                <tr>
+                    <td class="table_info td_border_rigth" colspan="4">&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table detailsTable tabla_elementos table_adicional" cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td class="azul table_info border_top" style="text-align: left;">Fecha de la cirugia</td>
+                    <td class="table_info border_top" style="width:25%;"></td>
+                    <td class="azul table_info border_top" style="text-align: left;">Institución</td>
+                    <td class="table_info border_top td_border_rigth" style="width:25%;"></td>
+                </tr>
+                <tr>
+                    <td class="azul table_info" style="text-align: left;">Nombre del paciente</td>
+                    <td class="table_info"></td>
+                    <td class="azul table_info" style="text-align: left;">Especialista</td>
+                    <td class="table_info td_border_rigth"></td>
+                </tr>
+                <tr>
+                    <td class="azul table_info" style="text-align: left;">Edad del paciente</td>
+                    <td class="table_info"></td>
+                    <td class="azul table_info" style="text-align: left;">Historia Clínica</td>
+                    <td class="table_info td_border_rigth"></td>
+                </tr>
+                <tr>
+                    <td class="azul table_info" style="text-align: left;">Identificación del paciente</td>
+                    <td class="table_info"></td>
+                    <td class="azul table_info" style="text-align: left;">Equipo</td>
+                    <td class="table_info td_border_rigth"></td>
+                </tr>
+                <tr>
+                    <td class="azul table_info" style="text-align: left;">Procedimiento quirurgico</td>
+                    <td class="table_info"></td>
+                    <td class="azul table_info" style="text-align: left;">Remisión</td>
+                    <td class="table_info td_border_rigth"></td>
+                </tr>
+                <tr>
+                    <td class="azul table_info" style="text-align: left;">Nota operatoria</td>
+                    <td class="table_info"></td>
+                    <td rowspan="2" class="azul table_info" style="text-align: center; vertical-align: middle;">Fabricante(s)</td>
+                    <td class="table_info td_border_rigth"></td>
+                </tr>
+                <tr>
+                    <td class="azul table_info" style="text-align: left;">Sala</td>
+                    <td class="table_info"></td>
+                    <td class="table_info td_border_rigth"></td>
+                </tr>
+                <tr>
+                    <td class="azul table_info" style="text-align: left;">Entidad</td>
+                    <td colspan="3" class="table_info td_border_rigth" style="padding:5px!important;">
+                        <span class="opcion">Institución</span>
+                        <span class="opcion">EPS</span>
+                        <span class="opcion">POS</span>
+                        <span class="opcion">SOAT</span>
+                        <span class="opcion">Prepagada</span>
+                        <span class="opcion">Poliza</span>
+                        <span class="opcion">ARL</span>
+                        <span class="opcion" style="width:20px;">Otro (Cual):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="element_border table_info td_border_rigth" colspan="4">&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table detailsTable tabla_elementos table_adicional" cellpadding="0" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td class="azul10 table_info border_top" style="width:5%;">No.</td>
+                    <td class="azul10 table_info border_top" style="width:20%;">Referencia</td>
+                    <td class="azul10 table_info border_top" style="width:55%;">Descipción articulo</td>
+                    <td class="azul10 table_info border_top" style="width:10%;">Lote</td>
+                    <td class="azul10 table_info border_top td_border_rigth" style="width:10%;">Cantidad</td>
+                </tr>
+                <tr><td class="azul10 table_info">1</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">2</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">3</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">4</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">5</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">6</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">7</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">8</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">9</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">10</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">11</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">12</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">13</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">14</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">15</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">16</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">17</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">18</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">19</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr><td class="azul10 table_info">20</td><td class="table_info"></td><td class="table_info"></td><td class="table_info"></td><td class="table_info td_border_rigth"></td></tr>
+                <tr>
+                    <td class="table_info td_border_rigth" colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="table_info azul border_top" colspan="2">Nombre Instrumentador Quirurgico</td>
+                    <td class="table_info border_top td_border_rigth" colspan="3">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="table_info azul" colspan="2">Firma del médico</td>
+                    <td class="table_info td_border_rigth" colspan="3">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="table_info azul" colspan="2">Firma del responsable de la institución</td>
+                    <td class="table_info td_border_rigth" colspan="3">&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table footer general_table" cellpadding="0" cellspacing="0">
+            <thead>
+
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="border:none">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Pie de página final del documento -->
+        <div class="page-footer">
+            <div class="page-footer-content"><br /> <br /> <br /> <br />MEDELLÍN: Cll 66A N. 43 - 02 Oficina 107 Centro Empresarial La Esmeralda. Itagüí Antioquia PBX (604) 3730700 Servicio al cliente: Telefono de Servicio 24 Horas: (604) 6049931 BOGOTA: (601) Calle 63 # 74B -42 Local 11. Telefono de Servicio 24 Horas: (601) 7440090<br /> CALI: AVENIDA ROOSEVELT # 25 - 32.Telefono de Servicio 24 Horas: (602) 4850210 <br />BARRANQUILLA:  Telefono de Servicio 24 Horas: (602)4850210 EMAIL servicioalcliente@diverquin.com.co <br /> Somos una Empresa comprometida con el cuidado del medio Ambiente.</div>
+            <div id="page-number"></div>
+        </div>
+    </div>
+</body>
+</html>

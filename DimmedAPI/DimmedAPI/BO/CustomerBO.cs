@@ -263,5 +263,23 @@ namespace DimmedAPI.BO
             }
             return customers;
         }
+
+        /// <summary>
+        /// Obtiene un cliente por su ID
+        /// </summary>
+        /// <param name="id">ID del cliente</param>
+        /// <returns>Cliente encontrado o null si no existe</returns>
+        public async Task<Customer?> GetByIdAsync(int id)
+        {
+            try
+            {
+                return await _context.Customer
+                    .FirstOrDefaultAsync(c => c.Id == id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener el cliente con ID {id}: {ex.Message}", ex);
+            }
+        }
     }
 }

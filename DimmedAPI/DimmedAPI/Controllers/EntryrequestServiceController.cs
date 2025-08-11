@@ -107,6 +107,9 @@ namespace DimmedAPI.Controllers
             companyContext.EntryrequestService.Add(service);
             await companyContext.SaveChangesAsync();
 
+            // Invalidar caché después de crear
+            await _outputCacheStore.EvictByTagAsync(cacheTag, default);
+
             var response = new EntryrequestServiceResponseDTO
             {
                 Id = service.Id,
@@ -136,6 +139,9 @@ namespace DimmedAPI.Controllers
             try
             {
                 await companyContext.SaveChangesAsync();
+                
+                // Invalidar caché después de actualizar
+                await _outputCacheStore.EvictByTagAsync(cacheTag, default);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -162,6 +168,10 @@ namespace DimmedAPI.Controllers
 
             companyContext.EntryrequestService.Remove(service);
             await companyContext.SaveChangesAsync();
+            
+            // Invalidar caché después de eliminar
+            await _outputCacheStore.EvictByTagAsync(cacheTag, default);
+            
             return NoContent();
         }
 
@@ -179,6 +189,10 @@ namespace DimmedAPI.Controllers
 
             service.IsActive = isActive;
             await companyContext.SaveChangesAsync();
+            
+            // Invalidar caché después de cambiar el estado
+            await _outputCacheStore.EvictByTagAsync(cacheTag, default);
+            
             return NoContent();
         }
 

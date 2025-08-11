@@ -3,6 +3,8 @@ using DimmedAPI.Interfaces;
 using DimmedAPI.BO;
 using DimmedAPI.Services;
 using Microsoft.EntityFrameworkCore;
+using DinkToPdf.Contracts;
+using DinkToPdf;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +59,7 @@ builder.Services.AddScoped<ICustomerBO, CustomerBO>();
 builder.Services.AddScoped<IEquipmentBO, EquipmentBO>();
 builder.Services.AddScoped<ICustomerAddressBO, CustomerAddressBO>();
 builder.Services.AddScoped<EntryRequestTraceBO>();
+builder.Services.AddScoped<IEmployeeBO, EmployeeBO>();
 
 // Register Dynamic Connection Service
 builder.Services.AddScoped<IDynamicConnectionService, DynamicConnectionService>();
@@ -66,6 +69,25 @@ builder.Services.AddScoped<IDynamicBCConnectionService, DynamicBCConnectionServi
 
 // Register Email Service
 builder.Services.AddScoped<IEmailService, EmailService>();
+
+// Register PDF Service
+builder.Services.AddScoped<IPdfService, PdfService>();
+
+// Register DinkToPdf Converter with error handling
+try
+{
+    var converter = new SynchronizedConverter(new PdfTools());
+    builder.Services.AddSingleton(typeof(IConverter), converter);
+    Console.WriteLine("DinkToPdf converter registrado exitosamente");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error al registrar DinkToPdf converter: {ex.Message}");
+    Console.WriteLine("El servicio PDF usará métodos alternativos");
+    
+    // Registrar null como converter - el servicio manejará este caso
+    builder.Services.AddSingleton(typeof(IConverter), (IConverter)null);
+}
 
 // Eliminada la configuración explícita de Kestrel para certificados SSL
 

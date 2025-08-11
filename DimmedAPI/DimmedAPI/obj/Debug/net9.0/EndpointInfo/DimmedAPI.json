@@ -10789,6 +10789,121 @@
         }
       }
     },
+    "/api/Pdf/remision/{id}": {
+      "get": {
+        "tags": [
+          "Pdf"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lot",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "price",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "duedate",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "option",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "regSan",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Pdf/remision": {
+      "post": {
+        "tags": [
+          "Pdf"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeneratePdfRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeneratePdfRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeneratePdfRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/QuotationDetail": {
       "get": {
         "tags": [
@@ -13707,6 +13822,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CustomerAddress"
+            },
+            "nullable": true
+          },
+          "customerContacts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomerContact"
             },
             "nullable": true
           }
@@ -17508,6 +17630,44 @@
           },
           "employee": {
             "$ref": "#/components/schemas/Employee"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GeneratePdfRequest": {
+        "type": "object",
+        "properties": {
+          "entryRequestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "companyCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "lot": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dueDate": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "option": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "regSan": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

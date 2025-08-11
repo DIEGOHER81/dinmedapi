@@ -6699,6 +6699,73 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "DimmedAPI.Controllers.PdfController",
+    "Method": "GenerateRemisionPdfPost",
+    "RelativePath": "api/Pdf/remision",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DimmedAPI.Controllers.GeneratePdfRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.PdfController",
+    "Method": "GenerateRemisionPdf",
+    "RelativePath": "api/Pdf/remision/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "lot",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "price",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "code",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "duedate",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "option",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "regSan",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "DimmedAPI.Controllers.QuotationDetailController",
     "Method": "GetAllQuotationDetails",
     "RelativePath": "api/QuotationDetail",

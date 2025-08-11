@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="EPPlus" Version="7.0.9" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.5">

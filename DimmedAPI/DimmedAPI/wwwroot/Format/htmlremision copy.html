@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remisión - #NO#</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+        }
+        .company-logo {
+            max-width: 200px;
+            max-height: 100px;
+            margin-bottom: 10px;
+        }
+        .document-title {
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+        .document-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        .customer-info, .patient-info {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .info-section h4 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            border-bottom: 1px solid #3498db;
+            padding-bottom: 5px;
+        }
+        .info-row {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .info-label {
+            font-weight: bold;
+            min-width: 120px;
+            color: #34495e;
+        }
+        .info-value {
+            flex: 1;
+            color: #2c3e50;
+        }
+        .table_info {
+            border: 1px solid #000000;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 11px;
+        }
+        .negrita {
+            font-weight: bold;
+        }
+        .bkColor {
+            background-color: #CCCCCC;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border: 2px solid #2c3e50;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+            padding: 10px 8px;
+        }
+        td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        .observations {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            background-color: #ecf0f1;
+        }
+        .observations h4 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        .section-header {
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+            margin: 20px 0 10px 0;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="#COMPANY_LOGO#" alt="Logo de la empresa" class="company-logo">
+        <h1 class="document-title">REMISIÓN DE EQUIPOS Y COMPONENTES</h1>
+        <h2 class="document-title">Número: #NO#</h2>
+    </div>
+
+    <div class="document-info">
+        <div class="customer-info info-section">
+            <h4>INFORMACIÓN DEL CLIENTE</h4>
+            <div class="info-row">
+                <span class="info-label">Cliente:</span>
+                <span class="info-value">#CUSTOMER_NAME#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">NIT:</span>
+                <span class="info-value">#CUSTOMER_NIT#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Dirección:</span>
+                <span class="info-value">#CUSTOMER_ADDRESS#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Ciudad:</span>
+                <span class="info-value">#CUSTOMER_CITY#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Teléfono:</span>
+                <span class="info-value">#CUSTOMER_PHONE#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Orden de Compra:</span>
+                <span class="info-value">#ORDER_NO#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Dirección de Entrega:</span>
+                <span class="info-value">#DELIVERY_ADDRESS#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Solicitante:</span>
+                <span class="info-value">#APPLICANT#</span>
+            </div>
+        </div>
+        <div class="patient-info info-section">
+            <h4>INFORMACIÓN DEL PACIENTE</h4>
+            <div class="info-row">
+                <span class="info-label">Paciente:</span>
+                <span class="info-value">#NOMBRE_PACIENTE#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Identificación:</span>
+                <span class="info-value">#PACIENTE_ID#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Historia Clínica:</span>
+                <span class="info-value">#HCPACIENTE#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Médico:</span>
+                <span class="info-value">#MECIC_NAME#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">ATC:</span>
+                <span class="info-value">#ATC#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Fecha de Entrega:</span>
+                <span class="info-value">#DELIVERY_DATE#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Fecha de Cirugía:</span>
+                <span class="info-value">#SURGERY_DATE#</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Hora de Cirugía:</span>
+                <span class="info-value">#SURGERY_TIME#</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="observations">
+        <h4>OBSERVACIONES</h4>
+        <p>#OBS#</p>
+    </div>
+
+    <div class="section-header">DETALLES DE COMPONENTES</div>
+    <table>
+        #DETAILS#
+    </table>
+
+    <div class="section-header">DETALLES DE EQUIPOS</div>
+    <table>
+        <tr>
+            <th class="table_info">REF</th>
+            <th class="table_info">Estado</th>
+            <th class="table_info">Descripción</th>
+            <th class="table_info"># Cajas</th>
+        </tr>
+        #DETAILS_EQP#
+    </table>
+
+    <div class="section-header">COMPONENTES SIN STOCK</div>
+    <table>
+        #DETAILS_ZERO#
+    </table>
+
+    <div class="footer">
+        <p><strong>Fecha de impresión:</strong> #FECHA_IMPRESION#</p>
+    </div>
+</body>
+</html> 

@@ -10,5 +10,6 @@ namespace DimmedAPI.Interfaces
         Task<List<Customer>> SincronizeBCAsync();
         Task<object> SincronizarDesdeBC(CustomerBCDTO dto);
         Task<List<Customer>> GetCustomersFromBCAsync(int? take = null, string systemIdBc = null);
+        Task<Customer?> GetByIdAsync(int id);
     }
 }

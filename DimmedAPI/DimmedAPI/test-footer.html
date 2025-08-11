@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es-col">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Footer Centrado</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .page-footer {
+            width: 100% !important;
+            position: relative !important;
+            bottom: 0 !important;
+            margin: 0 !important;
+            padding: 10px 0 !important;
+            text-align: center !important;
+            font-size: 9px !important;
+            line-height: 1.2 !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            page-break-after: avoid !important;
+            break-after: avoid !important;
+            background: white !important;
+            z-index: 1000 !important;
+        }
+
+        .page-footer-content {
+            width: 100% !important;
+            text-align: center !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 8pt !important;
+            line-height: 1.0 !important;
+            color: #333 !important;
+            font-weight: normal !important;
+            display: block !important;
+        }
+
+        .page-footer-content br {
+            display: block !important;
+            margin: 2px 0 !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test de Footer Centrado</h1>
+    <p>Este es un documento de prueba para verificar que el footer se centre correctamente.</p>
+    
+    <div style="height: 500px; background-color: #f0f0f0; margin: 20px 0;">
+        <p>Contenido de prueba para llenar espacio</p>
+    </div>
+    
+    <!-- Pie de página que aparecerá al final de la página -->
+    <div class="page-footer">
+        <div class="page-footer-content">
+            <div style="text-align: center; width: 100%; margin: 0; padding: 0;">
+                <br /><br /><br /><br />
+                <div style="text-align: center; margin: 2px 0;">MEDELLÍN: Cll 66A N. 43 - 02 Oficina 107 Centro Empresarial La Esmeralda. Itagüí Antioquia PBX (604) 3730700 Servicio al cliente: Telefono de Servicio 24 Horas: (604) 6049931</div>
+                <div style="text-align: center; margin: 2px 0;">BOGOTA: (601) Calle 63 # 74B -42 Local 11. Telefono de Servicio 24 Horas: (601) 7440090</div>
+                <div style="text-align: center; margin: 2px 0;">CALI: AVENIDA ROOSEVELT # 25 - 32. Telefono de Servicio 24 Horas: (602) 4850210</div>
+                <div style="text-align: center; margin: 2px 0;">BARRANQUILLA: Telefono de Servicio 24 Horas: (602)4850210 EMAIL servicioalcliente@diverquin.com.co</div>
+                <div style="text-align: center; margin: 2px 0;">Somos una Empresa comprometida con el cuidado del medio Ambiente.</div>
+            </div>
+        </div>
+        <div id="page-number"></div>
+    </div>
+</body>
+</html>

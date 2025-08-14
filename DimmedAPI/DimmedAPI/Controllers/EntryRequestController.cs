@@ -3287,5 +3287,99 @@ namespace DimmedAPI.Controllers
                 });
             }
         }
+
+        // PATCH: api/EntryRequest/{id}/cancel
+        [HttpPatch("{id}/cancel")]
+        public async Task<ActionResult<EntryRequestCancelUpdateResponseDTO>> UpdateEntryRequestCancel(int id, [FromBody] EntryRequestCancelUpdateDTO cancelUpdateDto, [FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO UpdateEntryRequestCancel ===");
+                Console.WriteLine($"EntryRequest ID: {id}");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest(new EntryRequestCancelUpdateResponseDTO
+                    {
+                        Success = false,
+                        Message = "El código de compañía es requerido",
+                        EntryRequestId = id,
+                        UpdatedAt = DateTime.Now
+                    });
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+
+                // Buscar la EntryRequest
+                var existingEntryRequest = await companyContext.EntryRequests.FindAsync(id);
+                if (existingEntryRequest == null)
+                {
+                    Console.WriteLine($"Error: EntryRequest con ID {id} no encontrada");
+                    return NotFound(new EntryRequestCancelUpdateResponseDTO
+                    {
+                        Success = false,
+                        Message = $"No se encontró la solicitud de entrada con ID {id}",
+                        EntryRequestId = id,
+                        UpdatedAt = DateTime.Now
+                    });
+                }
+
+                Console.WriteLine($"EntryRequest encontrada. Status actual: {existingEntryRequest.Status}");
+
+                // Actualizar los campos de cancelación
+                existingEntryRequest.Status = cancelUpdateDto.Status;
+                existingEntryRequest.IdCancelReason = cancelUpdateDto.IdCancelReason;
+                existingEntryRequest.CancelReason = cancelUpdateDto.CancelReason;
+                existingEntryRequest.IdCancelDetail = cancelUpdateDto.IdCancelDetail;
+                existingEntryRequest.CancelDetail = cancelUpdateDto.CancelDetail;
+
+                // Marcar la entidad como modificada
+                companyContext.EntryRequests.Update(existingEntryRequest);
+
+                // Guardar cambios
+                await companyContext.SaveChangesAsync();
+                Console.WriteLine("Cambios guardados exitosamente");
+
+                // Invalidar caché
+                await _outputCacheStore.EvictByTagAsync(cacheTag, default);
+
+                // Crear respuesta exitosa
+                var response = new EntryRequestCancelUpdateResponseDTO
+                {
+                    Success = true,
+                    Message = "EntryRequest actualizada exitosamente",
+                    EntryRequestId = id,
+                    Status = existingEntryRequest.Status,
+                    IdCancelReason = existingEntryRequest.IdCancelReason,
+                    CancelReason = existingEntryRequest.CancelReason,
+                    IdCancelDetail = existingEntryRequest.IdCancelDetail,
+                    CancelDetail = existingEntryRequest.CancelDetail,
+                    UpdatedAt = DateTime.Now
+                };
+
+                Console.WriteLine("=== FIN UpdateEntryRequestCancel ===");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en UpdateEntryRequestCancel ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                Console.WriteLine("=== FIN ERROR ===");
+
+                return StatusCode(500, new EntryRequestCancelUpdateResponseDTO
+                {
+                    Success = false,
+                    Message = $"Error interno del servidor: {ex.Message}",
+                    EntryRequestId = id,
+                    UpdatedAt = DateTime.Now
+                });
+            }
+        }
     }
 } 

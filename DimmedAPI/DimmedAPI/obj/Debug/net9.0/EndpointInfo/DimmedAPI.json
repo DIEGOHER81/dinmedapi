@@ -5529,6 +5529,72 @@
         }
       }
     },
+    "/api/EntryRequest/{id}/cancel": {
+      "patch": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryRequestCancelUpdateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryRequestCancelUpdateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryRequestCancelUpdateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestCancelUpdateResponseDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestCancelUpdateResponseDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestCancelUpdateResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/EntryRequestAssembly": {
       "get": {
         "tags": [
@@ -14805,6 +14871,83 @@
           "locationCode": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestCancelUpdateDTO": {
+        "required": [
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "idCancelReason": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "cancelReason": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          },
+          "idCancelDetail": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "cancelDetail": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestCancelUpdateResponseDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "entryRequestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "idCancelReason": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "cancelReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "idCancelDetail": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "cancelDetail": {
+            "type": "string",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false

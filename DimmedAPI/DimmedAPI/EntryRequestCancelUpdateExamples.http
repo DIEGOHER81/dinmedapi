@@ -1,0 +1,76 @@
+### EntryRequest Cancel Update Examples
+
+### 1. Actualizar EntryRequest con cancelación completa
+PATCH {{baseUrl}}/api/EntryRequest/123/cancel?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "status": "CANCELADO",
+  "idCancelReason": 1,
+  "cancelReason": "Cliente canceló el pedido",
+  "idCancelDetail": 2,
+  "cancelDetail": "Cambio de fecha de cirugía"
+}
+
+### 2. Actualizar solo el status
+PATCH {{baseUrl}}/api/EntryRequest/123/cancel?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "status": "CANCELADO"
+}
+
+### 3. Actualizar con razón de cancelación
+PATCH {{baseUrl}}/api/EntryRequest/123/cancel?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "status": "CANCELADO",
+  "idCancelReason": 3,
+  "cancelReason": "Equipo no disponible"
+}
+
+### 4. Actualizar con detalle de cancelación
+PATCH {{baseUrl}}/api/EntryRequest/123/cancel?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "status": "CANCELADO",
+  "idCancelDetail": 1,
+  "cancelDetail": "Paciente no asistió a la cita"
+}
+
+### 5. Error: Sin companyCode
+PATCH {{baseUrl}}/api/EntryRequest/123/cancel
+Content-Type: application/json
+
+{
+  "status": "CANCELADO",
+  "cancelReason": "Error de prueba"
+}
+
+### 6. Error: EntryRequest inexistente
+PATCH {{baseUrl}}/api/EntryRequest/999999/cancel?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "status": "CANCELADO",
+  "cancelReason": "EntryRequest que no existe"
+}
+
+### 7. Actualizar con valores nulos
+PATCH {{baseUrl}}/api/EntryRequest/123/cancel?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "status": "ACTIVO",
+  "idCancelReason": null,
+  "cancelReason": null,
+  "idCancelDetail": null,
+  "cancelDetail": null
+}
+
+### Variables para Postman/VS Code REST Client
+@baseUrl = https://localhost:7001
+@companyCode = COMP001
+@entryRequestId = 123

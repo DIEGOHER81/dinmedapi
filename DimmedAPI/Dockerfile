@@ -19,6 +19,12 @@ RUN apt-get update && apt-get install -y openssl
 EXPOSE 80
 EXPOSE 443
 COPY --from=build /app/DimmedAPI/out ./
+
+# Copiar y ejecutar script de verificación de librerías de PDF
+COPY verify-pdf-libs.sh ./
+RUN chmod +x verify-pdf-libs.sh
+RUN ./verify-pdf-libs.sh
+
 COPY entrypoint.sh ./
 RUN chmod +x entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"] 

@@ -2497,6 +2497,42 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
+    "Method": "UpdateEntryRequestCancel",
+    "RelativePath": "api/EntryRequest/{id}/cancel",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "cancelUpdateDto",
+        "Type": "DimmedAPI.DTOs.EntryRequestCancelUpdateDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.DTOs.EntryRequestCancelUpdateResponseDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
     "Method": "UpdateIdATC",
     "RelativePath": "api/EntryRequest/{id}/idATC",
     "HttpMethod": "PATCH",

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remisión P-123 - Suplemédicos</title>
+    <style>
+        /* Estilos generales para impresión */
+        @media print {
+            body {
+                margin: 0;
+                padding: 20px;
+                font-family: Arial, sans-serif;
+                font-size: 12px;
+                line-height: 1.4;
+                color: #000;
+                background: white;
+            }
+            
+            /* Ocultar elementos no necesarios para impresión */
+            .no-print {
+                display: none !important;
+            }
+            
+            /* Asegurar que las tablas se impriman correctamente */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                page-break-inside: avoid;
+                margin-bottom: 10px;
+            }
+            
+            th, td {
+                border: 1px solid #000;
+                padding: 4px 6px;
+                text-align: left;
+                vertical-align: top;
+                font-size: 10px;
+            }
+            
+            th {
+                background-color: #f0f0f0 !important;
+                font-weight: bold;
+                text-align: center;
+            }
+            
+            /* Asegurar que las imágenes se impriman */
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+            
+            /* Estilos para el encabezado */
+            .header {
+                text-align: center;
+                margin-bottom: 20px;
+                page-break-after: avoid;
+            }
+            
+            .header img {
+                max-height: 60px;
+                margin-bottom: 10px;
+            }
+            
+            /* Estilos para el footer */
+            .page-footer {
+                position: fixed;
+                bottom: 20px;
+                left: 0;
+                right: 0;
+                text-align: center;
+                font-size: 9px;
+                line-height: 1.2;
+                page-break-inside: avoid;
+            }
+            
+            /* Forzar saltos de página */
+            .page-break {
+                page-break-before: always;
+            }
+            
+            /* Evitar saltos de página en elementos importantes */
+            .no-break {
+                page-break-inside: avoid;
+            }
+            
+            /* Estilos para información del cliente y paciente */
+            .info-section {
+                margin-bottom: 15px;
+                page-break-inside: avoid;
+            }
+            
+            .info-table {
+                width: 100%;
+                border: none;
+            }
+            
+            .info-table td {
+                border: none;
+                padding: 2px 4px;
+                vertical-align: top;
+            }
+            
+            .info-label {
+                font-weight: bold;
+                width: 30%;
+            }
+            
+            .info-value {
+                width: 70%;
+            }
+            
+            /* Estilos para observaciones */
+            .observations {
+                margin: 10px 0;
+                padding: 10px;
+                border: 1px solid #ccc;
+                background-color: #f9f9f9;
+                page-break-inside: avoid;
+            }
+            
+            /* Botón de impresión (solo visible en pantalla) */
+            .print-button {
+                display: none;
+            }
+        }
+        
+        /* Estilos para pantalla */
+        @media screen {
+            body {
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+                margin: 20px;
+                background-color: #f5f5f5;
+            }
+            
+            .print-container {
+                background: white;
+                padding: 30px;
+                margin: 0 auto;
+                max-width: 800px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                border-radius: 5px;
+            }
+            
+            .print-button {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+                z-index: 1000;
+            }
+            
+            .print-button:hover {
+                background: #0056b3;
+            }
+            
+            .instructions {
+                background: #e7f3ff;
+                border: 1px solid #b3d9ff;
+                padding: 15px;
+                margin-bottom: 20px;
+                border-radius: 5px;
+            }
+            
+            .instructions h3 {
+                margin-top: 0;
+                color: #0056b3;
+            }
+            
+            .instructions ul {
+                margin: 10px 0;
+                padding-left: 20px;
+            }
+            
+            .instructions li {
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="print-container">
+        <!-- Instrucciones (solo visibles en pantalla) -->
+        <div class="instructions">
+            <h3>📋 Instrucciones para Imprimir</h3>
+            <ul>
+                <li><strong>Para imprimir:</strong> Haga clic en el botón 'Imprimir' o use Ctrl+P</li>
+                <li><strong>Para guardar como PDF:</strong> En la ventana de impresión, seleccione 'Guardar como PDF' como destino</li>
+                <li><strong>Configuración recomendada:</strong> A4, sin márgenes, escala 100%</li>
+                <li><strong>Ocultar elementos:</strong> Desmarque 'Encabezados y pies de página' en las opciones de impresión</li>
+            </ul>
+        </div>
+        
+        <!-- Botón de impresión -->
+        <button class="print-button" onclick="printDocument()">
+            🖨️ Imprimir / Guardar PDF
+        </button>
+        
+        <!-- Contenido de la remisión -->
+        <div class="header">
+            <img src="/template/img/suplemedicos.png" alt="Suplemédicos Logo">
+            <h1>REMISIÓN P-123</h1>
+            <p><strong>Nit:</strong> 8110417843</p>
+        </div>
+        
+        <!-- Información del cliente -->
+        <div class="info-section">
+            <table class="info-table">
+                <tr>
+                    <td class="info-label">Cliente Pagador:</td>
+                    <td class="info-value">HOSPITAL UNIVERSITARIO SAN VICENTE FUNDACIÓN</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Nit:</td>
+                    <td class="info-value">890980001-1</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Dirección:</td>
+                    <td class="info-value">Calle 64 # 51D-154</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Teléfono:</td>
+                    <td class="info-value">(604) 444-4444</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Ciudad:</td>
+                    <td class="info-value">Medellín</td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- Información del paciente -->
+        <div class="info-section">
+            <table class="info-table">
+                <tr>
+                    <td class="info-label">Paciente:</td>
+                    <td class="info-value">Juan Carlos Pérez López</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Cédula Paciente:</td>
+                    <td class="info-value">79.123.456</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Dir. Entrega:</td>
+                    <td class="info-value">Piso 3 - Sala de Cirugía</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Nombre solicitante:</td>
+                    <td class="info-value">Dr. María González</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Doctor:</td>
+                    <td class="info-value">Dr. Carlos Rodríguez</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Orden de Compra:</td>
+                    <td class="info-value">OC-2024-001</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Historia Clínica:</td>
+                    <td class="info-value">HC-2024-789</td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- Observaciones -->
+        <div class="observations">
+            <h4>Observaciones:</h4>
+            <p>Material requerido para cirugía programada. Entregar en sala de cirugía antes de las 7:00 AM.</p>
+        </div>
+        
+        <!-- Tabla de detalles -->
+        <table>
+            <thead>
+                <tr>
+                    <th>REF</th>
+                    <th>Descripción</th>
+                    <th>INVIMA</th>
+                    <th>LOTE</th>
+                    <th>F.Vencimiento</th>
+                    <th>Cant. LT</th>
+                    <th>Cant. Total</th>
+                    <th>Precio U.</th>
+                    <th>IVA</th>
+                    <th>Gasto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>EQP-001</strong></td>
+                    <td><strong>KIT DE CIRUGÍA CARDIOVASCULAR</strong></td>
+                    <td>2024-12345</td>
+                    <td>LOT-2024-001</td>
+                    <td>31/12/2025</td>
+                    <td>5</td>
+                    <td><strong>5</strong></td>
+                    <td>150,000</td>
+                    <td>28,500</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>COMP-001</td>
+                    <td><strong>CATÉTER INTRAVASCULAR 6F</strong></td>
+                    <td>2024-67890</td>
+                    <td>LOT-2024-002</td>
+                    <td>30/06/2025</td>
+                    <td>10</td>
+                    <td><strong>10</strong></td>
+                    <td>25,000</td>
+                    <td>4,750</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>COMP-002</td>
+                    <td><strong>GUIDEWIRE 0.035" 150CM</strong></td>
+                    <td>2024-11111</td>
+                    <td>LOT-2024-003</td>
+                    <td>31/12/2026</td>
+                    <td>8</td>
+                    <td><strong>8</strong></td>
+                    <td>35,000</td>
+                    <td>6,650</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Información de cajas -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Estado</th>
+                    <th>Descripción</th>
+                    <th># Cajas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>EQP-001</strong></td>
+                    <td><strong>DESPACHADO</strong></td>
+                    <td><strong>KIT DE CIRUGÍA CARDIOVASCULAR</strong></td>
+                    <td>2</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Total de cajas -->
+        <table>
+            <tbody>
+                <tr>
+                    <td colspan="3"><strong>Total Cajas</strong></td>
+                    <td><strong>2</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Pie de página -->
+        <div class="page-footer">
+            <div class="page-footer-content">
+                <div style="text-align: center; margin: 2px 0;">MEDELLÍN: Cll 66A N. 43 - 02 Oficina 107 Centro Empresarial La Esmeralda. Itagüí Antioquia PBX (604) 3730700 Servicio al cliente: Telefono de Servicio 24 Horas: (604) 6049931</div>
+                <div style="text-align: center; margin: 2px 0;">BOGOTA: (601) Calle 63 # 74B -42 Local 11. Telefono de Servicio 24 Horas: (601) 7440090</div>
+                <div style="text-align: center; margin: 2px 0;">CALI: AVENIDA ROOSEVELT # 25 - 32. Telefono de Servicio 24 Horas: (602) 4850210</div>
+                <div style="text-align: center; margin: 2px 0;">BARRANQUILLA: Telefono de Servicio 24 Horas: (602)4850210 EMAIL servicioalcliente@diverquin.com.co</div>
+                <div style="text-align: center; margin: 2px 0;">Somos una Empresa comprometida con el cuidado del medio Ambiente.</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function printDocument() {
+            window.print();
+        }
+        
+        // Auto-ocultar instrucciones después de 5 segundos
+        setTimeout(function() {
+            var instructions = document.querySelector('.instructions');
+            if (instructions) {
+                instructions.style.display = 'none';
+            }
+        }, 5000);
+        
+        // Mostrar instrucciones al hacer hover sobre el botón
+        document.addEventListener('DOMContentLoaded', function() {
+            var printButton = document.querySelector('.print-button');
+            var instructions = document.querySelector('.instructions');
+            
+            if (printButton && instructions) {
+                printButton.addEventListener('mouseenter', function() {
+                    instructions.style.display = 'block';
+                });
+                
+                printButton.addEventListener('mouseleave', function() {
+                    setTimeout(function() {
+                        instructions.style.display = 'none';
+                    }, 2000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

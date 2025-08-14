@@ -42,57 +42,119 @@ namespace DimmedAPI.Services
         /// <param name="duedate">Imprimir fecha de vencimiento 1: si, 0: no</param>
         /// <param name="option">Imprimir solo lo despachado en el momento 1: si, 0: no</param>
         /// <param name="regSan">Imprimir registro sanitario 1: si, 0: no</param>
+        /// <param name="printMethod">Método de impresión (0: flujo automático, 1: HTML, 2: iTextSharp)</param>
         /// <returns>Array de bytes del PDF generado</returns>
-        public async Task<byte[]> GenerateRemisionPdfAsync(EntryRequests entryRequests, string companyCode, int lot, int price, int code, int duedate, int option, int regSan)
+        public async Task<byte[]> GenerateRemisionPdfAsync(EntryRequests entryRequests, string companyCode, int lot, int price, int code, int duedate, int option, int regSan, int printMethod = 0)
         {
             var startTime = DateTime.Now;
             try
             {
                 Console.WriteLine($"Iniciando generación de PDF para remisión P-{entryRequests.Id}");
-                Console.WriteLine($"Parámetros: Lot={lot}, Price={price}, Code={code}, DueDate={duedate}, Option={option}, RegSan={regSan}");
+                Console.WriteLine($"Parámetros: Lot={lot}, Price={price}, Code={code}, DueDate={duedate}, Option={option}, RegSan={regSan}, PrintMethod={printMethod}");
                 
                 // Generar el HTML de la remisión
                 string htmlContent = await GenerateRemisionHtmlAsync(entryRequests, companyCode, lot, price, code, duedate, option, regSan);
                 
                 Console.WriteLine($"HTML generado exitosamente. Longitud: {htmlContent?.Length ?? 0} caracteres");
                 
-                // Intentar primero con DinkToPdf para preservar el diseño visual
-                if (_converter != null && IsDinkToPdfNativeAvailable())
+                // Determinar el método de generación basado en el parámetro printMethod
+                switch (printMethod)
                 {
-                    try
-                    {
-                        Console.WriteLine("Intentando generar PDF con DinkToPdf para preservar diseño visual...");
-                        var pdfBytes = await GeneratePdfWithDinkToPdfAsync(htmlContent, entryRequests.Id);
+                    case 1: // HTML - Forzar HTML
+                        Console.WriteLine("MÉTODO 1: Forzando generación de HTML para impresión desde navegador");
+                        throw new PdfGenerationException($"Método HTML seleccionado. Se puede usar la versión HTML para imprimir desde el navegador.");
                         
-                        var endTime = DateTime.Now;
-                        var duration = endTime - startTime;
-                        Console.WriteLine($"PDF generado exitosamente con DinkToPdf en {duration.TotalMilliseconds:F2}ms. Tamaño final: {pdfBytes.Length} bytes");
+                    case 2: // iTextSharp - Forzar iTextSharp
+                        Console.WriteLine("MÉTODO 2: Forzando generación con iTextSharp");
+                        try
+                        {
+                            var iTextPdfBytes = await GeneratePdfWithITextSharpAsync(htmlContent, entryRequests.Id);
+                            var endTime = DateTime.Now;
+                            var duration = endTime - startTime;
+                            Console.WriteLine($"✓ PDF generado exitosamente con iTextSharp (método forzado) en {duration.TotalMilliseconds:F2}ms. Tamaño final: {iTextPdfBytes.Length} bytes");
+                            return iTextPdfBytes;
+                        }
+                        catch (Exception iTextEx)
+                        {
+                            Console.WriteLine($"✗ iTextSharp falló: {iTextEx.Message}");
+                            throw new PdfGenerationException($"No se pudo generar el PDF con iTextSharp. Se puede usar la versión HTML para imprimir desde el navegador.", iTextEx);
+                        }
                         
-                        return pdfBytes;
-                    }
-                    catch (Exception dinkEx)
-                    {
-                        Console.WriteLine($"DinkToPdf falló, usando iTextSharp como fallback: {dinkEx.Message}");
-                    }
+                    case 0: // Flujo automático (default)
+                    default:
+                        Console.WriteLine("MÉTODO 0: Usando flujo automático (DinkToPdf → HTML → iTextSharp)");
+                        
+                        // PASO 1: Intentar con DinkToPdf (método preferido)
+                        if (_converter != null && IsDinkToPdfNativeAvailable())
+                        {
+                            try
+                            {
+                                Console.WriteLine("PASO 1: Intentando generar PDF con DinkToPdf...");
+                                var pdfBytes = await GeneratePdfWithDinkToPdfAsync(htmlContent, entryRequests.Id);
+                                
+                                var endTime = DateTime.Now;
+                                var duration = endTime - startTime;
+                                Console.WriteLine($"✓ PDF generado exitosamente con DinkToPdf en {duration.TotalMilliseconds:F2}ms. Tamaño final: {pdfBytes.Length} bytes");
+                                
+                                return pdfBytes;
+                            }
+                            catch (Exception dinkEx)
+                            {
+                                Console.WriteLine($"✗ DinkToPdf falló: {dinkEx.Message}");
+                                Console.WriteLine("PASO 2: Procediendo con fallback a HTML para impresión desde navegador...");
+                                
+                                // PASO 2: Si DinkToPdf falla, lanzar excepción para que el controlador proporcione enlace HTML
+                                throw new PdfGenerationException($"No se pudo generar el PDF automáticamente. Se puede usar la versión HTML para imprimir desde el navegador.", dinkEx);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("⚠️ DinkToPdf no está disponible");
+                            Console.WriteLine("PASO 2: Procediendo con fallback a HTML para impresión desde navegador...");
+                            
+                            // Si DinkToPdf no está disponible, ir directamente al HTML
+                            throw new PdfGenerationException($"DinkToPdf no está disponible. Se puede usar la versión HTML para imprimir desde el navegador.");
+                        }
                 }
-                
-                // Fallback a iTextSharp si DinkToPdf no está disponible o falla
-                Console.WriteLine("Generando PDF con iTextSharp como fallback...");
-                var fallbackPdfBytes = await GeneratePdfWithITextSharpAsync(htmlContent, entryRequests.Id);
-                
-                var fallbackEndTime = DateTime.Now;
-                var fallbackDuration = fallbackEndTime - startTime;
-                Console.WriteLine($"PDF generado exitosamente con iTextSharp en {fallbackDuration.TotalMilliseconds:F2}ms. Tamaño final: {fallbackPdfBytes.Length} bytes");
-                
-                return fallbackPdfBytes;
+            }
+            catch (PdfGenerationException)
+            {
+                // Re-lanzar la excepción para que el controlador la maneje
+                throw;
             }
             catch (Exception ex)
             {
                 var endTime = DateTime.Now;
                 var duration = endTime - startTime;
-                Console.WriteLine($"Error en GenerateRemisionPdfAsync después de {duration.TotalMilliseconds:F2}ms: {ex.Message}");
+                Console.WriteLine($"✗ Error crítico en GenerateRemisionPdfAsync después de {duration.TotalMilliseconds:F2}ms: {ex.Message}");
                 Console.WriteLine($"StackTrace: {ex.StackTrace}");
-                throw;
+                
+                // PASO 3: Si todo falla y estamos en flujo automático, intentar con iTextSharp como último recurso
+                if (printMethod == 0)
+                {
+                    Console.WriteLine("PASO 3: Último recurso - Intentando con iTextSharp...");
+                    try
+                    {
+                        var htmlContent = await GenerateRemisionHtmlAsync(entryRequests, companyCode, lot, price, code, duedate, option, regSan);
+                        var fallbackPdfBytes = await GeneratePdfWithITextSharpAsync(htmlContent, entryRequests.Id);
+                        
+                        var fallbackEndTime = DateTime.Now;
+                        var fallbackDuration = fallbackEndTime - startTime;
+                        Console.WriteLine($"✓ PDF generado exitosamente con iTextSharp (último recurso) en {fallbackDuration.TotalMilliseconds:F2}ms. Tamaño final: {fallbackPdfBytes.Length} bytes");
+                        
+                        return fallbackPdfBytes;
+                    }
+                    catch (Exception iTextEx)
+                    {
+                        Console.WriteLine($"✗ iTextSharp también falló: {iTextEx.Message}");
+                        throw new PdfGenerationException($"No se pudo generar el PDF con ningún método disponible. Se puede usar la versión HTML para imprimir desde el navegador.", ex);
+                    }
+                }
+                else
+                {
+                    // Si se especificó un método específico y falló, lanzar la excepción original
+                    throw new PdfGenerationException($"Error generando PDF con el método especificado ({printMethod}): {ex.Message}", ex);
+                }
             }
         }
 
@@ -1965,5 +2027,321 @@ namespace DimmedAPI.Services
                 return htmlContent; // Retornar HTML original si falla
             }
         }
+
+        /// <summary>
+        /// Genera el HTML de remisión optimizado para impresión en navegador
+        /// </summary>
+        /// <param name="entryRequests">Objeto EntryRequests datos del pedido</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <param name="lot">Imprimir lote 1: si, 0: no</param>
+        /// <param name="price">Imprimir precio 1: si, 0: no</param>
+        /// <param name="code">Imprimir codigo corto 1: si, 0: no</param>
+        /// <param name="duedate">Imprimir fecha de vencimiento 1: si, 0: no</param>
+        /// <param name="option">Imprimir solo lo despachado en el momento 1: si, 0: no</param>
+        /// <param name="regSan">Imprimir registro sanitario 1: si, 0: no</param>
+        /// <returns>HTML de la remisión optimizado para impresión</returns>
+        public async Task<string> GenerateRemisionHtmlForPrintAsync(EntryRequests entryRequests, string companyCode, int lot, int price, int code, int duedate, int option, int regSan)
+        {
+            try
+            {
+                Console.WriteLine($"Generando HTML optimizado para impresión de remisión P-{entryRequests.Id}");
+                
+                // Generar el HTML base
+                string htmlContent = await GenerateRemisionHtmlAsync(entryRequests, companyCode, lot, price, code, duedate, option, regSan);
+                
+                // Optimizar el HTML para impresión en navegador
+                string optimizedHtml = OptimizeHtmlForPrint(htmlContent);
+                
+                Console.WriteLine($"HTML optimizado para impresión generado exitosamente. Longitud: {optimizedHtml.Length} caracteres");
+                
+                return optimizedHtml;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error generando HTML para impresión: {ex.Message}");
+                throw new Exception($"Error al generar el HTML de remisión para impresión: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Optimiza el HTML para impresión en navegador
+        /// </summary>
+        private string OptimizeHtmlForPrint(string htmlContent)
+        {
+            try
+            {
+                Console.WriteLine("Optimizando HTML para impresión en navegador...");
+                
+                // CSS específico para impresión en navegador
+                var printCss = @"
+                    <style>
+                        /* Estilos generales para impresión */
+                        @media print {
+                            body {
+                                margin: 0;
+                                padding: 20px;
+                                font-family: Arial, sans-serif;
+                                font-size: 12px;
+                                line-height: 1.4;
+                                color: #000;
+                                background: white;
+                            }
+                            
+                            /* Ocultar elementos no necesarios para impresión */
+                            .no-print {
+                                display: none !important;
+                            }
+                            
+                            /* Asegurar que las tablas se impriman correctamente */
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                page-break-inside: avoid;
+                                margin-bottom: 10px;
+                            }
+                            
+                            th, td {
+                                border: 1px solid #000;
+                                padding: 4px 6px;
+                                text-align: left;
+                                vertical-align: top;
+                                font-size: 10px;
+                            }
+                            
+                            th {
+                                background-color: #f0f0f0 !important;
+                                font-weight: bold;
+                                text-align: center;
+                            }
+                            
+                            /* Asegurar que las imágenes se impriman */
+                            img {
+                                max-width: 100%;
+                                height: auto;
+                            }
+                            
+                            /* Estilos para el encabezado */
+                            .header {
+                                text-align: center;
+                                margin-bottom: 20px;
+                                page-break-after: avoid;
+                            }
+                            
+                            .header img {
+                                max-height: 60px;
+                                margin-bottom: 10px;
+                            }
+                            
+                            /* Estilos para el footer */
+                            .page-footer {
+                                position: fixed;
+                                bottom: 20px;
+                                left: 0;
+                                right: 0;
+                                text-align: center;
+                                font-size: 9px;
+                                line-height: 1.2;
+                                page-break-inside: avoid;
+                            }
+                            
+                            /* Forzar saltos de página */
+                            .page-break {
+                                page-break-before: always;
+                            }
+                            
+                            /* Evitar saltos de página en elementos importantes */
+                            .no-break {
+                                page-break-inside: avoid;
+                            }
+                            
+                            /* Estilos para información del cliente y paciente */
+                            .info-section {
+                                margin-bottom: 15px;
+                                page-break-inside: avoid;
+                            }
+                            
+                            .info-table {
+                                width: 100%;
+                                border: none;
+                            }
+                            
+                            .info-table td {
+                                border: none;
+                                padding: 2px 4px;
+                                vertical-align: top;
+                            }
+                            
+                            .info-label {
+                                font-weight: bold;
+                                width: 30%;
+                            }
+                            
+                            .info-value {
+                                width: 70%;
+                            }
+                            
+                            /* Estilos para observaciones */
+                            .observations {
+                                margin: 10px 0;
+                                padding: 10px;
+                                border: 1px solid #ccc;
+                                background-color: #f9f9f9;
+                                page-break-inside: avoid;
+                            }
+                            
+                            /* Botón de impresión (solo visible en pantalla) */
+                            .print-button {
+                                position: fixed;
+                                top: 20px;
+                                right: 20px;
+                                background: #007bff;
+                                color: white;
+                                border: none;
+                                padding: 10px 20px;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                font-size: 14px;
+                                z-index: 1000;
+                            }
+                            
+                            .print-button:hover {
+                                background: #0056b3;
+                            }
+                            
+                            @media print {
+                                .print-button {
+                                    display: none;
+                                }
+                            }
+                        }
+                        
+                        /* Estilos para pantalla */
+                        @media screen {
+                            body {
+                                font-family: Arial, sans-serif;
+                                font-size: 14px;
+                                line-height: 1.6;
+                                margin: 20px;
+                                background-color: #f5f5f5;
+                            }
+                            
+                            .print-container {
+                                background: white;
+                                padding: 30px;
+                                margin: 0 auto;
+                                max-width: 800px;
+                                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                                border-radius: 5px;
+                            }
+                            
+                            .print-button {
+                                position: fixed;
+                                top: 20px;
+                                right: 20px;
+                                background: #007bff;
+                                color: white;
+                                border: none;
+                                padding: 10px 20px;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                font-size: 14px;
+                                z-index: 1000;
+                            }
+                            
+                            .print-button:hover {
+                                background: #0056b3;
+                            }
+                        }
+                    </style>
+                ";
+                
+                // JavaScript para funcionalidad de impresión
+                var printScript = @"
+                    <script>
+                        function printDocument() {
+                            window.print();
+                        }
+                    </script>
+                ";
+                
+                // HTML de instrucciones (removido para impresión limpia)
+                var instructionsHtml = "";
+                
+                // Botón de impresión
+                var printButtonHtml = @"
+                    <button class='print-button' onclick='printDocument()'>
+                        🖨️ Imprimir / Guardar PDF
+                    </button>
+                ";
+                
+                // Insertar CSS en el head
+                if (htmlContent.Contains("<head>"))
+                {
+                    htmlContent = htmlContent.Replace("<head>", "<head>" + printCss);
+                }
+                else if (htmlContent.Contains("<html>"))
+                {
+                    htmlContent = htmlContent.Replace("<html>", "<html><head>" + printCss + "</head>");
+                }
+                else
+                {
+                    htmlContent = "<html><head>" + printCss + "</head><body>" + htmlContent + "</body></html>";
+                }
+                
+                // Insertar JavaScript antes del cierre del body
+                if (htmlContent.Contains("</body>"))
+                {
+                    htmlContent = htmlContent.Replace("</body>", printScript + "</body>");
+                }
+                else
+                {
+                    htmlContent += printScript;
+                }
+                
+                // Envolver el contenido en un contenedor para pantalla
+                var bodyContent = htmlContent;
+                if (htmlContent.Contains("<body>"))
+                {
+                    var bodyStart = htmlContent.IndexOf("<body>") + 6;
+                    var bodyEnd = htmlContent.IndexOf("</body>");
+                    if (bodyEnd > bodyStart)
+                    {
+                        var bodyInner = htmlContent.Substring(bodyStart, bodyEnd - bodyStart);
+                        bodyContent = htmlContent.Substring(0, bodyStart) + 
+                                    "<div class='print-container'>" +
+                                    instructionsHtml +
+                                    printButtonHtml +
+                                    bodyInner +
+                                    "</div>" +
+                                    htmlContent.Substring(bodyEnd);
+                    }
+                }
+                else
+                {
+                    bodyContent = "<div class='print-container'>" +
+                                instructionsHtml +
+                                printButtonHtml +
+                                htmlContent +
+                                "</div>";
+                }
+                
+                Console.WriteLine("HTML optimizado para impresión en navegador");
+                return bodyContent;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error optimizando HTML para impresión: {ex.Message}");
+                return htmlContent; // Retornar HTML original si falla
+            }
+        }
+    }
+
+    /// <summary>
+    /// Excepción personalizada para errores de generación de PDF
+    /// </summary>
+    public class PdfGenerationException : Exception
+    {
+        public PdfGenerationException(string message) : base(message) { }
+        public PdfGenerationException(string message, Exception innerException) : base(message, innerException) { }
     }
 } 

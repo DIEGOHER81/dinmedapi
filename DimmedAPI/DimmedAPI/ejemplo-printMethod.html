@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo de Uso del Parámetro printMethod - API PDF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .success { background: #d4edda; border-left: 4px solid #28a745; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; }
+        .error { background: #f8d7da; border-left: 4px solid #dc3545; }
+        .info { background: #d1ecf1; border-left: 4px solid #17a2b8; }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #6c757d; cursor: not-allowed; }
+        
+        .method-button {
+            background: #28a745;
+            margin: 10px 5px;
+        }
+        .method-button:hover { background: #218838; }
+        
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+        
+        .method-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .method-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .method-card h4 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        
+        .method-0 { border-color: #007bff; }
+        .method-1 { border-color: #28a745; }
+        .method-2 { border-color: #ffc107; }
+        
+        input, select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        
+        .curl-example {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Ejemplo de Uso del Parámetro printMethod</h1>
+    
+    <div class="container info">
+        <h3>📋 Descripción del Parámetro printMethod</h3>
+        <p>El parámetro <code>printMethod</code> permite especificar exactamente qué método de generación usar, dando control total al usuario sobre el proceso.</p>
+    </div>
+
+    <div class="container">
+        <h3>🧪 Prueba de Diferentes Métodos</h3>
+        <p>Ingresa los parámetros y selecciona el método de impresión:</p>
+        
+        <div>
+            <label>ID de Remisión:</label>
+            <input type="number" id="entryRequestId" value="10300" min="1">
+        </div>
+        <div>
+            <label>Código de Compañía:</label>
+            <input type="text" id="companyCode" value="6c265367-24c4-ed11-9a88-002248e00201">
+        </div>
+        <div>
+            <label>Método de Impresión:</label>
+            <select id="printMethod">
+                <option value="0">0 - Flujo Automático (DinkToPdf → HTML → iTextSharp)</option>
+                <option value="1">1 - Forzar HTML</option>
+                <option value="2">2 - Forzar iTextSharp</option>
+            </select>
+        </div>
+        
+        <div>
+            <label>Incluir Lote:</label>
+            <input type="checkbox" id="lot" checked>
+        </div>
+        <div>
+            <label>Incluir Precio:</label>
+            <input type="checkbox" id="price" checked>
+        </div>
+        
+        <br>
+        <button onclick="generateWithMethod()">🖨️ Generar con Método Seleccionado</button>
+        <button onclick="clearLog()">🗑️ Limpiar Log</button>
+    </div>
+
+    <div class="container">
+        <h3>📋 Información de Métodos</h3>
+        <div class="method-info">
+            <div class="method-card method-0">
+                <h4>🔄 Método 0: Flujo Automático</h4>
+                <p><strong>Comportamiento:</strong> Sigue el flujo inteligente</p>
+                <ul>
+                    <li>1. Intenta DinkToPdf (mejor calidad)</li>
+                    <li>2. Si falla → HTML para impresión</li>
+                    <li>3. Si HTML falla → iTextSharp</li>
+                </ul>
+                <p><strong>Recomendado para:</strong> Uso general</p>
+            </div>
+            
+            <div class="method-card method-1">
+                <h4>🌐 Método 1: Forzar HTML</h4>
+                <p><strong>Comportamiento:</strong> Genera HTML directamente</p>
+                <ul>
+                    <li>Omite DinkToPdf e iTextSharp</li>
+                    <li>Retorna HTML optimizado para impresión</li>
+                    <li>Usuario imprime desde navegador</li>
+                </ul>
+                <p><strong>Recomendado para:</strong> Cuando DinkToPdf no funciona</p>
+            </div>
+            
+            <div class="method-card method-2">
+                <h4>📄 Método 2: Forzar iTextSharp</h4>
+                <p><strong>Comportamiento:</strong> Genera PDF con iTextSharp</p>
+                <ul>
+                    <li>Omite DinkToPdf y HTML</li>
+                    <li>Genera PDF básico pero funcional</li>
+                    <li>Puede perder elementos de diseño</li>
+                </ul>
+                <p><strong>Recomendado para:</strong> Cuando se necesita PDF rápido</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h3>📊 Log de Eventos</h3>
+        <div id="log" class="log"></div>
+    </div>
+
+    <div class="container">
+        <h3>🔗 Ejemplos de cURL</h3>
+        
+        <h4>Flujo Automático (Default):</h4>
+        <div class="curl-example">
+curl -X 'GET' \
+  'https://agendamientoapi.pruebas.sapienss.com.co/api/Pdf/remision/10300?companyCode=6c265367-24c4-ed11-9a88-002248e00201&lot=1&price=1&code=0&duedate=1&option=0&regSan=1&printMethod=0' \
+  -H 'accept: */*'
+        </div>
+        
+        <h4>Forzar HTML:</h4>
+        <div class="curl-example">
+curl -X 'GET' \
+  'https://agendamientoapi.pruebas.sapienss.com.co/api/Pdf/remision/10300?companyCode=6c265367-24c4-ed11-9a88-002248e00201&lot=1&price=1&code=0&duedate=1&option=0&regSan=1&printMethod=1' \
+  -H 'accept: */*'
+        </div>
+        
+        <h4>Forzar iTextSharp:</h4>
+        <div class="curl-example">
+curl -X 'GET' \
+  'https://agendamientoapi.pruebas.sapienss.com.co/api/Pdf/remision/10300?companyCode=6c265367-24c4-ed11-9a88-002248e00201&lot=1&price=1&code=0&duedate=1&option=0&regSan=1&printMethod=2' \
+  -H 'accept: */*'
+        </div>
+    </div>
+
+    <script>
+        // Función para agregar logs
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            logDiv.appendChild(logEntry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        // Función para limpiar log
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        // Función para descargar PDF
+        function downloadPdf(blob, filename) {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Función para abrir HTML en nueva ventana
+        function openHtmlInNewWindow(url) {
+            window.open(url, '_blank', 'width=800,height=600');
+        }
+
+        // Función principal para generar con método específico
+        async function generateWithMethod() {
+            const entryRequestId = document.getElementById('entryRequestId').value;
+            const companyCode = document.getElementById('companyCode').value;
+            const printMethod = parseInt(document.getElementById('printMethod').value);
+            const lot = document.getElementById('lot').checked ? 1 : 0;
+            const price = document.getElementById('price').checked ? 1 : 0;
+
+            if (!entryRequestId || !companyCode) {
+                log('❌ Por favor completa todos los campos requeridos', 'error');
+                return;
+            }
+
+            const methodNames = {
+                0: 'Flujo Automático',
+                1: 'HTML Forzado',
+                2: 'iTextSharp Forzado'
+            };
+
+            log(`🚀 Iniciando generación con método: ${methodNames[printMethod]}`, 'info');
+            
+            try {
+                const params = new URLSearchParams({
+                    companyCode: companyCode,
+                    lot: lot,
+                    price: price,
+                    code: 0,
+                    duedate: 1,
+                    option: 0,
+                    regSan: 1,
+                    printMethod: printMethod
+                });
+
+                const response = await fetch(`/api/Pdf/remision/${entryRequestId}?${params}`);
+                
+                if (response.ok) {
+                    // ✓ Éxito
+                    log(`✓ PDF generado exitosamente con método ${printMethod}`, 'success');
+                    const blob = await response.blob();
+                    downloadPdf(blob, `Remision_P-${entryRequestId}_method${printMethod}.pdf`);
+                    log('📥 PDF descargado automáticamente', 'success');
+                }
+                else if (response.status === 503) {
+                    // Fallback a HTML
+                    log(`⚠️ Método ${printMethod} falló, usando fallback HTML...`, 'warning');
+                    const errorData = await response.json();
+                    
+                    if (errorData.fallback && errorData.fallback.url) {
+                        log('✓ Enlace HTML disponible', 'success');
+                        log(`🔗 URL: ${errorData.fallback.url}`, 'info');
+                        
+                        const userMessage = confirm(
+                            `El método ${methodNames[printMethod]} no pudo generar el PDF.\n\n` +
+                            'Se abrirá la versión HTML para que pueda imprimirla o guardarla como PDF desde el navegador.\n\n' +
+                            '¿Desea continuar?'
+                        );
+                        
+                        if (userMessage) {
+                            openHtmlInNewWindow(errorData.fallback.url);
+                            log('🌐 HTML abierto en nueva ventana', 'success');
+                        } else {
+                            log('❌ Usuario canceló la operación', 'warning');
+                        }
+                    } else {
+                        throw new Error('No se proporcionó enlace HTML de fallback');
+                    }
+                }
+                else {
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+                
+            } catch (error) {
+                log(`✗ Error: ${error.message}`, 'error');
+                
+                // Último recurso - Intentar con HTML directo
+                log('🔄 Intentando con HTML directo como último recurso...', 'warning');
+                try {
+                    const htmlUrl = `/api/Pdf/remision/${entryRequestId}/html?${params}`;
+                    openHtmlInNewWindow(htmlUrl);
+                    log('🌐 HTML abierto como último recurso', 'warning');
+                } catch (htmlError) {
+                    log(`✗ Error crítico: ${htmlError.message}`, 'error');
+                }
+            }
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            log('✅ Sistema de métodos de impresión inicializado', 'success');
+            log('📋 Métodos disponibles: 0 (Automático), 1 (HTML), 2 (iTextSharp)', 'info');
+        });
+    </script>
+</body>
+</html>

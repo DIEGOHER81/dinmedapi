@@ -60,6 +60,7 @@ builder.Services.AddScoped<IEquipmentBO, EquipmentBO>();
 builder.Services.AddScoped<ICustomerAddressBO, CustomerAddressBO>();
 builder.Services.AddScoped<EntryRequestTraceBO>();
 builder.Services.AddScoped<IEmployeeBO, EmployeeBO>();
+builder.Services.AddScoped<ICustomerPriceListBO, CustomerPriceListBO>();
 
 // Register Dynamic Connection Service
 builder.Services.AddScoped<IDynamicConnectionService, DynamicConnectionService>();

@@ -1,0 +1,31 @@
+### Customer Price List API Examples
+
+### Obtener listas de precio para un cliente específico
+GET {{baseUrl}}/api/CustomerPriceList/customer/123
+Content-Type: application/json
+
+###
+
+### Obtener listas de precio para otro cliente
+GET {{baseUrl}}/api/CustomerPriceList/customer/456
+Content-Type: application/json
+
+###
+
+### Intentar obtener listas de precio con ID inválido (debe retornar 400)
+GET {{baseUrl}}/api/CustomerPriceList/customer/0
+Content-Type: application/json
+
+###
+
+### Intentar obtener listas de precio con ID negativo (debe retornar 400)
+GET {{baseUrl}}/api/CustomerPriceList/customer/-1
+Content-Type: application/json
+
+###
+
+### Intentar obtener listas de precio para cliente inexistente (debe retornar 404)
+GET {{baseUrl}}/api/CustomerPriceList/customer/999999
+Content-Type: application/json
+
+###

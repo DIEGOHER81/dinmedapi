@@ -1,0 +1,31 @@
+### ReloadAssemblyDis - Validar ensamble de referencias de pedido
+
+# Ejemplo 1: Validar ensamble de pedido existente
+GET {{baseUrl}}/api/EntryRequest/10300/reloadAssemblyDis?companyCode=COMPANY001
+Content-Type: application/json
+
+###
+
+# Ejemplo 2: Validar ensamble de pedido con ID inválido
+GET {{baseUrl}}/api/EntryRequest/0/reloadAssemblyDis?companyCode=COMPANY001
+Content-Type: application/json
+
+###
+
+# Ejemplo 3: Validar ensamble sin companyCode
+GET {{baseUrl}}/api/EntryRequest/10300/reloadAssemblyDis
+Content-Type: application/json
+
+###
+
+# Ejemplo 4: Validar ensamble de pedido inexistente
+GET {{baseUrl}}/api/EntryRequest/99999/reloadAssemblyDis?companyCode=COMPANY001
+Content-Type: application/json
+
+###
+
+# Ejemplo 5: Validar ensamble de pedido con companyCode vacío
+GET {{baseUrl}}/api/EntryRequest/10300/reloadAssemblyDis?companyCode=
+Content-Type: application/json
+
+###

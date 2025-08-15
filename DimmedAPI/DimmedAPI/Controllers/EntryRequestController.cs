@@ -4,6 +4,7 @@ using DimmedAPI.Services;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using DimmedAPI.DTOs;
+using DimmedAPI.Interfaces;
 using System.Collections.Generic;
 using System.Data;
 using OfficeOpenXml;
@@ -19,18 +20,21 @@ namespace DimmedAPI.Controllers
         private readonly IDynamicConnectionService _dynamicConnectionService;
         private readonly IDynamicBCConnectionService _dynamicBCConnectionService;
         private readonly IOutputCacheStore _outputCacheStore;
+        private readonly ICustomerPriceListBO _customerPriceListBO;
         private const string cacheTag = "entryrequest";
 
         public EntryRequestController(
             ApplicationDBContext context,
             IDynamicConnectionService dynamicConnectionService,
             IDynamicBCConnectionService dynamicBCConnectionService,
-            IOutputCacheStore outputCacheStore)
+            IOutputCacheStore outputCacheStore,
+            ICustomerPriceListBO customerPriceListBO)
         {
             _context = context;
             _dynamicConnectionService = dynamicConnectionService;
             _dynamicBCConnectionService = dynamicBCConnectionService;
             _outputCacheStore = outputCacheStore;
+            _customerPriceListBO = customerPriceListBO;
         }
 
         // GET: api/EntryRequest
@@ -3378,6 +3382,259 @@ namespace DimmedAPI.Controllers
                     Message = $"Error interno del servidor: {ex.Message}",
                     EntryRequestId = id,
                     UpdatedAt = DateTime.Now
+                });
+            }
+        }
+
+        /// <summary>
+        /// Validar ensamble de referencias de pedido al momento de despachar 
+        /// </summary>
+        /// <param name="entryRequestId">Id del pedido</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>Texto para identificar si genera error por validaciones</returns>
+        [HttpGet("{entryRequestId}/reloadAssemblyDis")]
+        public async Task<ActionResult<ReloadAssemblyDisResponseDTO>> ReloadAssemblyDis(int entryRequestId, [FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO ReloadAssemblyDis ===");
+                Console.WriteLine($"EntryRequest ID: {entryRequestId}");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest(new ReloadAssemblyDisResponseDTO
+                    {
+                        Success = false,
+                        Message = "El código de compañía es requerido",
+                        EntryRequestId = entryRequestId,
+                        ValidationMessages = "",
+                        ProcessedAt = DateTime.Now
+                    });
+                }
+
+                if (entryRequestId <= 0)
+                {
+                    Console.WriteLine("Error: EntryRequestId debe ser mayor a 0");
+                    return BadRequest(new ReloadAssemblyDisResponseDTO
+                    {
+                        Success = false,
+                        Message = "El ID del pedido debe ser mayor a 0",
+                        EntryRequestId = entryRequestId,
+                        ValidationMessages = "",
+                        ProcessedAt = DateTime.Now
+                    });
+                }
+
+                string sUpdate = string.Empty;
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+
+                // Obtener la EntryRequest con todos sus detalles usando el endpoint existente
+                var entry = await companyContext.EntryRequests
+                    .Include(er => er.IdCustomerNavigation)
+                    .Include(er => er.InsurerTypeNavigation)
+                    .Include(er => er.EntryRequestDetails)
+                        .ThenInclude(erd => erd.IdEquipmentNavigation)
+                    .Include(er => er.EntryRequestAssembly)
+                    .FirstOrDefaultAsync(er => er.Id == entryRequestId);
+
+                if (entry == null)
+                {
+                    Console.WriteLine($"Error: EntryRequest con ID {entryRequestId} no encontrada");
+                    return NotFound(new ReloadAssemblyDisResponseDTO
+                    {
+                        Success = false,
+                        Message = $"No se encontró la solicitud de entrada con ID {entryRequestId}",
+                        EntryRequestId = entryRequestId,
+                        ValidationMessages = "",
+                        ProcessedAt = DateTime.Now
+                    });
+                }
+
+                Console.WriteLine($"EntryRequest encontrada. Customer: {entry.IdCustomerNavigation?.Name}");
+
+                // Obtener conexión a Business Central
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                Console.WriteLine("Conexión a Business Central establecida");
+
+                ICollection<EntryRequestDetails> entryRequestDetails = entry.EntryRequestDetails;
+                List<EntryRequestAssembly> dataEquipment = new List<EntryRequestAssembly>();
+                List<EntryRequestAssembly> dataEquipmentAll = new List<EntryRequestAssembly>();
+
+                string sPriceList = "";
+                if (entry.priceGroup != null && entry.priceGroup != "")
+                {
+                    sPriceList = entry.priceGroup;
+                }
+
+                foreach (var detail in entryRequestDetails)
+                {
+                    if (detail.IsComponent == null || !(bool)detail.IsComponent)
+                    {
+                        Console.WriteLine($"Procesando detalle para equipo: {detail.IdEquipmentNavigation?.Code}");
+
+                        if (sPriceList == "")
+                        {
+                            if (entry.IdCustomerNavigation.IsSecondPriceList == true)
+                            {
+                                // Obtener listas de precio del cliente usando el servicio directamente
+                                var priceLists = await _customerPriceListBO.GetPriceListByCustomerIdAsync(entry.IdCustomerNavigation.Id);
+                                
+                                var value = priceLists?.Where(list => list.InsurerType == entry.InsurerTypeNavigation?.description);
+                                
+                                if (value != null && value.Any())
+                                {
+                                    var finalList = value.FirstOrDefault();
+                                    sPriceList = finalList.PriceGroup;
+                                }
+                                else
+                                {
+                                    sPriceList = entry.IdCustomerNavigation.PriceGroup;
+                                }
+                            }
+                            else
+                            {
+                                sPriceList = entry.IdCustomerNavigation.PriceGroup;
+                            }
+                        }
+
+                        // Obtener ensamble V2 usando el endpoint existente
+                        var assemblyV2Response = await bcConn.GetEntryReqAssembly("lylassemblyV2", detail.IdEquipmentNavigation.Code, sPriceList);
+                        dataEquipmentAll = assemblyV2Response ?? new List<EntryRequestAssembly>();
+
+                        if (dataEquipmentAll != null && dataEquipmentAll.Any())
+                        {
+                            bool insertNew = false;
+                            foreach (var e in dataEquipmentAll)
+                            {
+                                if (entry.EntryRequestAssembly != null && entry.EntryRequestAssembly.Any())
+                                {
+                                    var assembly = entry.EntryRequestAssembly.ToList();
+                                    if (assembly != null && assembly.Count() > 0)
+                                    {
+                                        var dataAs = assembly.Find(x => x.Code == e.Code && x.EntryRequestDetailId == detail.Id);
+                                        if (dataAs == null)
+                                        {
+                                            // Componente no encontrado en el ensamble actual
+                                        }
+                                    }
+                                    else
+                                        insertNew = true;
+                                }
+                                else
+                                    insertNew = true;
+
+                                if (insertNew)
+                                {
+                                    // Nuevo componente encontrado
+                                }
+                            }
+                        }
+
+                        string PriceList = "";
+                        if (entry.priceGroup != null && entry.priceGroup != "")
+                        {
+                            PriceList = entry.priceGroup;
+                        }
+                        else if (entry.IdCustomerNavigation.IsSecondPriceList == true)
+                        {
+                            // Obtener listas de precio del cliente usando el servicio directamente
+                            var priceLists = await _customerPriceListBO.GetPriceListByCustomerIdAsync(entry.IdCustomerNavigation.Id);
+                            
+                            var value = priceLists?.Where(list => list.InsurerType == entry.InsurerTypeNavigation?.description);
+                            
+                            if (value != null && value.Any())
+                            {
+                                var finalList = value.FirstOrDefault();
+                                PriceList = finalList.PriceGroup;
+                            }
+                            else
+                            {
+                                PriceList = entry.IdCustomerNavigation.PriceGroup;
+                            }
+                        }
+                        else
+                        {
+                            PriceList = entry.IdCustomerNavigation.PriceGroup;
+                        }
+
+                        // Obtener ensamble usando el método existente
+                        dataEquipment = await bcConn.GetEntryReqAssembly("lylassembly", detail.IdEquipmentNavigation.Code, PriceList);
+
+                        if (dataEquipment != null && dataEquipment.Count() == 0)
+                        {
+                            sUpdate += $"El Equipo no tiene registros con reservas: {detail.IdEquipmentNavigation.Code}; ";
+                        }
+
+                        if (dataEquipment != null)
+                        {
+                            if (entry.EntryRequestAssembly != null && entry.EntryRequestAssembly.Any())
+                            {
+                                var assembly = entry.EntryRequestAssembly.ToList().FindAll(x => x.EntryRequestDetailId == detail.Id);
+                                foreach (var line in assembly)
+                                {
+                                    var exist = dataEquipment.Find(x => x.Code == line.Code && x.Lot == line.Lot);
+                                    if (exist == null)
+                                    {
+                                        if (line.QuantityConsumed > 0)
+                                            sUpdate += $"Para el Equipo: {detail.IdEquipmentNavigation.Code}, Componente: {line.Code}, Lote: {line.Lot} no existe cantidad reservada; ";
+                                    }
+                                }
+                            }
+
+                            foreach (var e in dataEquipment)
+                            {
+                                try
+                                {
+                                    var assembly = entry.EntryRequestAssembly.First(x => x.Code == e.Code && x.Lot == e.Lot && x.EntryRequestDetailId == detail.Id);
+
+                                    if (assembly != null && assembly.QuantityConsumed > 0 && assembly.QuantityConsumed > e.ReservedQuantity)
+                                    {
+                                        sUpdate += $"Equipo: {detail.IdEquipmentNavigation.Code} Componente: {assembly.Code}; {e.ToString()}; ";
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                    // Componente no encontrado en el ensamble actual
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Console.WriteLine($"=== FIN ReloadAssemblyDis ===");
+                Console.WriteLine($"Mensajes de validación: {sUpdate}");
+
+                var response = new ReloadAssemblyDisResponseDTO
+                {
+                    Success = true,
+                    Message = "Validación de ensamble completada exitosamente",
+                    EntryRequestId = entryRequestId,
+                    ValidationMessages = sUpdate,
+                    ProcessedAt = DateTime.Now
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en ReloadAssemblyDis ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                Console.WriteLine("=== FIN ERROR ===");
+
+                return StatusCode(500, new ReloadAssemblyDisResponseDTO
+                {
+                    Success = false,
+                    Message = $"Error interno del servidor: {ex.Message}",
+                    EntryRequestId = entryRequestId,
+                    ValidationMessages = "",
+                    ProcessedAt = DateTime.Now
                 });
             }
         }

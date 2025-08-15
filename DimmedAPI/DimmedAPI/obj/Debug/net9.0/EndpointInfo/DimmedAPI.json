@@ -5704,6 +5704,53 @@
         }
       }
     },
+    "/api/EntryRequest/{entryRequestId}/reloadAssemblyDis": {
+      "get": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "entryRequestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReloadAssemblyDisResponseDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReloadAssemblyDisResponseDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReloadAssemblyDisResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/EntryRequestAssembly": {
       "get": {
         "tags": [
@@ -19450,6 +19497,31 @@
           },
           "isActive": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReloadAssemblyDisResponseDTO": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "entryRequestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "validationMessages": {
+            "type": "string",
+            "nullable": true
+          },
+          "processedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false

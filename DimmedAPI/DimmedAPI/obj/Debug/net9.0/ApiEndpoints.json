@@ -2472,6 +2472,37 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
+    "Method": "ReloadAssemblyDis",
+    "RelativePath": "api/EntryRequest/{entryRequestId}/reloadAssemblyDis",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entryRequestId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.DTOs.ReloadAssemblyDisResponseDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
     "Method": "GetEntryRequestById",
     "RelativePath": "api/EntryRequest/{id}",
     "HttpMethod": "GET",

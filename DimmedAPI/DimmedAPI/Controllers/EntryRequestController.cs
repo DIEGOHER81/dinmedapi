@@ -3638,5 +3638,203 @@ namespace DimmedAPI.Controllers
                 });
             }
         }
+
+        /// <summary>
+        /// Actualizar cantidades de referencias de un pedido
+        /// </summary>
+        /// <param name="entryRequestId">Id del registro del pedido</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>True/False</returns>
+        [HttpGet("{entryRequestId}/reloadAssemblyToBC")]
+        public async Task<ActionResult<bool>> ReloadAssemblyToBC(int entryRequestId, [FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO ReloadAssemblyToBC ===");
+                Console.WriteLine($"EntryRequest ID: {entryRequestId}");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                if (entryRequestId <= 0)
+                {
+                    Console.WriteLine("Error: EntryRequestId debe ser mayor a 0");
+                    return BadRequest("El ID del pedido debe ser mayor a 0");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+
+                // Obtener la EntryRequest con todos sus detalles usando el endpoint existente
+                var entry = await companyContext.EntryRequests
+                    .Include(er => er.IdCustomerNavigation)
+                    .Include(er => er.InsurerTypeNavigation)
+                    .Include(er => er.EntryRequestDetails)
+                        .ThenInclude(erd => erd.IdEquipmentNavigation)
+                    .Include(er => er.EntryRequestAssembly)
+                    .FirstOrDefaultAsync(er => er.Id == entryRequestId);
+
+                if (entry == null)
+                {
+                    Console.WriteLine($"Error: EntryRequest con ID {entryRequestId} no encontrada");
+                    return NotFound($"No se encontró la solicitud de entrada con ID {entryRequestId}");
+                }
+
+                Console.WriteLine($"EntryRequest encontrada. Customer: {entry.IdCustomerNavigation?.Name}");
+
+                // Obtener conexión a Business Central
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                Console.WriteLine("Conexión a Business Central establecida");
+
+                ICollection<EntryRequestDetails> entryRequestDetails = entry.EntryRequestDetails;
+                List<EntryRequestAssembly> dataEquipment = new List<EntryRequestAssembly>();
+                List<EntryRequestAssembly> dataEquipmentAll = new List<EntryRequestAssembly>();
+
+                string sPriceList = string.Empty;
+                if (entry.priceGroup != null && entry.priceGroup != "")
+                {
+                    sPriceList = entry.priceGroup;
+                }
+                else if (entry.IdCustomerNavigation.IsSecondPriceList == true) //SUPLE TI: Valido si el cliente tiene mas de una lista de precios 
+                {
+                    CustomerPriceListResponseDTO finalList;
+                    List<CustomerPriceListResponseDTO> dataPriceList = await _customerPriceListBO.GetPriceListByCustomerIdAsync(entry.IdCustomerNavigation.Id);
+                    var value = dataPriceList.Where(list => list.InsurerType == entry.InsurerTypeNavigation?.description);
+                    if (value.Any())
+                    {
+                        finalList = value.FirstOrDefault();
+                        sPriceList = finalList.PriceGroup;
+                    }
+                    else
+                    {
+                        sPriceList = entry.IdCustomerNavigation.PriceGroup;
+                    }
+                }
+                else
+                {
+                    sPriceList = entry.IdCustomerNavigation.PriceGroup;
+                }
+
+                foreach (var detail in entryRequestDetails)
+                {
+                    List<EntryRequestAssembly> dataToDelete = new List<EntryRequestAssembly>();
+                    
+                    // Obtener ensamble V2 usando el endpoint existente
+                    dataEquipmentAll = await bcConn.GetEntryReqAssembly("lylassemblyV2", detail.IdEquipmentNavigation.Code, sPriceList);
+
+                    if (dataEquipmentAll != null)
+                    {
+                        bool insertNew = false;
+                        foreach (var e in dataEquipmentAll)
+                        {
+                            if (entry.EntryRequestAssembly != null && entry.EntryRequestAssembly.Any())
+                            {
+                                var assembly = entry.EntryRequestAssembly.ToList();
+                                if (assembly != null && assembly.Count() > 0)
+                                {
+                                    var dataAs = assembly.Find(x => x.Code == e.Code && x.EntryRequestDetailId == detail.Id && x.LineNo == e.LineNo);
+                                    if (assembly != null && dataAs != null)
+                                    {
+                                        if (e.ReservedQuantity != null)
+                                        {
+                                            dataAs.Quantity = e.Quantity;
+                                            dataAs.UnitPrice = e.UnitPrice;
+                                            dataAs.ReservedQuantity = e.ReservedQuantity;
+                                            dataAs.LowTurnover = e.LowTurnover;
+
+                                            companyContext.EntryRequestAssembly.Update(dataAs);
+                                        }
+                                    }
+                                    else
+                                        insertNew = true;
+                                }
+                                else
+                                    insertNew = true;
+                            }
+                            else
+                                insertNew = true;
+
+                            if (insertNew)
+                            {
+                                // Nuevo componente encontrado - aquí se podría implementar la lógica para insertar
+                                Console.WriteLine($"Nuevo componente encontrado: {e.Code}");
+                            }
+                        }
+                    }
+
+                    // Obtener ensamble usando el método existente
+                    dataEquipment = await bcConn.GetEntryReqAssembly("lylassembly", detail.IdEquipmentNavigation.Code, sPriceList);
+
+                    if (dataEquipment != null)
+                    {
+                        if (entry.EntryRequestAssembly != null && entry.EntryRequestAssembly.Any())
+                        {
+                            var assembly = entry.EntryRequestAssembly.ToList().FindAll(x => x.EntryRequestDetailId == detail.Id);
+                            foreach (var line in assembly)
+                            {
+                                var exist = dataEquipment.Find(x => x.Code == line.Code && x.Lot == line.Lot && x.LineNo == line.LineNo);
+                                if (exist != null)
+                                {
+                                    // Componente existe en el ensamble
+                                }
+                                else
+                                {
+                                    // Componente no existe - se podría marcar para eliminación
+                                    // dataToDelete.Add(line);
+                                }
+                            }
+                        }
+
+                        foreach (var e in dataEquipment)
+                        {
+                            try
+                            {
+                                var assembly = entry.EntryRequestAssembly.First(x => x.Code == e.Code && x.Lot == e.Lot && x.EntryRequestDetailId == detail.Id && x.LineNo == e.LineNo);
+                                if (assembly != null)
+                                {
+                                    assembly.ReservedQuantity = e.Quantity;
+                                    assembly.ShortDesc = e.ShortDesc;
+                                    assembly.Quantity = e.Quantity;
+                                    assembly.Quantity_ile = e.Quantity_ile;
+                                    assembly.Location_Code_ile = e.Location_Code_ile;
+                                    assembly.Invima = e.Invima;
+                                    assembly.UnitPrice = e.UnitPrice;
+                                    assembly.ExpirationDate = e.ExpirationDate;
+                                    assembly.LowTurnover = e.LowTurnover;
+
+                                    companyContext.EntryRequestAssembly.Update(assembly);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error actualizando ensamble {e.Code}: {ex.Message}");
+                            }
+                        }
+                    }
+                }
+
+                // Guardar cambios en la base de datos
+                await companyContext.SaveChangesAsync();
+                Console.WriteLine("Cambios guardados en la base de datos");
+
+                Console.WriteLine($"=== FIN ReloadAssemblyToBC ===");
+                return Ok(true);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en ReloadAssemblyToBC ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                Console.WriteLine("=== FIN ERROR ===");
+
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
     }
 } 

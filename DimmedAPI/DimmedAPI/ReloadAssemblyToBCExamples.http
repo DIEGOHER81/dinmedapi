@@ -1,0 +1,63 @@
+### ReloadAssemblyToBC API Examples
+
+### Actualizar cantidades de referencias de un pedido
+GET {{baseUrl}}/api/EntryRequest/10300/reloadAssemblyToBC?companyCode=COMP001
+Content-Type: application/json
+
+###
+
+### Actualizar cantidades de referencias de otro pedido
+GET {{baseUrl}}/api/EntryRequest/10301/reloadAssemblyToBC?companyCode=COMP001
+Content-Type: application/json
+
+###
+
+### Intentar actualizar sin companyCode (debe retornar 400)
+GET {{baseUrl}}/api/EntryRequest/10300/reloadAssemblyToBC
+Content-Type: application/json
+
+###
+
+### Intentar actualizar con companyCode vacío (debe retornar 400)
+GET {{baseUrl}}/api/EntryRequest/10300/reloadAssemblyToBC?companyCode=
+Content-Type: application/json
+
+###
+
+### Intentar actualizar con ID inválido (debe retornar 400)
+GET {{baseUrl}}/api/EntryRequest/0/reloadAssemblyToBC?companyCode=COMP001
+Content-Type: application/json
+
+###
+
+### Intentar actualizar con ID negativo (debe retornar 400)
+GET {{baseUrl}}/api/EntryRequest/-1/reloadAssemblyToBC?companyCode=COMP001
+Content-Type: application/json
+
+###
+
+### Intentar actualizar pedido inexistente (debe retornar 404)
+GET {{baseUrl}}/api/EntryRequest/999999/reloadAssemblyToBC?companyCode=COMP001
+Content-Type: application/json
+
+###
+
+### Actualizar pedido en otra compañía
+GET {{baseUrl}}/api/EntryRequest/10300/reloadAssemblyToBC?companyCode=COMP002
+Content-Type: application/json
+
+###
+
+### Actualizar pedido con diferentes IDs
+GET {{baseUrl}}/api/EntryRequest/1000/reloadAssemblyToBC?companyCode=COMP001
+Content-Type: application/json
+
+###
+
+GET {{baseUrl}}/api/EntryRequest/2000/reloadAssemblyToBC?companyCode=COMP001
+Content-Type: application/json
+
+###
+
+GET {{baseUrl}}/api/EntryRequest/3000/reloadAssemblyToBC?companyCode=COMP001
+Content-Type: application/json

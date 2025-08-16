@@ -3836,5 +3836,425 @@ namespace DimmedAPI.Controllers
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// Reportar consumo de pedido a BC, genera pedido de venta en BC
+        /// </summary>
+        /// <param name="data">Datos del registro con cantidades actualizadas</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>JsonResult Response</returns>
+        [HttpPost("update-quantities")]
+        public async Task<ActionResult<UpdateQuantitysResponseDTO>> UpdateQuantitys([FromBody] UpdateQuantitysRequestDTO data, [FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO UpdateQuantitys ===");
+                Console.WriteLine($"EntryRequest ID: {data.Id}");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+
+                var response = new UpdateQuantitysResponseDTO
+                {
+                    IsSuccess = true,
+                    Result = null,
+                    Message = "Cantidades actualizadas exitosamente"
+                };
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest(new UpdateQuantitysResponseDTO
+                    {
+                        IsSuccess = false,
+                        Message = "El código de compañía es requerido"
+                    });
+                }
+
+                if (data == null || data.Id <= 0)
+                {
+                    Console.WriteLine("Error: Datos inválidos");
+                    return BadRequest(new UpdateQuantitysResponseDTO
+                    {
+                        IsSuccess = false,
+                        Message = "Los datos del pedido son requeridos y el ID debe ser mayor a 0"
+                    });
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+
+                // Validar que existe el EntryRequest
+                var entryRequest = await companyContext.EntryRequests
+                    .Include(er => er.IdCustomerNavigation)
+                    .Include(er => er.InsurerTypeNavigation)
+                    .Include(er => er.EntryRequestDetails)
+                        .ThenInclude(erd => erd.IdEquipmentNavigation)
+                    .Include(er => er.EntryRequestAssembly)
+                    .Include(er => er.EntryRequestComponents)
+                    .FirstOrDefaultAsync(er => er.Id == data.Id);
+
+                if (entryRequest == null)
+                {
+                    Console.WriteLine($"Error: EntryRequest con ID {data.Id} no encontrada");
+                    return NotFound(new UpdateQuantitysResponseDTO
+                    {
+                        IsSuccess = false,
+                        Message = $"No se encontró la solicitud de entrada con ID {data.Id}"
+                    });
+                }
+
+                Console.WriteLine($"EntryRequest encontrada. Customer: {entryRequest.IdCustomerNavigation?.Name}");
+
+                // 1. Validar cantidades usando el método existente
+                Console.WriteLine("Validando cantidades del pedido...");
+                var validationResult = await ReloadAssemblyDis(data.Id, companyCode);
+                
+                if (validationResult.Result is not OkObjectResult validationOkResult)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Error al validar cantidades del pedido";
+                    return BadRequest(response);
+                }
+
+                var validationResponse = validationOkResult.Value as ReloadAssemblyDisResponseDTO;
+                if (validationResponse == null || !validationResponse.Success)
+                {
+                    response.IsSuccess = false;
+                    response.Message = validationResponse?.Message ?? "Error en validación";
+                    return BadRequest(response);
+                }
+
+                // Si hay mensajes de validación, significa que hay problemas
+                if (!string.IsNullOrEmpty(validationResponse.ValidationMessages))
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Las Cantidades del pedido no coinciden. " + validationResponse.ValidationMessages;
+                    
+                    // Registrar en el historial
+                    await companyContext.EntryRequestHistory.AddAsync(new EntryRequestHistory
+                    {
+                        Description = "Cantidades no coinciden",
+                        Information = validationResponse.ValidationMessages.Length > 500 ? 
+                            validationResponse.ValidationMessages.Substring(0, 500) : 
+                            validationResponse.ValidationMessages,
+                        DateLoad = DateTime.Now,
+                        UserId = 1, // TODO: Obtener del contexto de autenticación
+                        Location = "WEB",
+                        IdEntryRequest = data.Id
+                    });
+                    
+                    await companyContext.SaveChangesAsync();
+                    return BadRequest(response);
+                }
+
+                // 2. Actualizar cantidades de ensambles si se proporcionan
+                if (data.EntryRequestAssembly != null && data.EntryRequestAssembly.Count > 0)
+                {
+                    Console.WriteLine("Actualizando cantidades de ensambles...");
+                    foreach (var assemblyUpdate in data.EntryRequestAssembly)
+                    {
+                        var assembly = entryRequest.EntryRequestAssembly?.FirstOrDefault(x => x.Id == assemblyUpdate.Id);
+                        if (assembly != null && assembly.QuantityConsumed != assemblyUpdate.QuantityConsumed)
+                        {
+                            assembly.QuantityConsumed = assemblyUpdate.QuantityConsumed;
+                            companyContext.EntryRequestAssembly.Update(assembly);
+                            
+                            Console.WriteLine($"Ensemble {assembly.Code} actualizado: {assembly.QuantityConsumed}");
+                        }
+                    }
+                }
+
+                // 3. Actualizar cantidades de componentes si se proporcionan
+                if (data.EntryRequestComponents != null && data.EntryRequestComponents.Count > 0)
+                {
+                    Console.WriteLine("Actualizando cantidades de componentes...");
+                    foreach (var componentUpdate in data.EntryRequestComponents)
+                    {
+                        var component = entryRequest.EntryRequestComponents?.FirstOrDefault(x => x.Id == componentUpdate.Id);
+                        if (component != null && component.QuantityConsumed != componentUpdate.QuantityConsumed)
+                        {
+                            component.QuantityConsumed = componentUpdate.QuantityConsumed;
+                            companyContext.EntryRequestComponents.Update(component);
+                            
+                            Console.WriteLine($"Componente {component.ItemNo} actualizado: {component.QuantityConsumed}");
+                        }
+                    }
+                }
+
+                // Guardar cambios en la base de datos
+                await companyContext.SaveChangesAsync();
+                Console.WriteLine("Cambios guardados en la base de datos");
+
+                // 4. Actualizar cantidades desde BC usando el método existente
+                Console.WriteLine("Actualizando cantidades desde Business Central...");
+                var reloadResult = await ReloadAssemblyToBC(data.Id, companyCode);
+                
+                if (reloadResult.Result is not OkObjectResult reloadOkResult)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Error al actualizar cantidades desde Business Central";
+                    return BadRequest(response);
+                }
+
+                var reloadSuccess = reloadOkResult.Value as bool?;
+                if (reloadSuccess != true)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Error al actualizar cantidades desde Business Central";
+                    return BadRequest(response);
+                }
+
+                // 5. Obtener el EntryRequest actualizado con todos los detalles
+                var updatedEntryRequest = await GetByIdWithDetails(data.Id, companyCode);
+                
+                if (updatedEntryRequest.Result is not OkObjectResult updatedOkResult)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Error al obtener datos actualizados del pedido";
+                    return BadRequest(response);
+                }
+
+                var finalEntryRequest = updatedOkResult.Value as EntryRequests;
+                if (finalEntryRequest == null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Error al obtener datos actualizados del pedido";
+                    return BadRequest(response);
+                }
+
+                // 6. Enviar a Business Central
+                Console.WriteLine("Enviando pedido a Business Central...");
+                string result = "";
+                
+                if (finalEntryRequest.IdCancelReason == null || finalEntryRequest.IdCancelReason == 0)
+                {
+                    // Eliminar pedido de venta existente en BC
+                    await DeleteSalesHeaderFromBC(finalEntryRequest.Id, companyCode);
+                    
+                    // Enviar nuevo pedido a BC
+                    result = await SendEntryRequestToBC(finalEntryRequest, companyCode);
+                }
+                else
+                {
+                    result = "PEDIDO REGISTRADO";
+                    await DeleteSalesHeaderFromBC(finalEntryRequest.Id, companyCode);
+                }
+
+                if (result != "PEDIDO REGISTRADO" && !result.Contains("PEDIDO ACTUALIZADO"))
+                {
+                    response.IsSuccess = false;
+                    response.Message = result;
+                    
+                    // Registrar error en el historial
+                    await companyContext.EntryRequestHistory.AddAsync(new EntryRequestHistory
+                    {
+                        Description = "Error al enviar a Business Central",
+                        Information = result.Length > 500 ? result.Substring(0, 500) : result,
+                        DateLoad = DateTime.Now,
+                        UserId = 1, // TODO: Obtener del contexto de autenticación
+                        Location = "WEB",
+                        IdEntryRequest = data.Id
+                    });
+                    
+                    await companyContext.SaveChangesAsync();
+                    return BadRequest(response);
+                }
+
+                // 7. Actualizar estado del pedido
+                finalEntryRequest.Status = "CREPORTED"; // EntryReqStates.CREPORTED
+                companyContext.EntryRequests.Update(finalEntryRequest);
+                await companyContext.SaveChangesAsync();
+
+                // 8. Registrar en el historial
+                await companyContext.EntryRequestHistory.AddAsync(new EntryRequestHistory
+                {
+                    Description = "Reportar consumo Pedido",
+                    Information = result.Length > 500 ? result.Substring(0, 500) : result,
+                    DateLoad = DateTime.Now,
+                    UserId = 1, // TODO: Obtener del contexto de autenticación
+                    Location = "WEB",
+                    IdEntryRequest = data.Id
+                });
+
+                // 9. Registrar en el log de eventos
+                await companyContext.EventLog.AddAsync(new EventLog
+                {
+                    Description = "Reportar consumo Pedido",
+                    Information = $"Pedido: {data.Id}",
+                    DateLoad = DateTime.Now,
+                    UserId = 1, // TODO: Obtener del contexto de autenticación
+                    IdModule = 14
+                });
+
+                await companyContext.SaveChangesAsync();
+
+                response.Result = new
+                {
+                    EntryRequestId = data.Id,
+                    Status = finalEntryRequest.Status,
+                    Result = result,
+                    UpdatedAt = DateTime.Now
+                };
+
+                Console.WriteLine($"=== FIN UpdateQuantitys ===");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en UpdateQuantitys ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                Console.WriteLine("=== FIN ERROR ===");
+
+                return StatusCode(500, new UpdateQuantitysResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = $"Error interno del servidor: {ex.Message}"
+                });
+            }
+        }
+
+        /// <summary>
+        /// Eliminar pedido de venta de Business Central
+        /// </summary>
+        /// <param name="entryRequestId">ID del pedido</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>True si se eliminó correctamente</returns>
+        private async Task<bool> DeleteSalesHeaderFromBC(int entryRequestId, string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"Eliminando pedido de venta de BC: P-{entryRequestId}");
+                
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                string dataJson = $"{{\"inputJson\":\"{{\\\"No\\\":\\\"P-{entryRequestId}\\\"}}\"}}";
+                
+                var response = await bcConn.BCRQ_postDeletePD("LyLSupleDeleteSalesOrder_DeleteSalesOrder", "", dataJson);
+                
+                if (!response.IsSuccessful)
+                {
+                    Console.WriteLine($"Error eliminando pedido de BC: {response.StatusCode} - {response.Content}");
+                    return false;
+                }
+                
+                Console.WriteLine("Pedido eliminado de BC correctamente");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en DeleteSalesHeaderFromBC: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Enviar pedido a Business Central
+        /// </summary>
+        /// <param name="entry">Objeto EntryRequests con los datos del pedido</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>Texto, PEDIDO REGISTRADO|ERROR</returns>
+        private async Task<string> SendEntryRequestToBC(EntryRequests entry, string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"Enviando pedido {entry.Id} a Business Central...");
+                
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                
+                // Construir objeto para BC
+                var entryRequestApiBC_Header = new EntryRequestApiBC_Header
+                {
+                    documentNo = $"P-{entry.Id}",
+                    customerNo = entry.IdCustomerNavigation?.No ?? "",
+                    branch = entry.Branch?.Name ?? "",
+                    address = entry.DeliveryAddress ?? "",
+                    dateIni = entry.DeliveryDate.ToString("yyyy-MM-dd"),
+                    dateSrg = entry.SurgeryInit?.ToString("yyyy-MM-dd") ?? "",
+                    dateEnd = entry.SurgeryEnd?.ToString("yyyy-MM-dd") ?? "",
+                    idMedic = entry.IdMedicNavigation?.Identification ?? "",
+                    idPatient = entry.IdPatientNavigation?.Identification ?? "",
+                    orderNo = entry.PurchaseOrder ?? "",
+                    insurer = entry.InsurerNavigation?.Name ?? "",
+                    insurerType = entry.InsurerTypeNavigation?.description ?? "",
+                    listPrice = entry.priceGroup ?? entry.IdCustomerNavigation?.PriceGroup ?? "",
+                    patientName = $"{entry.IdPatientNavigation?.Name} {entry.IdPatientNavigation?.LastName}",
+                    medicalrecordPatient = entry.IdPatientNavigation?.MedicalRecord ?? "",
+                    medicName = $"{entry.IdMedicNavigation?.Name} {entry.IdMedicNavigation?.LastName}",
+                    salesline = new List<EntryRequestApiBC_Line>(),
+                    salesassembly = new List<EntryRequestApiBC_Assembly>()
+                };
+
+                // Procesar ensambles
+                if (entry.EntryRequestAssembly != null && entry.EntryRequestAssembly.Any())
+                {
+                    foreach (var assembly in entry.EntryRequestAssembly.Where(a => a.QuantityConsumed > 0))
+                    {
+                        entryRequestApiBC_Header.salesassembly.Add(new EntryRequestApiBC_Assembly
+                        {
+                            documentNo = $"P-{entry.Id}",
+                            itemNo = assembly.Code,
+                            lot = assembly.Lot ?? "",
+                            quantityConsumed = assembly.QuantityConsumed ?? 0,
+                            lineNo = assembly.LineNo ?? 0,
+                            assemblyNo = assembly.AssemblyNo,
+                            idWeb = assembly.Id
+                        });
+                    }
+                }
+
+                // Procesar componentes
+                if (entry.EntryRequestComponents != null && entry.EntryRequestComponents.Any())
+                {
+                    foreach (var component in entry.EntryRequestComponents.Where(c => c.QuantityConsumed > 0))
+                    {
+                        entryRequestApiBC_Header.salesline.Add(new EntryRequestApiBC_Line
+                        {
+                            documentNo = $"P-{entry.Id}",
+                            itemNo = component.ItemNo,
+                            quantity = (int)(component.Quantity ?? 0),
+                            price = component.UnitPrice ?? 0,
+                            assemblyNo = component.AssemblyNo ?? "",
+                            quantityConsumed = component.QuantityConsumed ?? 0,
+                            locationCode = component.Warehouse ?? "",
+                            idWeb = component.Id,
+                            rowType = 1
+                        });
+
+                        entryRequestApiBC_Header.salesassembly.Add(new EntryRequestApiBC_Assembly
+                        {
+                            documentNo = $"P-{entry.Id}",
+                            itemNo = component.ItemNo,
+                            lot = component.Lot ?? "",
+                            quantityConsumed = component.QuantityConsumed ?? 0,
+                            idWeb = component.Id
+                        });
+                    }
+                }
+
+                // Verificar si hay consumos
+                if (!entryRequestApiBC_Header.salesline.Any() && !entryRequestApiBC_Header.salesassembly.Any())
+                {
+                    return "ERROR: El pedido no tiene consumos";
+                }
+
+                // Enviar a BC
+                var jsonEntry = System.Text.Json.JsonSerializer.Serialize(entryRequestApiBC_Header);
+                var response = await bcConn.BCRQ_post("lylsuplesalesheader?$expand=salesline,salesassembly", "", jsonEntry);
+                
+                if (!response.IsSuccessful)
+                {
+                    return $"ERROR: {response.Content}";
+                }
+                
+                Console.WriteLine("Pedido enviado a BC correctamente");
+                return "PEDIDO REGISTRADO";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en SendEntryRequestToBC: {ex.Message}");
+                return $"ERROR: {ex.Message}";
+            }
+        }
     }
 } 

@@ -64,6 +64,8 @@ namespace DimmedAPI
 
         public DbSet<FollowType> FollowType { get; set; }
 
+        public DbSet<EventLog> EventLog { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

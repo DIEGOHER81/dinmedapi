@@ -1,0 +1,142 @@
+### UpdateQuantitys - Reportar consumo de pedido a BC
+
+# Ejemplo 1: Actualizar cantidades de ensambles y componentes
+POST {{baseUrl}}/api/EntryRequest/update-quantities?companyCode=COMPANY001
+Content-Type: application/json
+
+{
+  "id": 10300,
+  "entryRequestAssembly": [
+    {
+      "id": 4733021,
+      "quantityConsumed": 1
+    },
+    {
+      "id": 4733022,
+      "quantityConsumed": 2
+    },
+    {
+      "id": 4733023,
+      "quantityConsumed": 1
+    }
+  ],
+  "entryRequestComponents": [
+    {
+      "id": 12345,
+      "quantityConsumed": 5
+    },
+    {
+      "id": 12346,
+      "quantityConsumed": 3
+    }
+  ]
+}
+
+###
+
+# Ejemplo 2: Actualizar solo ensambles
+POST {{baseUrl}}/api/EntryRequest/update-quantities?companyCode=COMPANY001
+Content-Type: application/json
+
+{
+  "id": 10300,
+  "entryRequestAssembly": [
+    {
+      "id": 4733021,
+      "quantityConsumed": 1
+    }
+  ]
+}
+
+###
+
+# Ejemplo 3: Actualizar solo componentes
+POST {{baseUrl}}/api/EntryRequest/update-quantities?companyCode=COMPANY001
+Content-Type: application/json
+
+{
+  "id": 10300,
+  "entryRequestComponents": [
+    {
+      "id": 12345,
+      "quantityConsumed": 2
+    }
+  ]
+}
+
+###
+
+# Ejemplo 4: Pedido sin cantidades (solo validación)
+POST {{baseUrl}}/api/EntryRequest/update-quantities?companyCode=COMPANY001
+Content-Type: application/json
+
+{
+  "id": 10300
+}
+
+###
+
+# Ejemplo 5: Pedido con ID inválido
+POST {{baseUrl}}/api/EntryRequest/update-quantities?companyCode=COMPANY001
+Content-Type: application/json
+
+{
+  "id": 0
+}
+
+###
+
+# Ejemplo 6: Sin companyCode
+POST {{baseUrl}}/api/EntryRequest/update-quantities
+Content-Type: application/json
+
+{
+  "id": 10300,
+  "entryRequestAssembly": [
+    {
+      "id": 4733021,
+      "quantityConsumed": 1
+    }
+  ]
+}
+
+###
+
+# Ejemplo 7: Pedido inexistente
+POST {{baseUrl}}/api/EntryRequest/update-quantities?companyCode=COMPANY001
+Content-Type: application/json
+
+{
+  "id": 99999,
+  "entryRequestAssembly": [
+    {
+      "id": 4733021,
+      "quantityConsumed": 1
+    }
+  ]
+}
+
+###
+
+# Ejemplo 8: Cantidades con valores decimales
+POST {{baseUrl}}/api/EntryRequest/update-quantities?companyCode=COMPANY001
+Content-Type: application/json
+
+{
+  "id": 10300,
+  "entryRequestAssembly": [
+    {
+      "id": 4733021,
+      "quantityConsumed": 1.5
+    }
+  ],
+  "entryRequestComponents": [
+    {
+      "id": 12345,
+      "quantityConsumed": 2.75
+    }
+  ]
+}
+
+###
+

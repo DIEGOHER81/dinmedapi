@@ -185,6 +185,51 @@ namespace DimmedAPI.Controllers
             return Ok(new { total, page, pageSize, data });
         }
 
+        // GET: api/equipment/summary-active?companyCode=xxx&page=1&pageSize=10&filter=xxx
+        [HttpGet("summary-active")]
+        public async Task<ActionResult<object>> GetSummaryActive(
+            [FromQuery] string companyCode,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string filter = null)
+        {
+            if (string.IsNullOrEmpty(companyCode))
+                return BadRequest("El código de compañía es requerido");
+            if (page < 1) page = 1;
+            if (pageSize < 1) pageSize = 10;
+
+            using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+            var query = companyContext.Equipment
+                .Where(e => e.Status != "Descontinuado")
+                .Select(e => new DTOs.SummaryEquipmentDTO
+                {
+                    Id = e.Id,
+                    Code = e.Code ?? string.Empty,
+                    Name = e.Name ?? string.Empty,
+                    ShortName = e.ShortName ?? string.Empty,
+                    Branch = e.Branch ?? string.Empty,
+                    Status = e.Status ?? string.Empty,
+                    Alert = e.Alert
+                });
+
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                var filterLower = filter.ToLower();
+                query = query.Where(e =>
+                    e.Code.ToLower().Contains(filterLower) ||
+                    e.Name.ToLower().Contains(filterLower)
+                );
+            }
+
+            var total = await query.CountAsync();
+            var data = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return Ok(new { total, page, pageSize, data });
+        }
+
         // GET: api/equipment/view/columns?companyCode=xxx
         [HttpGet("view/columns")]
         public async Task<ActionResult<object>> GetEquipmentViewColumns([FromQuery] string companyCode)

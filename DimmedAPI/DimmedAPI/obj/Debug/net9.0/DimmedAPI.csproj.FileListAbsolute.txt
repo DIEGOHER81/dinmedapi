@@ -519,7 +519,6 @@ D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\DimmedAPI.
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\DimmedAPI.genruntimeconfig.cache
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\ref\DimmedAPI.dll
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\compressed\qbpkwi2aqh-smq16dt7a0.gz
-D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\bin\Debug\net9.0\libwkhtmltox.dll
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\bin\Debug\net9.0\wkhtmltox.dll
 D:\dimmed\DEVDinmedAPI\dinmedapi\DimmedAPI\DimmedAPI\bin\Debug\net9.0\bin\Debug\net9.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll

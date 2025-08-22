@@ -4740,6 +4740,37 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EquipmentController",
+    "Method": "GetSummaryActive",
+    "RelativePath": "api/equipment/summary-active",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "filter",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EquipmentController",
     "Method": "GetEquipmentView",
     "RelativePath": "api/equipment/view",
     "HttpMethod": "GET",

@@ -13,20 +13,17 @@ namespace DimmedAPI.Services
     {
         private readonly IWebHostEnvironment _env;
         private readonly ICustomerBO _customerBO;
-        private readonly IEmployeeBO _employeeBO;
         private readonly IConverter _converter;
         private readonly IDynamicConnectionService _dynamicConnectionService;
 
         public PdfService(
             IWebHostEnvironment env,
             ICustomerBO customerBO,
-            IEmployeeBO employeeBO,
             IConverter converter,
             IDynamicConnectionService dynamicConnectionService)
         {
             _env = env;
             _customerBO = customerBO;
-            _employeeBO = employeeBO;
             _converter = converter;
             _dynamicConnectionService = dynamicConnectionService;
         }
@@ -247,8 +244,20 @@ namespace DimmedAPI.Services
                 if (entryRequests.IdAtcNavigation != null)
                     atcName = entryRequests.IdAtcNavigation.Name;
 
-                // Obtener información del cliente
-                Customer customer = await _customerBO.GetByIdAsync(entryRequests.IdCustomer);
+                // Obtener información del cliente usando el contexto dinámico de la compañía
+                Customer customer = null;
+                try
+                {
+                    var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                    customer = await companyContext.Customer
+                        .FirstOrDefaultAsync(c => c.Id == entryRequests.IdCustomer);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error obteniendo cliente con contexto dinámico: {ex.Message}");
+                    // Fallback al método tradicional si falla el contexto dinámico
+                    customer = await _customerBO.GetByIdAsync(entryRequests.IdCustomer);
+                }
 
                 // Configurar logo - usar el logo de la carpeta uploads/logos
                 var logoPath = Path.Combine(_env.WebRootPath, "uploads", "logos", "suplemedicos.png");
@@ -362,17 +371,13 @@ namespace DimmedAPI.Services
                 {
                     if (entryRequests.EntryRequestDetails != null && entryRequests.EntryRequestDetails.Count > 0)
                     {
-                        try
+                        var compAdData = entryRequests.EntryRequestDetails.FirstOrDefault(x => x.IsComponent == true);
+                        if (compAdData != null)
                         {
-                            var compAdData = entryRequests.EntryRequestDetails.First(x => x.IsComponent == true);
                             detailsHtml += "<tr HEIGHT=\"15\">";
                             detailsHtml += "<td class=\"table_info\"><strong> " + compAdData.IdEquipmentNavigation?.Code + "</strong></td>";
                             detailsHtml += "<td colspan='" + colspan + "' class=\"table_info\"><strong> " + compAdData.IdEquipmentNavigation?.Name + " </strong></td>";
                             detailsHtml += "</tr>";
-                        }
-                        catch (Exception)
-                        {
-                            // Componente no encontrado, continuar
                         }
                     }
 
@@ -494,6 +499,34 @@ namespace DimmedAPI.Services
                 // Generar detalles de equipos
                 if (entryRequests.EntryRequestDetails != null && entryRequests.EntryRequestDetails.Count() > 0)
                 {
+                    // Cargar los assemblies para cada detalle si no están cargados
+                    try
+                    {
+                        var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                        var dataAssembly = await companyContext.EntryRequestAssembly
+                            .Where(x => x.EntryRequestId == entryRequests.Id)
+                            .OrderByDescending(x => x.QuantityConsumed)
+                            .ToListAsync();
+
+                        Console.WriteLine($"DEBUG: Assemblies encontrados para EntryRequest {entryRequests.Id}: {dataAssembly?.Count ?? 0}");
+
+                        if (dataAssembly != null && dataAssembly.Any())
+                        {
+                            // Asignar los assemblies a cada detalle correspondiente
+                            foreach (var detail in entryRequests.EntryRequestDetails)
+                            {
+                                detail.EntryRequestAssembly = dataAssembly
+                                    .Where(y => y.EntryRequestDetailId == detail.Id)
+                                    .ToList();
+                                Console.WriteLine($"DEBUG: Detail ID {detail.Id} - Assemblies asignados: {detail.EntryRequestAssembly?.Count ?? 0}");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"ERROR: No se pudieron cargar los assemblies: {ex.Message}");
+                    }
+
                     int totalBoxes = 0;
                     foreach (var detail in entryRequests.EntryRequestDetails)
                     {
@@ -510,6 +543,13 @@ namespace DimmedAPI.Services
                                 detailsHtml += "<td class=\"table_info\" style='border-right:1px solid #000000;'>" + detail.IdEquipmentNavigation?.NoBoxes + "</td>";
                                 detailsHtml += "</tr>";
 
+                                // Debug: Verificar si EntryRequestAssembly está cargado
+                                Console.WriteLine($"DEBUG: Detail ID {detail.Id} - EntryRequestAssembly is null: {detail.EntryRequestAssembly == null}");
+                                if (detail.EntryRequestAssembly != null)
+                                {
+                                    Console.WriteLine($"DEBUG: Detail ID {detail.Id} - EntryRequestAssembly count: {detail.EntryRequestAssembly.Count}");
+                                }
+                                
                                 if (detail.EntryRequestAssembly != null && detail.EntryRequestAssembly.Any())
                                 {
                                     detailsHtml += "<tr HEIGHT=\"15\">";
@@ -1679,109 +1719,80 @@ namespace DimmedAPI.Services
         {
             try
             {
-                // CSS específico para DinkToPdf que mejora el manejo de saltos de página
+                // CSS simplificado para DinkToPdf que evita saltos inesperados
                 var pageBreakCss = @"
                     <style>
-                        /* Estilos específicos para el footer que aseguran centrado */
+                        /* Estilos simplificados para el footer */
                         .page-footer {
                             width: 100% !important;
                             position: relative !important;
-                            bottom: 0 !important;
-                            margin: 0 !important;
+                            margin-top: 20px !important;
+                            margin-bottom: 10px !important;
                             padding: 10px 0 !important;
                             text-align: center !important;
                             font-size: 9px !important;
                             line-height: 1.2 !important;
                             page-break-inside: avoid !important;
                             break-inside: avoid !important;
-                            page-break-after: avoid !important;
-                            break-after: avoid !important;
                             background: white !important;
-                            z-index: 1000 !important;
                         }
 
                         .page-footer-content {
-                            width: 100% !important;
-                            text-align: center !important;
                             margin: 0 !important;
                             padding: 0 !important;
+                            text-align: center !important;
                             font-size: 8pt !important;
                             line-height: 1.0 !important;
                             color: #333 !important;
-                            font-weight: normal !important;
-                            display: block !important;
                         }
 
-                        /* Asegurar que el contenido del footer se centre */
-                        .page-footer-content br {
-                            display: block !important;
-                            margin: 2px 0 !important;
-                        }
-
-                        /* Estilos para el pagebreak */
+                        /* Estilos simplificados para el pagebreak */
                         .pagebreak {
                             page-break-before: always !important;
                             break-before: page !important;
-                            page-break-after: avoid !important;
-                            break-after: avoid !important;
-                            margin-top: 0 !important;
-                            margin-bottom: 0 !important;
-                            padding-top: 0 !important;
-                            padding-bottom: 0 !important;
+                            margin: 0 !important;
+                            padding: 0 !important;
                             height: 0 !important;
-                            overflow: hidden !important;
                             display: block !important;
                         }
                         
-                        /* Asegurar que las tablas no se dividan en páginas */
+                        /* Tablas */
                         table {
                             page-break-inside: avoid !important;
                             break-inside: avoid !important;
+                            width: 100% !important;
+                            margin: 0 !important;
+                            padding: 0 !important;
                         }
                         
-                        /* Asegurar que las filas de tabla no se dividan */
                         tr {
                             page-break-inside: avoid !important;
                             break-inside: avoid !important;
                         }
                         
-                        /* Asegurar que las celdas no se dividan */
                         td, th {
                             page-break-inside: avoid !important;
                             break-inside: avoid !important;
-                        }
-                        
-                        /* Forzar salto de página antes de elementos específicos */
-                        .force-page-break {
-                            page-break-before: always !important;
-                            break-before: page !important;
-                        }
-                        
-                        /* Evitar salto de página después de encabezados */
-                        h1, h2, h3, h4, h5, h6 {
-                            page-break-after: avoid !important;
-                            break-after: avoid !important;
+                            padding: 2px 4px !important;
+                            margin: 0 !important;
                         }
 
-                        /* Asegurar que el contenido principal no interfiera con el footer */
+                        /* Contenedor principal */
                         .tabla_principal {
-                            margin-bottom: 0.5in !important;
+                            margin-bottom: 20px !important;
                         }
 
                         /* Estilos específicos para impresión */
                         @media print {
-                            .page-footer {
-                                position: absolute !important;
-                                bottom: 0.1in !important;
-                                left: 0.5in !important;
-                                right: 0.5in !important;
-                                width: calc(100% - 1in) !important;
-                                text-align: center !important;
+                            body {
+                                margin: 0 !important;
+                                padding: 0 !important;
                             }
                             
-                            .page-footer-content {
-                                text-align: center !important;
-                                width: 100% !important;
+                            .page-footer {
+                                position: relative !important;
+                                margin-top: 20px !important;
+                                margin-bottom: 10px !important;
                             }
                         }
                     </style>
@@ -2134,19 +2145,21 @@ namespace DimmedAPI.Services
                             
                             /* Estilos para el footer */
                             .page-footer {
-                                position: fixed;
-                                bottom: 20px;
-                                left: 0;
-                                right: 0;
+                                position: relative;
+                                margin-top: 15px;
+                                margin-bottom: 5px;
                                 text-align: center;
-                                font-size: 9px;
-                                line-height: 1.2;
+                                font-size: 8px;
+                                line-height: 1.1;
                                 page-break-inside: avoid;
                             }
                             
-                            /* Forzar saltos de página */
-                            .page-break {
+                            /* Saltos de página simplificados */
+                            .pagebreak {
                                 page-break-before: always;
+                                margin: 0;
+                                padding: 0;
+                                height: 0;
                             }
                             
                             /* Evitar saltos de página en elementos importantes */

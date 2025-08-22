@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es-col">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remisión Optimizada - Sin Salto</title>
+    <style>
+        /* Estilos generales */
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 11px;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Estilos para pantalla */
+        @media screen {
+            body {
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+                margin: 20px;
+                background-color: #f5f5f5;
+            }
+            
+            .print-container {
+                background: white;
+                padding: 30px;
+                margin: 0 auto;
+                max-width: 800px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                border-radius: 5px;
+            }
+            
+            .print-button {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+                z-index: 1000;
+            }
+            
+            .print-button:hover {
+                background: #0056b3;
+            }
+        }
+
+        /* Estilos para impresión - OPTIMIZADOS */
+        @media print {
+            * {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 11px;
+            }
+
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                margin: 0;
+                padding: 0;
+            }
+
+            @page {
+                size: A4;
+                margin: 0.5in;
+            }
+
+            /* Pagebreak simplificado - SIN saltos inesperados */
+            .pagebreak {
+                page-break-before: always !important;
+                break-before: page !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 0 !important;
+                display: block !important;
+            }
+
+            /* Footer simplificado - SIN posicionamiento absoluto */
+            .page-footer {
+                width: 100%;
+                position: relative;
+                margin-top: 20px;
+                margin-bottom: 10px;
+                padding: 10px 0;
+                text-align: center;
+                font-size: 9px;
+                line-height: 1.2;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                background: white;
+            }
+
+            .page-footer-content {
+                margin: 0;
+                padding: 0;
+                text-align: center;
+                font-size: 8pt;
+                line-height: 1.0;
+                color: #333;
+            }
+
+            /* Contenedor principal */
+            .tabla_principal {
+                margin-bottom: 20px;
+            }
+
+            /* Tablas */
+            table {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            td, th {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                padding: 2px 4px !important;
+                margin: 0 !important;
+            }
+
+            /* Encabezados de tabla */
+            thead.report-header {
+                display: table-header-group;
+            }
+
+            /* Colores y estilos */
+            .azul {
+                background-color: #93C4F5 !important;
+                font-weight: bold;
+                width: 25%;
+            }
+
+            .azul10 {
+                background-color: #93C4F5 !important;
+                font-weight: bold;
+                width: 10%;
+            }
+
+            .bkColor {
+                background-color: #CCCCCC !important;
+                -webkit-print-color-adjust: exact;
+            }
+
+            /* Texto centrado */
+            .text_centro {
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            /* Remisión */
+            .remition {
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            /* Información de tabla */
+            .table_info {
+                text-align: center;
+                font-size: 10px;
+                padding: 2px 4px;
+                margin: 0;
+                border-bottom: 1px solid;
+                border-left: 1px solid;
+            }
+
+            /* Elementos de tabla */
+            .table_elements {
+                font-size: 10px;
+            }
+
+            /* Firmas */
+            .firma_field {
+                font-size: 10px;
+                padding: 0;
+                margin: 0;
+            }
+
+            .table_firmas_section {
+                text-align: center;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+
+            .line_firma {
+                width: 300px;
+                padding: 0;
+                margin: 0;
+            }
+
+            /* Bordes de tabla */
+            .tabla_derecha,
+            .tabla_izquierda {
+                border: 1px solid #000;
+            }
+
+            /* Elementos sin borde */
+            .element_border {
+                border: none !important;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* Negrita */
+            .negrita {
+                font-weight: bold;
+                font-size: 10px;
+                padding: 0;
+                margin: 0;
+            }
+
+            /* Opciones */
+            .opcion {
+                padding: 5px;
+                background-color: #93C4F5 !important;
+                border-radius: 10px;
+                text-align: left;
+            }
+
+            /* Yes/No options */
+            .yes_option,
+            .no_option {
+                text-align: center;
+                padding: 0;
+                margin: 0;
+            }
+
+            /* General table */
+            .general_table {
+                padding: 0;
+                margin: 0;
+            }
+
+            /* Details table */
+            .detailsTable td {
+                padding: 2px 4px;
+                margin: 0;
+            }
+
+            /* Header table */
+            .headerTable thead tr th, 
+            .headerTable tbody tr td {
+                border: 0.5px solid #000000;
+                padding: 2px 4px;
+                margin: 0;
+            }
+
+            /* Customer borders */
+            .customer_border,
+            .customer_name_border,
+            .patient_border,
+            .patient_name_border {
+                padding: 0;
+                margin: 0;
+            }
+
+            /* Border top */
+            .border_top {
+                border-top: 1px solid;
+            }
+
+            /* Tabla elementos */
+            .tabla_elementos {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* Tabla principal */
+            .tabla_principal {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* Ocultar botón de impresión */
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="print-container">
+        <button class="print-button" onclick="window.print()">
+            🖨️ Imprimir / Guardar PDF
+        </button>
+        
+        <div class="tabla_principal">
+            <!-- ENCABEZADO -->
+            <table class="table header general_table" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>
+                        <img src="https://supledemo.azurewebsites.net/template/img/logo.png" height="65" width="200" style="vertical-align: top;" /><br />
+                        <span style="margin-left:25px"><strong>Nit: 8110417843 </strong><br /><br /></span>
+                    </td>
+                    <td class="element_border remition negrita" scope="col" colspan="2" style="text-align: right; vertical-align: top;">REMISIÓN P-10183</td>
+                </tr>
+            </table>
+
+            <!-- INFORMACIÓN DEL CLIENTE Y PACIENTE -->
+            <table class="table header general_table" cellpadding="0" cellspacing="0" style="background-color: #f0f0f0;">
+                <tr>
+                    <td colspan="4" style="border-top: 2px solid #1C69A8;height: 50px;">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">Cliente Pagador</td>
+                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">SANCHEZ CASTAÑEDA LUZ ENITH</td>
+                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">Paciente:</td>
+                    <td scope="col" class="negrita element_border" style="text-align: left;border:none;">SU SEJ YORESKI. BUSTO TRUJILLO.</td>
+                </tr>
+                <tr>
+                    <td class="element_border p-0" style="text-align: left;border:none;">Nit:</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">31839940</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">Cédula Paciente:</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">1093300384</td>
+                </tr>
+                <tr>
+                    <td class="element_border p-0" style="text-align: left;border:none;">Dirección:</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">CR 37 5 B 2 69</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">Dir. Entrega:</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">CLI. COLOMBIA</td>
+                </tr>
+                <tr>
+                    <td class="element_border p-0" style="text-align: left;border:none;">Teléfono:</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">5585813</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">Nombre solicitante:</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">SANCHEZ CASTAÑEDA LUZ ENITH</td>
+                </tr>
+                <tr>
+                    <td class="element_border p-0" style="text-align: left;border:none;">Ciudad:</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">CALI</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">Doctor:</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">SIN A SIG A SIGNAR</td>
+                </tr>
+                <tr>
+                    <td class="element_border p-0"></td>
+                    <td class="element_border p-0"></td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">Orden de Compra:</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">344</td>
+                </tr>
+                <tr>
+                    <td class="element_border p-0"></td>
+                    <td class="element_border p-0"></td>
+                    <td class="element_border p-0" style="text-align: left;border:none;">Historia Clinica:</td>
+                    <td class="element_border p-0" style="text-align: left;border:none;"></td>
+                </tr>
+            </table>
+
+            <!-- TABLA DE FECHAS -->
+            <table class="table headerTable mt-2 tabla_elementos" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr HEIGHT="30">
+                        <th class="table_info">ASESOR TECNICO</th>
+                        <th class="table_info">FECHA DE ENTREGA </th>
+                        <th class="table_info">FECHA DE CIRUGÍA </th>
+                        <th class="table_info">HORA DE CIRUGÍA</th>
+                        <th class="table_info">FECHA DE RECOGIDA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr HEIGHT="30">
+                        <td class="table_info"></td>
+                        <td class="table_info">24/07/2025</td>
+                        <td class="table_info">25/07/2025</td>
+                        <td class="table_info">13:00</td>
+                        <td class="table_info">25/07/2025</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- DETALLES DE PRODUCTOS -->
+            <table class="table detailsTable tabla_elementos" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr HEIGHT="15">
+                        <td class="table_info"><strong>DQ SISTEMA RADIO DISTAL APTUS-20-MEDELLIN</strong></td>
+                        <td colspan="8" class="table_info"><strong>#Cajas 0</strong></td>
+                    </tr>
+                    <tr HEIGHT="15">
+                        <th class="negrita table_info">REF</th>
+                        <th class="negrita table_info" colspan="2">Descripción</th>
+                        <th style="font-size:8px;" class="negrita table_info">INVIMA</th>
+                        <th style="font-size:8px;" class="negrita table_info">LOTE</th>
+                        <th style="font-size:8px;" class="negrita table_info">F.Vencimiento</th>
+                        <th style="font-size:8px;" class="negrita table_info">Cant. LT</th>
+                        <th style="font-size:8px;" class="negrita table_info">Cant. Total</th>
+                        <th style="font-size:8px;border-right:1px solid #000000;" class="negrita table_info">Gasto</th>
+                    </tr>
+                    <tr HEIGHT="15">
+                        <td class="table_info">21102A-4750.75</td>
+                        <td class="table_info" style="text-align: left;" colspan="2"><strong>PLACA DE CORRECION Y FRAC EXTRA LARGA IZQ.20H</strong></td>
+                        <td class="table_info">2021DM-0007361-R1</td>
+                        <td class="table_info">22279117</td>
+                        <td class="table_info">31/12/2099</td>
+                        <td class="table_info">1</td>
+                        <td class="table_info"><strong>1</strong></td>
+                        <td class="table_info" style="border-right:1px solid #000000;"></td>
+                    </tr>
+                    <tr HEIGHT="15">
+                        <td class="table_info">21102A-4750.76</td>
+                        <td class="table_info" style="text-align: left;" colspan="2"><strong>PLACA DE CORRECION Y FRAC EXTRA LARGA DER.20H</strong></td>
+                        <td class="table_info">2021DM-0007361-R1</td>
+                        <td class="table_info">18185500</td>
+                        <td class="table_info">31/12/2099</td>
+                        <td class="table_info">1</td>
+                        <td class="table_info"><strong>1</strong></td>
+                        <td class="table_info" style="border-right:1px solid #000000;"></td>
+                    </tr>
+                    <tr HEIGHT="15">
+                        <td class="table_info">21102A-4750.77</td>
+                        <td class="table_info" style="text-align: left;" colspan="2"><strong>PLACA DE CORRECION Y FRAC EXTRA LARGA IZQ.25H</strong></td>
+                        <td class="table_info">2021DM-0007361-R1</td>
+                        <td class="table_info">16151040</td>
+                        <td class="table_info">31/12/2099</td>
+                        <td class="table_info">1</td>
+                        <td class="table_info"><strong>1</strong></td>
+                        <td class="table_info" style="border-right:1px solid #000000;"></td>
+                    </tr>
+                    <tr HEIGHT="15">
+                        <td class="table_info">21102A-4750.78</td>
+                        <td class="table_info" style="text-align: left;" colspan="2"><strong>PLACA DE CORRECION Y FRAC EXTRA LARGA DER.25H</strong></td>
+                        <td class="table_info">2021DM-0007361-R1</td>
+                        <td class="table_info">22289601</td>
+                        <td class="table_info">31/12/2099</td>
+                        <td class="table_info">1</td>
+                        <td class="table_info"><strong>1</strong></td>
+                        <td class="table_info" style="border-right:1px solid #000000;"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- PIE DE PÁGINA -->
+            <div class="page-footer">
+                <div class="page-footer-content">
+                    <br /> <br /> <br /> <br />
+                    MEDELLÍN: Cll 66A N. 43 - 02 Oficina 107 Centro Empresarial La Esmeralda. Itagüí Antioquia PBX (604) 3730700 Servicio al cliente: Telefono de Servicio 24 Horas: (604) 6049931 BOGOTA: (601) Calle 63 # 74B -42 Local 11. Telefono de Servicio 24 Horas: (601) 7440090<br /> 
+                    CALI: AVENIDA ROOSEVELT # 25 - 32.Telefono de Servicio 24 Horas: (602) 4850210 <br />
+                    BARRANQUILLA: Telefono de Servicio 24 Horas: (602)4850210 EMAIL servicioalcliente@diverquin.com.co <br /> 
+                    Somos una Empresa comprometida con el cuidado del medio Ambiente.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function printDocument() {
+            window.print();
+        }
+    </script>
+</body>
+</html>

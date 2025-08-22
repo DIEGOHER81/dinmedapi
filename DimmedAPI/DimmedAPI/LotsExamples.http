@@ -1,0 +1,39 @@
+### Consultar lotes disponibles
+GET {{baseUrl}}/api/Lots/available?companyCode=COMP001&itemCode=ITEM-001&locationCode=BODEGA01
+Content-Type: application/json
+
+###
+
+### Verificar configuración de compañía
+GET {{baseUrl}}/api/Lots/config?companyCode=COMP001
+Content-Type: application/json
+
+###
+
+### Consultar lotes disponibles - Error: Sin código de compañía
+GET {{baseUrl}}/api/Lots/available?itemCode=ITEM-001&locationCode=BODEGA01
+Content-Type: application/json
+
+###
+
+### Consultar lotes disponibles - Error: Sin código de artículo
+GET {{baseUrl}}/api/Lots/available?companyCode=COMP001&locationCode=BODEGA01
+Content-Type: application/json
+
+###
+
+### Consultar lotes disponibles - Error: Sin código de bodega
+GET {{baseUrl}}/api/Lots/available?companyCode=COMP001&itemCode=ITEM-001
+Content-Type: application/json
+
+###
+
+### Consultar lotes disponibles - Compañía diferente
+GET {{baseUrl}}/api/Lots/available?companyCode=COMP002&itemCode=ITEM-002&locationCode=BODEGA02
+Content-Type: application/json
+
+###
+
+### Verificar configuración - Compañía inexistente
+GET {{baseUrl}}/api/Lots/config?companyCode=COMP_INEXISTENTE
+Content-Type: application/json

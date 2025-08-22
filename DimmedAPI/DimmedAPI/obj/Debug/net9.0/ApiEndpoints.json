@@ -6132,6 +6132,58 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "DimmedAPI.Controllers.LotsController",
+    "Method": "GetAvailableLots",
+    "RelativePath": "api/Lots/available",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "itemCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "locationCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[DimmedAPI.DTOs.EntryRequestAssemblyResponseDTO, DimmedAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.LotsController",
+    "Method": "VerificarConfiguracionCompania",
+    "RelativePath": "api/Lots/config",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "DimmedAPI.Controllers.MedicController",
     "Method": "UpdateMedic",
     "RelativePath": "api/medic/ActualizarMedico/{id}",

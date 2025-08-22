@@ -24,5 +24,6 @@ namespace DimmedAPI.BO
         Task<List<EntryRequestComponents>> GetComponents(string method, string location, string stock, string salesCode);
         Task<List<EntryRequestComponents>> GetAssemblyLines(string method, string documentNo = null);
         Task<List<CustomerContact>> GetCustContListAsync(string method);
+        Task<List<EntryRequestAssembly>> GetLotsAdditionals(string method, string equipmentId, string locationCode);
     }
 }

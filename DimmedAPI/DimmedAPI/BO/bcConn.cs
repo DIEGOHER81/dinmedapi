@@ -884,6 +884,87 @@ namespace DimmedAPI.BO
             }
             throw new Exception($"Error obteniendo términos de pago: {response.ErrorMessage}");
         }
+
+        /// <summary>
+        /// Consultar lotes disponibles de referencia
+        /// </summary>
+        /// <param name="ItemCode">Referencia</param>
+        /// <param name="locationCode">Bodega</param>
+        /// <returns>Lista de EntryRequestAssembly con información de lotes</returns>
+        public async Task<List<EntryRequestAssembly>> GetLotsAdditionals(string method, string equipmentId, string locationCode)
+        {
+            try
+            {
+                List<EntryRequestAssembly> lData = new List<EntryRequestAssembly>();
+                var response = await BCRQ(method, "?$filter=(itemNo eq '" + equipmentId + "') and (locationCodeile eq '" + locationCode + "')");
+                var resValues = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response.Content);
+                IEnumerable<object> data = JsonConvert.DeserializeObject(resValues["value"].ToString());
+
+                EntryRequestAssembly entryRequestAssembly = new EntryRequestAssembly();
+                if (data != null)
+                {
+                    foreach (dynamic row in data)
+                    {
+                        if (row.lotNo != "")
+                        {
+                            entryRequestAssembly = new EntryRequestAssembly();
+                            entryRequestAssembly.Code = row.itemNo;
+                            entryRequestAssembly.Lot = row.lotNo;
+                            entryRequestAssembly.ReservedQuantity = row.reservedQuantityile;
+                            entryRequestAssembly.Location_Code_ile = row.locationCodeile;
+                            entryRequestAssembly.Quantity_ile = row.quantityile;
+
+                            try
+                            {
+                                if (row.rsClasifRegistro != null)
+                                    entryRequestAssembly.RSClasifRegistro = row.rsClasifRegistro;
+                                else
+                                    entryRequestAssembly.RSClasifRegistro = "";
+                            }
+                            catch (Exception)
+                            {
+                                entryRequestAssembly.RSClasifRegistro = "";
+                            }
+
+                            try
+                            {
+                                if (row.rsFechaVencimiento != null && row.rsFechaVencimiento != "0001-01-01")
+                                {
+                                    string dateString = row.rsFechaVencimiento.ToString();
+                                    string[] dataDatestring = dateString.Split("-");
+                                    DateTime dateTime = new DateTime(int.Parse(dataDatestring[0]), int.Parse(dataDatestring[1]), int.Parse(dataDatestring[2]));
+                                    entryRequestAssembly.RSFechaVencimiento = dateTime;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                            }
+
+                            if (row.expirationDate != "" && row.expirationDate != "0001-01-01")
+                            {
+                                string dateString = row.expirationDate.ToString();
+                                string[] dataDatestring = dateString.Split("-");
+                                DateTime dateTime = new DateTime(int.Parse(dataDatestring[0]), int.Parse(dataDatestring[1]), int.Parse(dataDatestring[2]));
+                                entryRequestAssembly.ExpirationDate = dateTime;
+                            }
+                            else
+                            {
+                                DateTime dateTime;
+                                DateTime.TryParse("2999-01-01", out dateTime);
+                                entryRequestAssembly.ExpirationDate = dateTime;
+                            }
+
+                            lData.Add(entryRequestAssembly);
+                        }
+                    }
+                }
+                return lData;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 
     public class TokenResponse

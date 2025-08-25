@@ -1,6 +1,22 @@
-# Ignorar compilados .NET
-DimmedAPI/DimmedAPI/bin/
-DimmedAPI/DimmedAPI/obj/
-*.dll
-*.exe
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+Debug/
+Release/
+[Bb]uild/
+artifacts/
+
+# Archivos temporales
+*.vsidx
+*.db-shm
+*.db-wal
+*.cache
+*.log
 *.pdb

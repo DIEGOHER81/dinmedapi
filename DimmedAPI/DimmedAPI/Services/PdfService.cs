@@ -175,7 +175,7 @@ namespace DimmedAPI.Services
                 {
                     ColorMode = ColorMode.Color,
                     Orientation = Orientation.Portrait,
-                    PaperSize = PaperKind.A4,
+                    PaperSize = PaperKind.Letter,
                     Margins = new MarginSettings { Top = 10, Bottom = 10, Left = 10, Right = 10 }
                     // NO especificar Out para que retorne bytes en lugar de guardar en archivo
                 };

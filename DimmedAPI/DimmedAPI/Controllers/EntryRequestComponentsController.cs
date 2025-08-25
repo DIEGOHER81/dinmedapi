@@ -442,7 +442,7 @@ namespace DimmedAPI.Controllers
         /// <param name="pageSize">Tamaño de página (opcional, por defecto 50, máximo 200)</param>
         /// <returns>Lista de componentes con información detallada de cantidades</returns>
         [HttpGet("consultar-cantidades-disponibilidad")]
-        [OutputCache(Tags = [cacheTag], Duration = 120)] // Cache por 2 minutos
+        //[OutputCache(Tags = [cacheTag], Duration = 120)] // Cache por 2 minutos
         public async Task<IActionResult> ConsultarCantidadesDisponibilidad(
             [FromQuery] string companyCode,
             [FromQuery] string? location = null,

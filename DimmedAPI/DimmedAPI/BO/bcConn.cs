@@ -528,10 +528,27 @@ namespace DimmedAPI.BO
             {
                 List<ItemsBC> lData = new List<ItemsBC>();
                 ItemsBC item = null;
-                var response = await BCRQ(method, "");
                 string dataNext = "";
                 do
                 {                 
+                    RestResponse response;
+                    
+                    if (string.IsNullOrEmpty(dataNext))
+                    {
+                        // Primera llamada
+                        response = await BCRQ(method, "");
+                    }
+                    else
+                    {
+                        // Llamadas de paginación - usar la URL completa del nextLink
+                        var token = await BCRQ_GETTOKEN();
+                        var client = new RestClient(dataNext);
+                        var request = new RestRequest();
+                        request.AddHeader("Authorization", $"Bearer {token}");
+                        request.AddHeader("Accept", "application/json");
+                        response = await client.ExecuteAsync(request);
+                    }
+                    
                     var resValues = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response.Content);
                     IEnumerable<object> data = JsonConvert.DeserializeObject(resValues["value"].ToString());
 
@@ -540,6 +557,10 @@ namespace DimmedAPI.BO
                         if (resValues["@odata.nextLink"] != null)
                         {
                             dataNext = resValues["@odata.nextLink"].ToString();
+                        }
+                        else
+                        {
+                            dataNext = "";
                         }
                     }
                     catch (Exception)
@@ -563,7 +584,7 @@ namespace DimmedAPI.BO
                             lData.Add(item);
                         }
                     }
-                } while (dataNext != "");
+                } while (!string.IsNullOrEmpty(dataNext));
 
                 return lData;
             }
@@ -672,27 +693,35 @@ namespace DimmedAPI.BO
                 {
                     try
                     {
-                        // Construir filtro dinámicamente basado en los parámetros proporcionados
-                        var filterConditions = new List<string>();
+                        RestResponse response;
                         
-                        // Siempre filtrar por cantidad mayor a 0
-                        filterConditions.Add("quantity ne 0");
-                        
-                        // Agregar filtro de salesCode solo si se proporciona
-                        if (!string.IsNullOrEmpty(salesCode))
+                        if (string.IsNullOrEmpty(dataNext))
                         {
-                            filterConditions.Add("salesCode eq '" + salesCode + "'");
+                            // Primera llamada - construir filtro
+                            var filterConditions = new List<string>();
+                            
+                            // Siempre filtrar por cantidad mayor a 0
+                            filterConditions.Add("quantity ne 0");
+                            
+                            // Agregar filtro de salesCode solo si se proporciona
+                            if (!string.IsNullOrEmpty(salesCode))
+                            {
+                                filterConditions.Add("salesCode eq '" + salesCode + "'");
+                            }
+                            
+                            var filter = string.Join(" and ", filterConditions);
+                            response = await BCRQ(method, filter);
                         }
-                        
-                        var filterurl = "?$filter=" + string.Join(" and ", filterConditions);
-                        
-                        if(dataNext != "")
+                        else
                         {
-                            string[] dataurl = dataNext.Split("?$filter=");
-                            filterurl = "?$filter=" + dataurl[1];
+                            // Llamadas de paginación - usar la URL completa del nextLink
+                            var token = await BCRQ_GETTOKEN();
+                            var client = new RestClient(dataNext);
+                            var request = new RestRequest();
+                            request.AddHeader("Authorization", $"Bearer {token}");
+                            request.AddHeader("Accept", "application/json");
+                            response = await client.ExecuteAsync(request);
                         }
-                        
-                        var response = await BCRQ(method, filterurl);
                         
                         if (!response.IsSuccessful)
                         {
@@ -713,6 +742,10 @@ namespace DimmedAPI.BO
                             if (resValues["@odata.nextLink"] != null)
                             {
                                 dataNext = resValues["@odata.nextLink"].ToString();
+                            }
+                            else
+                            {
+                                dataNext = "";
                             }
                         }
                         catch (Exception)
@@ -805,24 +838,32 @@ namespace DimmedAPI.BO
                 string dataNext = "";
                 do
                 {
-                    // Construir filtro dinámicamente basado en los parámetros proporcionados
-                    var filterConditions = new List<string>();
+                    RestResponse response;
                     
-                    // Agregar filtro de documento solo si se proporciona
-                    if (!string.IsNullOrEmpty(documentNo))
+                    if (string.IsNullOrEmpty(dataNext))
                     {
-                        filterConditions.Add("documentNo eq '" + documentNo + "'");
+                        // Primera llamada - construir filtro
+                        var filterConditions = new List<string>();
+                        
+                        // Agregar filtro de documento solo si se proporciona
+                        if (!string.IsNullOrEmpty(documentNo))
+                        {
+                            filterConditions.Add("documentNo eq '" + documentNo + "'");
+                        }
+                        
+                        var filter = filterConditions.Count > 0 ? string.Join(" and ", filterConditions) : "";
+                        response = await BCRQ(method, filter);
                     }
-                    
-                    var filterurl = filterConditions.Count > 0 ? "?$filter=" + string.Join(" and ", filterConditions) : "";
-                    
-                    if(dataNext != "")
+                    else
                     {
-                        string[] dataurl = dataNext.Split("?$filter=");
-                        filterurl = "?$filter=" + dataurl[1];
+                        // Llamadas de paginación - usar la URL completa del nextLink
+                        var token = await BCRQ_GETTOKEN();
+                        var client = new RestClient(dataNext);
+                        var request = new RestRequest();
+                        request.AddHeader("Authorization", $"Bearer {token}");
+                        request.AddHeader("Accept", "application/json");
+                        response = await client.ExecuteAsync(request);
                     }
-                    
-                    var response = await BCRQ(method, filterurl);
                     var resValues = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(response.Content);
                     IEnumerable<object> data = JsonConvert.DeserializeObject(resValues["value"].ToString());
 
@@ -831,6 +872,10 @@ namespace DimmedAPI.BO
                         if (resValues["@odata.nextLink"] != null)
                         {
                             dataNext = resValues["@odata.nextLink"].ToString();
+                        }
+                        else
+                        {
+                            dataNext = "";
                         }
                     }
                     catch (Exception)
@@ -864,7 +909,7 @@ namespace DimmedAPI.BO
                             lData.Add(reqcomponents);
                         }
                     }
-                } while (dataNext != "");         
+                } while (!string.IsNullOrEmpty(dataNext));         
               
                 return lData;
             }

@@ -876,6 +876,146 @@ namespace DimmedAPI.Controllers
         }
 
         /// <summary>
+        /// Lista componentes con información de disponibilidad y stock
+        /// </summary>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <param name="location">Bodega/Ubicación</param>
+        /// <param name="stock">Bodega de stock</param>
+        /// <param name="salesCode">Código de venta</param>
+        /// <param name="reference">Código de referencia del componente</param>
+        /// <param name="filter">Filtro de búsqueda por texto (opcional)</param>
+        /// <param name="page">Número de página (opcional, por defecto 1)</param>
+        /// <param name="pageSize">Tamaño de página (opcional, por defecto 50, máximo 200)</param>
+        /// <returns>Lista de componentes con información de disponibilidad y stock</returns>
+        [HttpGet("lista-Componentes")]
+        [OutputCache(Tags = [cacheTag], Duration = 120)] // Cache por 2 minutos
+        public async Task<IActionResult> ListaComponentes(
+            [FromQuery] string companyCode,
+            [FromQuery] string? location = null,
+            [FromQuery] string? stock = null,
+            [FromQuery] string? salesCode = null,
+            [FromQuery] string? reference = null,
+            [FromQuery] string? filter = null,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 50)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                // Validar parámetros de paginación
+                if (page < 1) page = 1;
+                if (pageSize < 1) pageSize = 50;
+                if (pageSize > 200) pageSize = 200;
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                
+                // Crear un EntryRequestComponentsBO con el contexto específico de la compañía
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var componentsBO = new EntryRequestComponentsBO(companyContext, bcConn);
+                
+                // Obtener componentes con información de cantidades
+                var componentes = await componentsBO.GetComponentsAsync(location, stock, salesCode);
+                
+                // Validar que componentes no sea null
+                if (componentes == null)
+                {
+                    return Ok(new
+                    {
+                        totalComponentes = 0,
+                        componentesConStock = 0,
+                        componentesSinStock = 0,
+                        componentes = new List<object>(),
+                        paginacion = new
+                        {
+                            paginaActual = page,
+                            tamañoPagina = pageSize,
+                            totalPaginas = 0,
+                            totalElementos = 0
+                        }
+                    });
+                }
+                
+                // Si se proporciona una referencia específica, filtrar por ella
+                if (!string.IsNullOrEmpty(reference))
+                {
+                    componentes = componentes.Where(c => c.ItemNo == reference || c.ItemName.Contains(reference)).ToList();
+                }
+
+                // Aplicar filtro de búsqueda por texto
+                if (!string.IsNullOrEmpty(filter))
+                {
+                    var filterLower = filter.ToLower();
+                    componentes = componentes.Where(c => 
+                        (c.ItemNo != null && c.ItemNo.ToLower().Contains(filterLower)) ||
+                        (c.ItemName != null && c.ItemName.ToLower().Contains(filterLower)) ||
+                        (c.SystemId != null && c.SystemId.ToLower().Contains(filterLower)) ||
+                        (c.Warehouse != null && c.Warehouse.ToLower().Contains(filterLower)) ||
+                        (c.AssemblyNo != null && c.AssemblyNo.ToLower().Contains(filterLower)) ||
+                        (c.shortDesc != null && c.shortDesc.ToLower().Contains(filterLower))
+                    ).ToList();
+                }
+
+                // Aplicar paginación
+                var totalElementos = componentes.Count;
+                var totalPaginas = (int)Math.Ceiling((double)totalElementos / pageSize);
+                var elementosPaginados = componentes
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                // Agregar información adicional de disponibilidad
+                var componentesConDisponibilidad = elementosPaginados.Select(c => new
+                {
+                    id = c.Id,
+                    itemNo = c.ItemNo,
+                    itemName = c.ItemName,
+                    warehouse = c.Warehouse,
+                    quantity = c.Quantity ?? 0,
+                    unitPrice = c.UnitPrice ?? 0,
+                    systemId = c.SystemId,
+                    disponibilidad = new
+                    {
+                        cantidadDisponible = c.Quantity ?? 0,
+                        cantidadReservada = c.QuantityConsumed ?? 0,
+                        cantidadNeta = (c.Quantity ?? 0) - (c.QuantityConsumed ?? 0),
+                        tieneStock = (c.Quantity ?? 0) > 0,
+                        requiereReposicion = (c.Quantity ?? 0) <= 5, // Umbral configurable
+                        estadoInventario = GetEstadoInventario(c.Quantity ?? 0)
+                    }
+                }).ToList();
+
+                return Ok(new
+                {
+                    totalComponentes = totalElementos,
+                    componentesConStock = componentes.Count(c => (c.Quantity ?? 0) > 0),
+                    componentesSinStock = componentes.Count(c => (c.Quantity ?? 0) <= 0),
+                    componentes = componentesConDisponibilidad,
+                    paginacion = new
+                    {
+                        paginaActual = page,
+                        tamañoPagina = pageSize,
+                        totalPaginas = totalPaginas,
+                        totalElementos = totalElementos
+                    }
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                var detalle = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return BadRequest(new { mensaje = "Error al consultar lista de componentes", detalle });
+            }
+        }
+
+        /// <summary>
         /// Determina el estado del inventario basado en la cantidad disponible
         /// </summary>
         /// <param name="cantidad">Cantidad disponible</param>

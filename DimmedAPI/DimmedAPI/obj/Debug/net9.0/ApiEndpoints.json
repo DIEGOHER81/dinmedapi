@@ -4050,6 +4050,57 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
+    "Method": "ListaComponentes",
+    "RelativePath": "api/EntryRequestComponents/lista-Componentes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "location",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "stock",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "salesCode",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "reference",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "filter",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",
     "Method": "GetLocales",
     "RelativePath": "api/EntryRequestComponents/locales",
     "HttpMethod": "GET",

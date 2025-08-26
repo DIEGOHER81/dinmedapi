@@ -709,6 +709,27 @@ namespace DimmedAPI.BO
                                 filterConditions.Add("salesCode eq '" + salesCode + "'");
                             }
                             
+                            // Agregar filtro de location/stock si se proporcionan
+                            if (!string.IsNullOrEmpty(location) || !string.IsNullOrEmpty(stock))
+                            {
+                                var locationConditions = new List<string>();
+                                
+                                if (!string.IsNullOrEmpty(location))
+                                {
+                                    locationConditions.Add("location eq '" + location + "'");
+                                }
+                                
+                                if (!string.IsNullOrEmpty(stock))
+                                {
+                                    locationConditions.Add("location eq '" + stock + "'");
+                                }
+                                
+                                if (locationConditions.Count > 0)
+                                {
+                                    filterConditions.Add("(" + string.Join(" or ", locationConditions) + ")");
+                                }
+                            }
+                            
                             var filter = string.Join(" and ", filterConditions);
                             response = await BCRQ(method, filter);
                         }
@@ -763,29 +784,11 @@ namespace DimmedAPI.BO
                                 reqcomponents.Warehouse = v.location;
                                 reqcomponents.UnitPrice = v.unitPrice;
 
-                                // Solo aplicar filtro de ubicación si se proporcionan los parámetros
-                                if (!string.IsNullOrEmpty(location) || !string.IsNullOrEmpty(stock))
-                                {
-                                    if (v.location != location && v.location != stock)
-                                    {
-                                        reqcomponents.Quantity = 0;
-                                    }
-                                    else
-                                    {
-                                        if (v.reservedQuantity != null)
-                                            reqcomponents.Quantity = v.quantity - v.reservedQuantity;
-                                        else
-                                            reqcomponents.Quantity = v.quantity;
-                                    }
-                                }
+                                // Calcular cantidad disponible (quantity - reservedQuantity)
+                                if (v.reservedQuantity != null)
+                                    reqcomponents.Quantity = v.quantity - v.reservedQuantity;
                                 else
-                                {
-                                    // Si no se proporcionan filtros de ubicación, usar la cantidad completa
-                                    if (v.reservedQuantity != null)
-                                        reqcomponents.Quantity = v.quantity - v.reservedQuantity;
-                                    else
-                                        reqcomponents.Quantity = v.quantity;
-                                }
+                                    reqcomponents.Quantity = v.quantity;
 
                                 if (v.salesCode != null)
                                 {

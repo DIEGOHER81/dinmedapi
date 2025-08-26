@@ -701,6 +701,211 @@ namespace DimmedAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Crea un nuevo ensamble de solicitud de entrada
+        /// </summary>
+        /// <param name="assemblyDto">Datos del ensamble a crear</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>Ensemble creado</returns>
+        [HttpPost]
+        public async Task<ActionResult<EntryRequestAssemblyResponseDTO>> CreateEntryRequestAssembly(
+            [FromBody] EntryRequestAssemblyCreateDTO assemblyDto, 
+            [FromQuery] string companyCode)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                    return BadRequest("El código de compañía es requerido");
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+
+                // Validar que la solicitud de entrada existe
+                var entryRequest = await companyContext.EntryRequests
+                    .FirstOrDefaultAsync(er => er.Id == assemblyDto.EntryRequestId);
+
+                if (entryRequest == null)
+                    return BadRequest($"No se encontró la solicitud de entrada con ID {assemblyDto.EntryRequestId}");
+
+                // Validar que el detalle de la solicitud existe si se proporciona (excluyendo ID 0)
+                if (assemblyDto.EntryRequestDetailId.HasValue && assemblyDto.EntryRequestDetailId.Value > 0)
+                {
+                    var entryRequestDetail = await companyContext.EntryRequestDetails
+                        .FirstOrDefaultAsync(erd => erd.Id == assemblyDto.EntryRequestDetailId.Value);
+
+                    if (entryRequestDetail == null)
+                        return BadRequest($"No se encontró el detalle de la solicitud con ID {assemblyDto.EntryRequestDetailId.Value}");
+                    
+                    // Verificar que el detalle pertenece a la misma solicitud de entrada
+                    if (entryRequestDetail.IdEntryReq != assemblyDto.EntryRequestId)
+                    {
+                        return BadRequest($"El detalle de la solicitud con ID {assemblyDto.EntryRequestDetailId.Value} no pertenece a la solicitud de entrada {assemblyDto.EntryRequestId}");
+                    }
+                    
+                    Console.WriteLine($"EntryRequestDetail encontrado: ID={entryRequestDetail.Id}, IdEntryReq={entryRequestDetail.IdEntryReq}");
+                }
+
+                // Crear el nuevo ensamble
+                var newAssembly = new EntryRequestAssembly
+                {
+                    Code = assemblyDto.Code,
+                    Description = assemblyDto.Description,
+                    ShortDesc = assemblyDto.ShortDesc,
+                    Invima = assemblyDto.Invima,
+                    Lot = assemblyDto.Lot,
+                    Quantity = assemblyDto.Quantity,
+                    UnitPrice = assemblyDto.UnitPrice,
+                    AssemblyNo = assemblyDto.AssemblyNo,
+                    EntryRequestId = assemblyDto.EntryRequestId,
+                    EntryRequestDetailId = assemblyDto.EntryRequestDetailId > 0 ? assemblyDto.EntryRequestDetailId : null,
+                    QuantityConsumed = assemblyDto.QuantityConsumed ?? 0,
+                    ExpirationDate = assemblyDto.ExpirationDate,
+                    ReservedQuantity = assemblyDto.ReservedQuantity,
+                    Location_Code_ile = assemblyDto.Location_Code_ile,
+                    Classification = assemblyDto.Classification,
+                    Status = assemblyDto.Status ?? "Activo",
+                    LineNo = assemblyDto.LineNo,
+                    Position = assemblyDto.Position,
+                    Quantity_ile = assemblyDto.Quantity_ile,
+                    TaxCode = assemblyDto.TaxCode,
+                    LowTurnover = assemblyDto.LowTurnover,
+                    IsComponent = assemblyDto.IsComponent,
+                    RSFechaVencimiento = assemblyDto.RSFechaVencimiento,
+                    RSClasifRegistro = assemblyDto.RSClasifRegistro
+                };
+
+                // Log de los datos que se van a guardar para depuración
+                Console.WriteLine($"=== DATOS A GUARDAR ===");
+                Console.WriteLine($"Code: {newAssembly.Code}");
+                Console.WriteLine($"Description: {newAssembly.Description}");
+                Console.WriteLine($"AssemblyNo: {newAssembly.AssemblyNo}");
+                Console.WriteLine($"EntryRequestId: {newAssembly.EntryRequestId}");
+                Console.WriteLine($"EntryRequestDetailId: {newAssembly.EntryRequestDetailId}");
+                Console.WriteLine($"Quantity: {newAssembly.Quantity}");
+                Console.WriteLine($"Status: {newAssembly.Status}");
+                Console.WriteLine("=== FIN DATOS ===");
+
+                // Agregar a la base de datos
+                companyContext.EntryRequestAssembly.Add(newAssembly);
+                
+                // Intentar guardar con más información de depuración
+                try
+                {
+                    await companyContext.SaveChangesAsync();
+                    Console.WriteLine("Guardado exitoso en la base de datos");
+                }
+                catch (Exception saveEx)
+                {
+                    Console.WriteLine($"Error al guardar en SaveChangesAsync: {saveEx.Message}");
+                    throw; // Re-lanzar la excepción para que sea capturada por el catch principal
+                }
+
+                // Crear la respuesta
+                var response = new EntryRequestAssemblyResponseDTO
+                {
+                    Id = newAssembly.Id,
+                    Code = newAssembly.Code,
+                    Description = newAssembly.Description,
+                    ShortDesc = newAssembly.ShortDesc,
+                    Invima = newAssembly.Invima,
+                    Lot = newAssembly.Lot,
+                    Quantity = newAssembly.Quantity,
+                    UnitPrice = newAssembly.UnitPrice,
+                    AssemblyNo = newAssembly.AssemblyNo,
+                    EntryRequestId = newAssembly.EntryRequestId,
+                    EntryRequestDetailId = newAssembly.EntryRequestDetailId,
+                    QuantityConsumed = newAssembly.QuantityConsumed,
+                    ExpirationDate = newAssembly.ExpirationDate,
+                    Name = newAssembly.Name,
+                    ReservedQuantity = newAssembly.ReservedQuantity,
+                    Location_Code_ile = newAssembly.Location_Code_ile,
+                    Classification = newAssembly.Classification,
+                    Status = newAssembly.Status,
+                    LineNo = newAssembly.LineNo,
+                    Position = newAssembly.Position,
+                    Quantity_ile = newAssembly.Quantity_ile,
+                    TaxCode = newAssembly.TaxCode,
+                    LowTurnover = newAssembly.LowTurnover,
+                    IsComponent = newAssembly.IsComponent,
+                    RSFechaVencimiento = newAssembly.RSFechaVencimiento,
+                    RSClasifRegistro = newAssembly.RSClasifRegistro,
+                    LocationCode = newAssembly.LocationCode
+                };
+
+                return CreatedAtAction(nameof(GetEntryRequestAssembly), new { id = newAssembly.Id, companyCode }, response);
+            }
+            catch (Exception ex)
+            {
+                // Capturar detalles de la excepción interna para depuración
+                var errorMsg = $"Error al crear el ensamble: {ex.Message}";
+                if (ex.InnerException != null)
+                {
+                    errorMsg += $" | InnerException: {ex.InnerException.Message}";
+                }
+                if (ex.InnerException?.InnerException != null)
+                {
+                    errorMsg += $" | InnerMostException: {ex.InnerException.InnerException.Message}";
+                }
+                
+                // Log del error completo para depuración
+                Console.WriteLine($"=== ERROR en CreateEntryRequestAssembly ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Inner Exception StackTrace: {ex.InnerException.StackTrace}");
+                }
+                
+                Console.WriteLine("=== FIN ERROR ===");
+                
+                return BadRequest(new { mensaje = "Error al crear el ensamble", detalle = errorMsg });
+            }
+        }
+
+        /// <summary>
+        /// Endpoint temporal para verificar la existencia de EntryRequestDetail
+        /// </summary>
+        /// <param name="id">ID del detalle a verificar</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>Información del detalle</returns>
+        [HttpGet("verify-detail/{id}")]
+        public async Task<IActionResult> VerifyEntryRequestDetail(int id, [FromQuery] string companyCode)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                    return BadRequest("El código de compañía es requerido");
+
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+
+                var detail = await companyContext.EntryRequestDetails
+                    .Where(erd => erd.Id == id)
+                    .Select(erd => new
+                    {
+                        erd.Id,
+                        erd.IdEntryReq,
+                        erd.IdEquipment,
+                        erd.CreateAt,
+                        erd.DateIni,
+                        erd.DateEnd,
+                        erd.status
+                    })
+                    .FirstOrDefaultAsync();
+
+                if (detail == null)
+                    return NotFound($"No se encontró el detalle con ID {id}");
+
+                return Ok(detail);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensaje = "Error al verificar el detalle", detalle = ex.Message });
+            }
+        }
+
         // Métodos helper para leer datos de forma segura
         private static string GetSafeString(IDataReader reader, string columnName)
         {

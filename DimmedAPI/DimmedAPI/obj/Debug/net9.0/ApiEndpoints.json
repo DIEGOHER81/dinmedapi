@@ -3587,6 +3587,37 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestAssemblyController",
+    "Method": "CreateEntryRequestAssembly",
+    "RelativePath": "api/EntryRequestAssembly",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "assemblyDto",
+        "Type": "DimmedAPI.DTOs.EntryRequestAssemblyCreateDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "DimmedAPI.DTOs.EntryRequestAssemblyResponseDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestAssemblyController",
     "Method": "GetEntryRequestAssembly",
     "RelativePath": "api/EntryRequestAssembly/{id}",
     "HttpMethod": "GET",
@@ -3789,6 +3820,27 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestAssemblyController",
+    "Method": "VerifyEntryRequestDetail",
+    "RelativePath": "api/EntryRequestAssembly/verify-detail/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestComponentsController",

@@ -5900,6 +5900,61 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": [
+          "EntryRequestAssembly"
+        ],
+        "parameters": [
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryRequestAssemblyCreateDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryRequestAssemblyCreateDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntryRequestAssemblyCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestAssemblyResponseDTO"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestAssemblyResponseDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntryRequestAssemblyResponseDTO"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/EntryRequestAssembly/{id}": {
@@ -6248,6 +6303,36 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/EntryRequestAssembly/verify-detail/{id}": {
+      "get": {
+        "tags": [
+          "EntryRequestAssembly"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -15328,6 +15413,144 @@
             "nullable": true
           },
           "locationCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntryRequestAssemblyCreateDTO": {
+        "required": [
+          "assemblyNo",
+          "code",
+          "description",
+          "entryRequestId",
+          "quantity"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "shortDesc": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          },
+          "invima": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "lot": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "minimum": 0,01,
+            "type": "number",
+            "format": "double"
+          },
+          "unitPrice": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "assemblyNo": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "entryRequestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "entryRequestDetailId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "quantityConsumed": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "expirationDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reservedQuantity": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "location_Code_ile": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "classification": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "lineNo": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "position": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "quantity_ile": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "taxCode": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "lowTurnover": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isComponent": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "rsFechaVencimiento": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "rsClasifRegistro": {
+            "maxLength": 100,
             "type": "string",
             "nullable": true
           }

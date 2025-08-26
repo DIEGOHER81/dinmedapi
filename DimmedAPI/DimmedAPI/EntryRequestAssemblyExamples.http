@@ -1,56 +1,106 @@
-### EntryRequestAssemblyAPI Examples
+### EntryRequestAssembly API Examples
 
-### Obtener todos los ensambles
+### 1. Obtener todos los ensambles
 GET {{baseUrl}}/api/EntryRequestAssembly?companyCode=COMP001
-Content-Type: application/json
 
-### Obtener ensamble por ID
+### 2. Obtener ensamble por ID
 GET {{baseUrl}}/api/EntryRequestAssembly/1?companyCode=COMP001
-Content-Type: application/json
 
-### Filtrar ensambles - por lote
-GET {{baseUrl}}/api/EntryRequestAssembly/filtro?companyCode=COMP001&lot=LOT123
-Content-Type: application/json
+### 3. Filtrar ensambles
+GET {{baseUrl}}/api/EntryRequestAssembly/filtro?companyCode=COMP001&lot=LOT123&entryRequestId=22
 
-### Filtrar ensambles - por código
-GET {{baseUrl}}/api/EntryRequestAssembly/filtro?companyCode=COMP001&code=ASSEMBLY-001
-Content-Type: application/json
-
-### Filtrar ensambles - por solicitud de entrada
-GET {{baseUrl}}/api/EntryRequestAssembly/filtro?companyCode=COMP001&entryRequestId=22
-Content-Type: application/json
-
-### Filtrar ensambles - múltiples criterios
-GET {{baseUrl}}/api/EntryRequestAssembly/filtro?companyCode=COMP001&lot=LOT123&entryRequestId=22&assemblyNo=EQ-001
-Content-Type: application/json
-
-### Obtener ensambles con detalles (solo consumidos > 0)
+### 4. Obtener ensambles con detalles
 GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/22/with-details?companyCode=COMP001&quantityConsumedFilter=greater
-Content-Type: application/json
 
-### Obtener ensambles con detalles (solo consumidos = 0)
-GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/22/with-details?companyCode=COMP001&quantityConsumedFilter=zero
-Content-Type: application/json
-
-### Obtener ensambles con detalles (todos)
-GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/22/with-details?companyCode=COMP001&quantityConsumedFilter=all
-Content-Type: application/json
-
-### Obtener componentes (solo consumidos > 0)
+### 5. Obtener componentes de solicitud
 GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/22/components?companyCode=COMP001&quantityConsumedFilter=greater
+
+### 6. Crear nuevo ensamble - Ejemplo básico
+POST {{baseUrl}}/api/EntryRequestAssembly?companyCode=COMP001
 Content-Type: application/json
 
-### Obtener componentes (solo consumidos = 0)
-GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/22/components?companyCode=COMP001&quantityConsumedFilter=zero
+{
+  "code": "ASSEMBLY-001",
+  "description": "Ensemble de prueba básico",
+  "quantity": 10.0,
+  "assemblyNo": "EQ-001",
+  "entryRequestId": 22
+}
+
+### 7. Crear nuevo ensamble - Ejemplo completo
+POST {{baseUrl}}/api/EntryRequestAssembly?companyCode=COMP001
 Content-Type: application/json
 
-### Obtener componentes (todos)
-GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/22/components?companyCode=COMP001&quantityConsumedFilter=all
+{
+  "code": "ASSEMBLY-002",
+  "description": "Ensemble de prueba completo",
+  "shortDesc": "Descripción corta del ensemble",
+  "invima": "INV123456",
+  "lot": "LOT789",
+  "quantity": 15.5,
+  "unitPrice": 250.75,
+  "assemblyNo": "EQ-002",
+  "entryRequestId": 22,
+  "entryRequestDetailId": 1,
+  "quantityConsumed": 0,
+  "expirationDate": "2024-12-31T00:00:00",
+  "reservedQuantity": 5.0,
+  "location_Code_ile": "LOC001",
+  "classification": "CLASE-A",
+  "status": "Activo",
+  "lineNo": 1,
+  "position": 1,
+  "quantity_ile": 12.0,
+  "taxCode": "IVA",
+  "lowTurnover": false,
+  "isComponent": false,
+  "rsFechaVencimiento": "2024-12-31T00:00:00",
+  "rsClasifRegistro": "REG-A"
+}
+
+### 8. Crear nuevo ensamble - Solo campos requeridos
+POST {{baseUrl}}/api/EntryRequestAssembly?companyCode=COMP001
 Content-Type: application/json
 
-### Ejemplos con diferentes IDs de solicitud
-GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/25/with-details?companyCode=COMP001
+{
+  "code": "ASSEMBLY-003",
+  "description": "Ensemble mínimo",
+  "quantity": 5.0,
+  "assemblyNo": "EQ-003",
+  "entryRequestId": 22
+}
+
+### 9. Crear nuevo ensamble - Con detalle de solicitud
+POST {{baseUrl}}/api/EntryRequestAssembly?companyCode=COMP001
 Content-Type: application/json
 
-GET {{baseUrl}}/api/EntryRequestAssembly/entry-request/30/components?companyCode=COMP002
+{
+  "code": "ASSEMBLY-004",
+  "description": "Ensemble con detalle",
+  "quantity": 8.0,
+  "assemblyNo": "EQ-004",
+  "entryRequestId": 22,
+  "entryRequestDetailId": 1,
+  "status": "Pendiente"
+}
+
+### 10. Crear nuevo ensamble - Sin detalle de solicitud (entryRequestDetailId = 0)
+POST {{baseUrl}}/api/EntryRequestAssembly?companyCode=COMP001
 Content-Type: application/json
+
+{
+  "code": "ASSEMBLY-005",
+  "description": "Ensemble sin detalle",
+  "quantity": 5.0,
+  "assemblyNo": "EQ-005",
+  "entryRequestId": 22,
+  "entryRequestDetailId": 0,
+  "status": "Activo"
+}
+
+### 11. Verificar detalle de solicitud (endpoint temporal)
+GET {{baseUrl}}/api/EntryRequestAssembly/verify-detail/807?companyCode=6c265367-24c4-ed11-9a88-002248e00201
+
+### Variables de entorno (para usar con REST Client en VS Code)
+# @baseUrl = https://localhost:7001
+# @baseUrl = http://localhost:5000

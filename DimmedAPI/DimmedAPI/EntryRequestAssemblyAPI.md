@@ -5,7 +5,7 @@ API para gestionar ensambles de solicitudes de entrada en la base de datos local
 ## Información General
 - **Tipo:** API Local (base de datos local)
 - **Base URL:** `/api/EntryRequestAssembly`
-- **Método:** Todos los endpoints son GET
+- **Método:** GET, POST
 - **Formato de respuesta:** JSON
 - **Base de datos:** SQL Server local
 
@@ -122,7 +122,78 @@ GET /api/EntryRequestAssembly/filtro?companyCode=COMP001&lot=LOT123&entryRequest
 
 ---
 
-### 5. Obtener componentes de solicitud
+### 5. Crear nuevo ensamble
+- **POST** `/api/EntryRequestAssembly?companyCode={companyCode}`
+- **Descripción:** Crea un nuevo ensamble de solicitud de entrada.
+- **Parámetros:**
+  - `companyCode` (query, requerido): Código de la compañía.
+- **Body (JSON):**
+```json
+{
+  "code": "ASSEMBLY-001",
+  "description": "Ensemble de prueba",
+  "shortDesc": "Descripción corta",
+  "invima": "INV123",
+  "lot": "LOT123",
+  "quantity": 10.0,
+  "unitPrice": 150.50,
+  "assemblyNo": "EQ-001",
+  "entryRequestId": 22,
+  "entryRequestDetailId": 1,
+  "quantityConsumed": 0,
+  "expirationDate": "2024-12-31T00:00:00",
+  "reservedQuantity": 5.0,
+  "location_Code_ile": "LOC001",
+  "classification": "CLASE-A",
+  "status": "Activo",
+  "lineNo": 1,
+  "position": 1,
+  "quantity_ile": 8.0,
+  "taxCode": "IVA",
+  "lowTurnover": false,
+  "isComponent": false,
+  "rsFechaVencimiento": "2024-12-31T00:00:00",
+  "rsClasifRegistro": "REG-A"
+}
+```
+
+**Nota:** Si `entryRequestDetailId` es 0 o null, se guardará como null en la base de datos.
+- **Respuesta exitosa:** 201 Created
+- **Respuesta de error:** 400 Bad Request
+- **Ejemplo de respuesta:**
+```json
+{
+  "id": 1,
+  "code": "ASSEMBLY-001",
+  "description": "Ensemble de prueba",
+  "shortDesc": "Descripción corta",
+  "invima": "INV123",
+  "lot": "LOT123",
+  "quantity": 10.0,
+  "unitPrice": 150.50,
+  "assemblyNo": "EQ-001",
+  "entryRequestId": 22,
+  "entryRequestDetailId": 1,
+  "quantityConsumed": 0,
+  "expirationDate": "2024-12-31T00:00:00",
+  "reservedQuantity": 5.0,
+  "location_Code_ile": "LOC001",
+  "classification": "CLASE-A",
+  "status": "Activo",
+  "lineNo": 1,
+  "position": 1,
+  "quantity_ile": 8.0,
+  "taxCode": "IVA",
+  "lowTurnover": false,
+  "isComponent": false,
+  "rsFechaVencimiento": "2024-12-31T00:00:00",
+  "rsClasifRegistro": "REG-A"
+}
+```
+
+---
+
+### 6. Obtener componentes de solicitud
 - **GET** `/api/EntryRequestAssembly/entry-request/{entryRequestId}/components?companyCode={companyCode}&quantityConsumedFilter={filter}`
 - **Descripción:** Obtiene componentes de solicitud de entrada usando SQL directo (equivalente a la segunda consulta SQL).
 - **Parámetros:**

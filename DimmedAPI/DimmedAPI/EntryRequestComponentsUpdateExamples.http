@@ -1,0 +1,81 @@
+### Actualizar todos los campos de un componente
+PATCH {{baseUrl}}/api/EntryRequestComponents/123/warehouse-lot-expiration?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "warehouse": "BODEGA01",
+  "expirationDate": "2024-12-31T00:00:00",
+  "lot": "LOT123456"
+}
+
+### Actualizar solo el warehouse
+PATCH {{baseUrl}}/api/EntryRequestComponents/123/warehouse-lot-expiration?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "warehouse": "BODEGA02"
+}
+
+### Actualizar solo la fecha de expiración
+PATCH {{baseUrl}}/api/EntryRequestComponents/123/warehouse-lot-expiration?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "expirationDate": "2025-06-30T00:00:00"
+}
+
+### Actualizar solo el lote
+PATCH {{baseUrl}}/api/EntryRequestComponents/123/warehouse-lot-expiration?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "lot": "NUEVO_LOTE_789"
+}
+
+### Establecer warehouse y lot como nulos
+PATCH {{baseUrl}}/api/EntryRequestComponents/123/warehouse-lot-expiration?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "warehouse": null,
+  "lot": null
+}
+
+### Establecer fecha de expiración como nula
+PATCH {{baseUrl}}/api/EntryRequestComponents/123/warehouse-lot-expiration?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "expirationDate": null
+}
+
+### Actualizar warehouse y lot, mantener expirationDate
+PATCH {{baseUrl}}/api/EntryRequestComponents/123/warehouse-lot-expiration?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "warehouse": "BODEGA_CENTRAL",
+  "lot": "LOTE_ESPECIAL"
+}
+
+### Error: Sin companyCode
+PATCH {{baseUrl}}/api/EntryRequestComponents/123/warehouse-lot-expiration
+Content-Type: application/json
+
+{
+  "warehouse": "BODEGA01"
+}
+
+### Error: Componente inexistente
+PATCH {{baseUrl}}/api/EntryRequestComponents/999999/warehouse-lot-expiration?companyCode=COMP001
+Content-Type: application/json
+
+{
+  "warehouse": "BODEGA01"
+}
+
+### Error: DTO vacío
+PATCH {{baseUrl}}/api/EntryRequestComponents/123/warehouse-lot-expiration?companyCode=COMP001
+Content-Type: application/json
+
+{}

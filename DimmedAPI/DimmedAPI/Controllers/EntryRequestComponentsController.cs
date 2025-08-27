@@ -876,6 +876,126 @@ namespace DimmedAPI.Controllers
         }
 
         /// <summary>
+        /// Actualiza los campos Warehouse, ExpirationDate y Lot de un componente específico
+        /// </summary>
+        /// <param name="id">ID del componente a actualizar</param>
+        /// <param name="updateDto">Datos de actualización</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>Resultado de la actualización</returns>
+        [HttpPatch("{id}/warehouse-lot-expiration")]
+        public async Task<ActionResult<UpdateResponseDTO>> UpdateWarehouseLotExpiration(
+            int id,
+            [FromBody] EntryRequestComponentsUpdateDTO updateDto,
+            [FromQuery] string companyCode)
+        {
+            try
+            {
+                Console.WriteLine($"=== INICIO UpdateWarehouseLotExpiration (EntryRequestComponents) ===");
+                Console.WriteLine($"ID del componente: {id}");
+                Console.WriteLine($"CompanyCode: {companyCode}");
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    Console.WriteLine("Error: CompanyCode está vacío");
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                if (updateDto == null)
+                {
+                    Console.WriteLine("Error: El DTO de actualización es nulo");
+                    return BadRequest("Los datos de actualización son requeridos");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                Console.WriteLine("Contexto de base de datos creado exitosamente");
+
+                // Buscar el componente por ID con manejo explícito de valores nulos
+                var component = await companyContext.EntryRequestComponents
+                    .FirstOrDefaultAsync(erc => erc.Id == id);
+
+                if (component == null)
+                {
+                    Console.WriteLine($"No se encontró el componente con ID: {id}");
+                    return NotFound($"No se encontró el componente con ID: {id}");
+                }
+
+                Console.WriteLine($"Componente encontrado: ID={component.Id}, ItemNo={component.ItemNo ?? "NULL"}");
+
+                // Guardar valores anteriores para logging
+                var previousWarehouse = component.Warehouse;
+                var previousExpirationDate = component.ExpirationDate;
+                var previousLot = component.Lot;
+
+                // Actualizar solo los campos proporcionados (permitiendo valores nulos)
+                if (updateDto.Warehouse != null)
+                {
+                    component.Warehouse = updateDto.Warehouse;
+                    Console.WriteLine($"Warehouse actualizado: {previousWarehouse} -> {component.Warehouse}");
+                }
+
+                if (updateDto.ExpirationDate.HasValue)
+                {
+                    component.ExpirationDate = updateDto.ExpirationDate.Value;
+                    Console.WriteLine($"ExpirationDate actualizado: {previousExpirationDate} -> {component.ExpirationDate}");
+                }
+                else if (updateDto.ExpirationDate == null)
+                {
+                    // Permitir establecer explícitamente como null
+                    component.ExpirationDate = null;
+                    Console.WriteLine($"ExpirationDate establecido como null: {previousExpirationDate} -> null");
+                }
+
+                if (updateDto.Lot != null)
+                {
+                    component.Lot = updateDto.Lot;
+                    Console.WriteLine($"Lot actualizado: {previousLot} -> {component.Lot}");
+                }
+
+                // Guardar los cambios
+                await companyContext.SaveChangesAsync();
+
+                Console.WriteLine($"Campos actualizados exitosamente");
+
+                // Invalidar caché después de actualizar
+                await _outputCacheStore.EvictByTagAsync(cacheTag, default);
+
+                var response = new UpdateResponseDTO
+                {
+                    Success = true,
+                    Message = "Campos Warehouse, ExpirationDate y Lot actualizados exitosamente",
+                    UpdatedAt = DateTime.UtcNow,
+                    Id = component.Id,
+                    UpdatedId = component.Id
+                };
+
+                Console.WriteLine("=== FIN UpdateWarehouseLotExpiration (EntryRequestComponents) ===");
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en UpdateWarehouseLotExpiration (EntryRequestComponents) ===");
+                Console.WriteLine($"Mensaje de error: {ex.Message}");
+                Console.WriteLine($"Tipo de excepción: {ex.GetType().Name}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                    Console.WriteLine($"Inner Exception StackTrace: {ex.InnerException.StackTrace}");
+                }
+                
+                Console.WriteLine("=== FIN ERROR ===");
+                return StatusCode(500, new UpdateResponseDTO
+                {
+                    Success = false,
+                    Message = $"Error interno del servidor: {ex.Message}",
+                    UpdatedAt = DateTime.UtcNow
+                });
+            }
+        }
+
+        /// <summary>
         /// Lista componentes con información de disponibilidad y stock
         /// </summary>
         /// <param name="companyCode">Código de la compañía</param>

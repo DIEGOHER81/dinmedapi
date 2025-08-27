@@ -4060,9 +4060,8 @@ namespace DimmedAPI.Controllers
                     return BadRequest(response);
                 }
 
-                // 7. Actualizar estado del pedido
-                finalEntryRequest.Status = "CREPORTED"; // EntryReqStates.CREPORTED
-                companyContext.EntryRequests.Update(finalEntryRequest);
+                // 7. Actualizar estado del pedido usando la entidad ya trackeada
+                entryRequest.Status = "CREPORTED"; // EntryReqStates.CREPORTED
                 await companyContext.SaveChangesAsync();
 
                 // 8. Registrar en el historial
@@ -4125,25 +4124,46 @@ namespace DimmedAPI.Controllers
         {
             try
             {
+                Console.WriteLine($"=== INICIO DeleteSalesHeaderFromBC ===");
                 Console.WriteLine($"Eliminando pedido de venta de BC: P-{entryRequestId}");
                 
                 var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
                 string dataJson = $"{{\"inputJson\":\"{{\\\"No\\\":\\\"P-{entryRequestId}\\\"}}\"}}";
                 
+                Console.WriteLine($"Data JSON para eliminación: {dataJson}");
+                
                 var response = await bcConn.BCRQ_postDeletePD("LyLSupleDeleteSalesOrder_DeleteSalesOrder", "", dataJson);
+                
+                Console.WriteLine($"Respuesta de eliminación - Status: {response.StatusCode}, Success: {response.IsSuccessful}");
+                Console.WriteLine($"Contenido de respuesta: {response.Content}");
                 
                 if (!response.IsSuccessful)
                 {
+                    // Si el error es "NotFound", significa que el pedido no existe en BC, lo cual es válido
+                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound || 
+                        response.Content.Contains("NotFound") || 
+                        response.Content.Contains("BadRequest_NotFound"))
+                    {
+                        Console.WriteLine($"Pedido P-{entryRequestId} no existe en BC (esto es normal para pedidos nuevos)");
+                        Console.WriteLine("=== FIN DeleteSalesHeaderFromBC ===");
+                        return true; // Consideramos esto como éxito
+                    }
+                    
                     Console.WriteLine($"Error eliminando pedido de BC: {response.StatusCode} - {response.Content}");
+                    Console.WriteLine("=== FIN DeleteSalesHeaderFromBC ===");
                     return false;
                 }
                 
                 Console.WriteLine("Pedido eliminado de BC correctamente");
+                Console.WriteLine("=== FIN DeleteSalesHeaderFromBC ===");
                 return true;
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"=== ERROR en DeleteSalesHeaderFromBC ===");
                 Console.WriteLine($"Error en DeleteSalesHeaderFromBC: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                Console.WriteLine("=== FIN ERROR ===");
                 return false;
             }
         }
@@ -4158,7 +4178,12 @@ namespace DimmedAPI.Controllers
         {
             try
             {
+                Console.WriteLine($"=== INICIO SendEntryRequestToBC ===");
                 Console.WriteLine($"Enviando pedido {entry.Id} a Business Central...");
+                Console.WriteLine($"Customer: {entry.IdCustomerNavigation?.Name}");
+                Console.WriteLine($"Details count: {entry.EntryRequestDetails?.Count ?? 0}");
+                Console.WriteLine($"Assemblies count: {entry.EntryRequestAssembly?.Count ?? 0}");
+                Console.WriteLine($"Components count: {entry.EntryRequestComponents?.Count ?? 0}");
                 
                 var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
                 
@@ -4185,11 +4210,45 @@ namespace DimmedAPI.Controllers
                     salesassembly = new List<EntryRequestApiBC_Assembly>()
                 };
 
-                // Procesar ensambles
+                Console.WriteLine($"Header construido - DocumentNo: {entryRequestApiBC_Header.documentNo}");
+
+                // Procesar detalles del pedido (EntryRequestDetails)
+                if (entry.EntryRequestDetails != null && entry.EntryRequestDetails.Any())
+                {
+                    Console.WriteLine("Procesando detalles del pedido...");
+                    foreach (var detail in entry.EntryRequestDetails)
+                    {
+                        Console.WriteLine($"Procesando detalle ID: {detail.Id}, Equipment: {detail.IdEquipmentNavigation?.Code}");
+                        
+                        // Agregar línea de venta para cada detalle
+                        entryRequestApiBC_Header.salesline.Add(new EntryRequestApiBC_Line
+                        {
+                            documentNo = $"P-{entry.Id}",
+                            itemNo = detail.IdEquipmentNavigation?.Code ?? "",
+                            quantity = 1, // Cantidad por defecto para detalles
+                            price = 0, // Precio por defecto para detalles
+                            assemblyNo = "", // Los detalles no tienen AssemblyNo
+                            quantityConsumed = 0, // Los detalles no tienen consumo directo
+                            locationCode = detail.IdEquipmentNavigation?.LocationCode ?? "", // Usar LocationCode del equipo
+                            idWeb = detail.Id,
+                            rowType = 0 // Tipo detalle
+                        });
+                        
+                        Console.WriteLine($"Línea agregada - ItemNo: {detail.IdEquipmentNavigation?.Code}, Quantity: 1");
+                    }
+                }
+
+                // Procesar ensambles con consumo
                 if (entry.EntryRequestAssembly != null && entry.EntryRequestAssembly.Any())
                 {
-                    foreach (var assembly in entry.EntryRequestAssembly.Where(a => a.QuantityConsumed > 0))
+                    Console.WriteLine("Procesando ensambles con consumo...");
+                    var assembliesWithConsumption = entry.EntryRequestAssembly.Where(a => a.QuantityConsumed > 0).ToList();
+                    Console.WriteLine($"Ensambles con consumo: {assembliesWithConsumption.Count}");
+                    
+                    foreach (var assembly in assembliesWithConsumption)
                     {
+                        Console.WriteLine($"Procesando ensamble ID: {assembly.Id}, Code: {assembly.Code}, QuantityConsumed: {assembly.QuantityConsumed}");
+                        
                         entryRequestApiBC_Header.salesassembly.Add(new EntryRequestApiBC_Assembly
                         {
                             documentNo = $"P-{entry.Id}",
@@ -4200,14 +4259,22 @@ namespace DimmedAPI.Controllers
                             assemblyNo = assembly.AssemblyNo,
                             idWeb = assembly.Id
                         });
+                        
+                        Console.WriteLine($"Ensemble agregado - ItemNo: {assembly.Code}, QuantityConsumed: {assembly.QuantityConsumed}");
                     }
                 }
 
-                // Procesar componentes
+                // Procesar componentes con consumo
                 if (entry.EntryRequestComponents != null && entry.EntryRequestComponents.Any())
                 {
-                    foreach (var component in entry.EntryRequestComponents.Where(c => c.QuantityConsumed > 0))
+                    Console.WriteLine("Procesando componentes con consumo...");
+                    var componentsWithConsumption = entry.EntryRequestComponents.Where(c => c.QuantityConsumed > 0).ToList();
+                    Console.WriteLine($"Componentes con consumo: {componentsWithConsumption.Count}");
+                    
+                    foreach (var component in componentsWithConsumption)
                     {
+                        Console.WriteLine($"Procesando componente ID: {component.Id}, ItemNo: {component.ItemNo}, QuantityConsumed: {component.QuantityConsumed}");
+                        
                         entryRequestApiBC_Header.salesline.Add(new EntryRequestApiBC_Line
                         {
                             documentNo = $"P-{entry.Id}",
@@ -4218,7 +4285,7 @@ namespace DimmedAPI.Controllers
                             quantityConsumed = component.QuantityConsumed ?? 0,
                             locationCode = component.Warehouse ?? "",
                             idWeb = component.Id,
-                            rowType = 1
+                            rowType = 1 // Tipo componente
                         });
 
                         entryRequestApiBC_Header.salesassembly.Add(new EntryRequestApiBC_Assembly
@@ -4229,32 +4296,60 @@ namespace DimmedAPI.Controllers
                             quantityConsumed = component.QuantityConsumed ?? 0,
                             idWeb = component.Id
                         });
+                        
+                        Console.WriteLine($"Componente agregado - ItemNo: {component.ItemNo}, QuantityConsumed: {component.QuantityConsumed}");
                     }
                 }
 
-                // Verificar si hay consumos
+                // Resumen final
+                Console.WriteLine($"=== RESUMEN ENVÍO A BC ===");
+                Console.WriteLine($"Total salesline: {entryRequestApiBC_Header.salesline.Count}");
+                Console.WriteLine($"Total salesassembly: {entryRequestApiBC_Header.salesassembly.Count}");
+                
+                foreach (var line in entryRequestApiBC_Header.salesline)
+                {
+                    Console.WriteLine($"SalesLine - ItemNo: {line.itemNo}, Quantity: {line.quantity}, QuantityConsumed: {line.quantityConsumed}, RowType: {line.rowType}");
+                }
+                
+                foreach (var assembly in entryRequestApiBC_Header.salesassembly)
+                {
+                    Console.WriteLine($"SalesAssembly - ItemNo: {assembly.itemNo}, QuantityConsumed: {assembly.quantityConsumed}, AssemblyNo: {assembly.assemblyNo}");
+                }
+
+                // Verificar si hay contenido para enviar
                 if (!entryRequestApiBC_Header.salesline.Any() && !entryRequestApiBC_Header.salesassembly.Any())
                 {
-                    return "ERROR: El pedido no tiene consumos";
+                    Console.WriteLine("ERROR: El pedido no tiene líneas ni ensambles para enviar");
+                    return "ERROR: El pedido no tiene líneas ni ensambles para enviar";
                 }
 
                 // Enviar a BC
                 var jsonEntry = System.Text.Json.JsonSerializer.Serialize(entryRequestApiBC_Header);
+                Console.WriteLine($"JSON a enviar: {jsonEntry}");
+                
                 var response = await bcConn.BCRQ_post("lylsuplesalesheader?$expand=salesline,salesassembly", "", jsonEntry);
+                
+                Console.WriteLine($"Respuesta de BC - Status: {response.StatusCode}, Success: {response.IsSuccessful}");
+                Console.WriteLine($"Contenido de respuesta: {response.Content}");
                 
                 if (!response.IsSuccessful)
                 {
+                    Console.WriteLine($"ERROR en respuesta de BC: {response.Content}");
                     return $"ERROR: {response.Content}";
                 }
                 
                 Console.WriteLine("Pedido enviado a BC correctamente");
+                Console.WriteLine("=== FIN SendEntryRequestToBC ===");
                 return "PEDIDO REGISTRADO";
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"=== ERROR en SendEntryRequestToBC ===");
                 Console.WriteLine($"Error en SendEntryRequestToBC: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                Console.WriteLine("=== FIN ERROR ===");
                 return $"ERROR: {ex.Message}";
             }
         }
     }
-} 
+}

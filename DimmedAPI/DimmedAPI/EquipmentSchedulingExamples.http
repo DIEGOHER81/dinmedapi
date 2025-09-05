@@ -1,0 +1,109 @@
+### Equipment Scheduling Validation API Examples
+
+### Variables
+@baseUrl = https://localhost:7001
+@companyCode = COMP001
+
+### 1. Validar Agendamiento - POST (Equipo Disponible)
+POST {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}
+Content-Type: application/json
+
+{
+  "idEquipment": 2,
+  "dateIni": "2025-08-23T00:00:00",
+  "dateEnd": "2025-08-25T23:59:59"
+}
+
+### 2. Validar Agendamiento - POST (Equipo No Disponible)
+POST {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}
+Content-Type: application/json
+
+{
+  "idEquipment": 2,
+  "dateIni": "2025-08-24T00:00:00",
+  "dateEnd": "2025-08-26T23:59:59"
+}
+
+### 3. Validar Agendamiento - GET (Equipo Disponible)
+GET {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}&idEquipment=2&dateIni=2025-08-23&dateEnd=2025-08-25
+
+### 4. Validar Agendamiento - GET (Equipo No Disponible)
+GET {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}&idEquipment=2&dateIni=2025-08-24&dateEnd=2025-08-26
+
+### 5. Validar Agendamiento - POST (Fechas Inválidas)
+POST {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}
+Content-Type: application/json
+
+{
+  "idEquipment": 2,
+  "dateIni": "2025-08-25T00:00:00",
+  "dateEnd": "2025-08-23T23:59:59"
+}
+
+### 6. Validar Agendamiento - POST (Equipo No Existe)
+POST {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}
+Content-Type: application/json
+
+{
+  "idEquipment": 99999,
+  "dateIni": "2025-08-23T00:00:00",
+  "dateEnd": "2025-08-25T23:59:59"
+}
+
+### 7. Validar Agendamiento - POST (Sin Código de Compañía)
+POST {{baseUrl}}/api/EquipmentScheduling/validate
+Content-Type: application/json
+
+{
+  "idEquipment": 2,
+  "dateIni": "2025-08-23T00:00:00",
+  "dateEnd": "2025-08-25T23:59:59"
+}
+
+### 8. Validar Agendamiento - POST (Body Vacío)
+POST {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}
+Content-Type: application/json
+
+{}
+
+### 9. Validar Agendamiento - GET (Fechas Inválidas)
+GET {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}&idEquipment=2&dateIni=2025-08-25&dateEnd=2025-08-23
+
+### 10. Validar Agendamiento - GET (Formato de Fecha Inválido)
+GET {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}&idEquipment=2&dateIni=invalid-date&dateEnd=2025-08-25
+
+### 11. Validar Agendamiento - GET (ID de Equipo Inválido)
+GET {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}&idEquipment=0&dateIni=2025-08-23&dateEnd=2025-08-25
+
+### 12. Validar Agendamiento - POST (Rango de Fechas Muy Amplio)
+POST {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}
+Content-Type: application/json
+
+{
+  "idEquipment": 2,
+  "dateIni": "2025-01-01T00:00:00",
+  "dateEnd": "2025-12-31T23:59:59"
+}
+
+### 13. Validar Agendamiento - POST (Rango de Fechas Muy Corto)
+POST {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}
+Content-Type: application/json
+
+{
+  "idEquipment": 2,
+  "dateIni": "2025-08-23T10:00:00",
+  "dateEnd": "2025-08-23T11:00:00"
+}
+
+### 14. Validar Agendamiento - POST (Mismo Día)
+POST {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}
+Content-Type: application/json
+
+{
+  "idEquipment": 2,
+  "dateIni": "2025-08-23T00:00:00",
+  "dateEnd": "2025-08-23T23:59:59"
+}
+
+### 15. Validar Agendamiento - GET (Mismo Día)
+GET {{baseUrl}}/api/EquipmentScheduling/validate?companyCode={{companyCode}}&idEquipment=2&dateIni=2025-08-23&dateEnd=2025-08-23

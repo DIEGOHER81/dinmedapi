@@ -1879,6 +1879,24 @@ namespace DimmedAPI.Controllers
             }
         }
 
+        private static string? ConcatenateEquiposYComponentes(string? equipos, string? componentes)
+        {
+            // Si ambos están vacíos o nulos, retornar null
+            if (string.IsNullOrWhiteSpace(equipos) && string.IsNullOrWhiteSpace(componentes))
+                return null;
+
+            // Si solo equipos tiene valor, retornar equipos
+            if (string.IsNullOrWhiteSpace(componentes))
+                return equipos?.Trim();
+
+            // Si solo componentes tiene valor, retornar componentes
+            if (string.IsNullOrWhiteSpace(equipos))
+                return componentes?.Trim();
+
+            // Si ambos tienen valor, concatenar con separador
+            return $"{equipos.Trim()} | {componentes.Trim()}";
+        }
+
         // GET: api/EntryRequest/basic/{id}
         [HttpGet("basic/{id}")]
         public async Task<IActionResult> GetEntryRequestBasic(int id, [FromQuery] string companyCode)
@@ -2255,7 +2273,7 @@ namespace DimmedAPI.Controllers
                         Branch = GetSafeString(reader, "Branch"),
                         IsRemLot = GetSafeBoolean(reader, "IsRemLot"),
                         ATCName = GetSafeString(reader, "ATCName"),
-                        equipos = GetSafeString(reader, "equipos"),
+                        equipos = ConcatenateEquiposYComponentes(GetSafeString(reader, "equipos"), GetSafeString(reader, "Componentes")),
                         Componentes = GetSafeString(reader, "Componentes"),
                         RemCustomer = GetSafeString(reader, "RemCustomer"),
                         ShortDesc = GetSafeString(reader, "ShortDesc")

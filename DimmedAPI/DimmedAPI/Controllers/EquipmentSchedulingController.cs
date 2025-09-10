@@ -22,11 +22,11 @@ namespace DimmedAPI.Controllers
         }
 
         /// <summary>
-        /// Valida si es permitido el agendamiento de un equipo en un rango de fechas específico
+        /// Valida si es permitido el agendamiento de un equipo en un rango de fechas específico y retorna todos los pedidos relacionados
         /// </summary>
         /// <param name="companyCode">Código de la compañía</param>
         /// <param name="request">Parámetros de validación (IdEquipment, DateIni, DateEnd)</param>
-        /// <returns>Resultado de la validación de agendamiento</returns>
+        /// <returns>Resultado de la validación de agendamiento con lista de pedidos relacionados</returns>
         [HttpPost("validate")]
         public async Task<ActionResult<EquipmentSchedulingValidationResponseDTO>> ValidateEquipmentScheduling(
             [FromQuery] string companyCode,
@@ -72,19 +72,21 @@ namespace DimmedAPI.Controllers
         }
 
         /// <summary>
-        /// Valida si es permitido el agendamiento de un equipo usando parámetros de query string
+        /// Valida si es permitido el agendamiento de un equipo usando parámetros de query string y retorna todos los pedidos relacionados
         /// </summary>
         /// <param name="companyCode">Código de la compañía</param>
         /// <param name="idEquipment">ID del equipo</param>
         /// <param name="dateIni">Fecha inicial (formato: yyyy-MM-dd)</param>
         /// <param name="dateEnd">Fecha final (formato: yyyy-MM-dd)</param>
-        /// <returns>Resultado de la validación de agendamiento</returns>
+        /// <param name="idEntryReq">ID del pedido a excluir de los relacionados (opcional)</param>
+        /// <returns>Resultado de la validación de agendamiento con lista de pedidos relacionados</returns>
         [HttpGet("validate")]
         public async Task<ActionResult<EquipmentSchedulingValidationResponseDTO>> ValidateEquipmentSchedulingGet(
             [FromQuery] string companyCode,
             [FromQuery] int idEquipment,
             [FromQuery] string dateIni,
-            [FromQuery] string dateEnd)
+            [FromQuery] string dateEnd,
+            [FromQuery] int? idEntryReq = null)
         {
             try
             {
@@ -113,7 +115,8 @@ namespace DimmedAPI.Controllers
                 {
                     IdEquipment = idEquipment,
                     DateIni = parsedDateIni,
-                    DateEnd = parsedDateEnd
+                    DateEnd = parsedDateEnd,
+                    IdEntryReq = idEntryReq
                 };
 
                 // Obtener el contexto de la base de datos específica de la compañía

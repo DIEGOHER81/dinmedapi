@@ -2,6 +2,7 @@ using DimmedAPI.DTOs;
 using DimmedAPI.Entidades;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DimmedAPI.BO
@@ -75,28 +76,133 @@ namespace DimmedAPI.BO
                     };
                 }
 
-                // Verificar si existe algún EntryRequestDetail que se superponga con el rango de fechas
-                var conflictingScheduling = await _context.EntryRequestDetails
-                    .FromSqlRaw(@"
-                        SELECT 
-                            Id,
-                            IdEntryReq,
-                            IdEquipment,
-                            CreateAt,
-                            DateIni,
-                            DateEnd,
-                            ISNULL(status, '') as status,
-                            DateLoadState,
-                            ISNULL(TraceState, '') as TraceState,
-                            IsComponent
-                        FROM EntryRequestDetails
-                        WHERE IdEquipment = {0}
-                          AND status = 'NUEVO'
-                          AND (
-                               {1} <= DateEnd
-                           AND {2} >= DateIni
-                          )", request.IdEquipment, request.DateIni, request.DateEnd)
-                    .FirstOrDefaultAsync();
+                // Obtener todos los EntryRequestDetails relacionados con el equipo en el rango de fechas
+                // Excluir el pedido actual si se proporciona IdEntryReq
+                var sqlQuery = @"
+                    SELECT 
+                        erd.Id,
+                        erd.IdEntryReq,
+                        erd.IdEquipment,
+                        erd.CreateAt,
+                        erd.DateIni,
+                        erd.DateEnd,
+                        ISNULL(erd.status, '') as status,
+                        erd.DateLoadState,
+                        ISNULL(erd.TraceState, '') as TraceState,
+                        erd.IsComponent
+                    FROM EntryRequestDetails erd
+                    WHERE erd.IdEquipment = {0}
+                      AND (
+                           {1} <= erd.DateEnd
+                       AND {2} >= erd.DateIni
+                      )";
+
+                // Si se proporciona IdEntryReq, excluir ese pedido de la consulta
+                if (request.IdEntryReq.HasValue)
+                {
+                    sqlQuery += " AND erd.IdEntryReq != {3}";
+                }
+
+                var relatedSchedulings = await _context.EntryRequestDetails
+                    .FromSqlRaw(sqlQuery, 
+                        request.IdEquipment, 
+                        request.DateIni, 
+                        request.DateEnd,
+                        request.IdEntryReq ?? (object)DBNull.Value)
+                    .ToListAsync();
+
+                // Verificar si existe algún conflicto con status 'NUEVO'
+                var conflictingScheduling = relatedSchedulings.FirstOrDefault(rs => rs.status == "NUEVO");
+
+                // Obtener información de los pedidos principales para los agendamientos relacionados
+                var relatedOrders = new List<EquipmentSchedulingRelatedOrderDTO>();
+                
+                if (relatedSchedulings.Any())
+                {
+                    var entryRequestIds = relatedSchedulings.Select(rs => rs.IdEntryReq).Distinct().ToList();
+                    var entryRequests = await _context.EntryRequests
+                        .FromSqlRaw($@"
+                            SELECT 
+                                Id,
+                                Date,
+                                ISNULL(Service, '') as Service,
+                                IdOrderType,
+                                ISNULL(DeliveryPriority, '') as DeliveryPriority,
+                                IdCustomer,
+                                InsurerType,
+                                Insurer,
+                                IdMedic,
+                                IdPatient,
+                                ISNULL(Applicant, '') as Applicant,
+                                IdATC,
+                                ISNULL(LimbSide, '') as LimbSide,
+                                DeliveryDate,
+                                ISNULL(OrderObs, '') as OrderObs,
+                                SurgeryTime,
+                                SurgeryInit,
+                                SurgeryEnd,
+                                ISNULL(Status, '') as Status,
+                                IdTraceStates,
+                                BranchId,
+                                SurgeryInitTime,
+                                SurgeryEndTime,
+                                ISNULL(DeliveryAddress, '') as DeliveryAddress,
+                                ISNULL(PurchaseOrder, '') as PurchaseOrder,
+                                AtcConsumed,
+                                IsSatisfied,
+                                ISNULL(Observations, '') as Observations,
+                                ISNULL(obsMaint, '') as obsMaint,
+                                AuxLog,
+                                IdCancelReason,
+                                IdCancelDetail,
+                                ISNULL(CancelReason, '') as CancelReason,
+                                ISNULL(CancelDetail, '') as CancelDetail,
+                                Notification,
+                                IsReplacement,
+                                AssemblyComponents,
+                                ISNULL(priceGroup, '') as priceGroup
+                            FROM EntryRequests 
+                            WHERE Id IN ({string.Join(",", entryRequestIds)})")
+                        .ToListAsync();
+
+                    foreach (var scheduling in relatedSchedulings)
+                    {
+                        var entryRequest = entryRequests.FirstOrDefault(er => er.Id == scheduling.IdEntryReq);
+                        
+                        relatedOrders.Add(new EquipmentSchedulingRelatedOrderDTO
+                        {
+                            Id = scheduling.Id,
+                            IdEntryReq = scheduling.IdEntryReq,
+                            IdEquipment = scheduling.IdEquipment,
+                            CreateAt = scheduling.CreateAt,
+                            DateIni = scheduling.DateIni,
+                            DateEnd = scheduling.DateEnd,
+                            Status = scheduling.status,
+                            DateLoadState = scheduling.DateLoadState,
+                            TraceState = scheduling.TraceState,
+                            IsComponent = scheduling.IsComponent,
+                            sInformation = scheduling.sInformation,
+                            Name = scheduling.Name,
+                            EquipmentName = equipment.Name,
+                            EquipmentCode = equipment.Code,
+                            OrderInfo = entryRequest != null ? new EquipmentSchedulingOrderInfoDTO
+                            {
+                                Id = entryRequest.Id,
+                                Date = entryRequest.Date,
+                                Service = entryRequest.Service,
+                                IdOrderType = entryRequest.IdOrderType,
+                                DeliveryPriority = entryRequest.DeliveryPriority,
+                                IdCustomer = entryRequest.IdCustomer,
+                                Applicant = entryRequest.Applicant,
+                                DeliveryDate = entryRequest.DeliveryDate,
+                                OrderObs = entryRequest.OrderObs,
+                                Status = entryRequest.Status,
+                                DeliveryAddress = entryRequest.DeliveryAddress,
+                                PurchaseOrder = entryRequest.PurchaseOrder
+                            } : null
+                        });
+                    }
+                }
 
                 if (conflictingScheduling != null)
                 {
@@ -106,7 +212,8 @@ namespace DimmedAPI.BO
                         Message = $"El equipo {equipment.Code} - {equipment.Name} no está disponible en el rango de fechas especificado. Ya tiene un agendamiento activo que se superpone con las fechas solicitadas.",
                         IdEquipment = request.IdEquipment,
                         DateIni = request.DateIni,
-                        DateEnd = request.DateEnd
+                        DateEnd = request.DateEnd,
+                        RelatedOrders = relatedOrders
                     };
                 }
 
@@ -116,7 +223,8 @@ namespace DimmedAPI.BO
                     Message = $"El equipo {equipment.Code} - {equipment.Name} está disponible para el agendamiento en el rango de fechas especificado.",
                     IdEquipment = request.IdEquipment,
                     DateIni = request.DateIni,
-                    DateEnd = request.DateEnd
+                    DateEnd = request.DateEnd,
+                    RelatedOrders = relatedOrders
                 };
             }
             catch (Exception ex)

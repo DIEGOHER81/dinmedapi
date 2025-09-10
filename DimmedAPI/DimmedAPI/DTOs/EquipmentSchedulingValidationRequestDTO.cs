@@ -24,5 +24,10 @@ namespace DimmedAPI.DTOs
         /// </summary>
         [Required(ErrorMessage = "La fecha final es requerida")]
         public DateTime DateEnd { get; set; }
+
+        /// <summary>
+        /// ID del pedido que se está validando (opcional, para excluirlo de los pedidos relacionados)
+        /// </summary>
+        public int? IdEntryReq { get; set; }
     }
 }

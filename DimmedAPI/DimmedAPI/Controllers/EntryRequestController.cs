@@ -1575,6 +1575,7 @@ namespace DimmedAPI.Controllers
             [FromQuery] int? noEntryRequest = null,
             [FromQuery] DateTime? dateIni = null,
             [FromQuery] DateTime? dateEnd = null,
+            [FromQuery] int? branchId = null,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 50)
         {
@@ -1585,6 +1586,7 @@ namespace DimmedAPI.Controllers
                 Console.WriteLine($"NoEntryRequest: {noEntryRequest}");
                 Console.WriteLine($"DateIni: {dateIni}");
                 Console.WriteLine($"DateEnd: {dateEnd}");
+                Console.WriteLine($"BranchId: {branchId}");
                 Console.WriteLine($"PageNumber: {pageNumber}");
                 Console.WriteLine($"PageSize: {pageSize}");
 
@@ -1621,6 +1623,10 @@ namespace DimmedAPI.Controllers
                 parameters.Add(dateEnd?.Date ?? (object)DBNull.Value);
                 parameterNames.Add("@DateEnd");
 
+                // Siempre enviar @BranchId (NULL si no se proporciona)
+                parameters.Add(branchId ?? (object)DBNull.Value);
+                parameterNames.Add("@BranchId");
+
                 // Construir la consulta SQL con todos los parámetros
                 var sql = "EXEC sp_GetEntryRequestsReport " + string.Join(", ", parameterNames);
 
@@ -1630,6 +1636,7 @@ namespace DimmedAPI.Controllers
                 Console.WriteLine($"  @NoEntryRequest: {noEntryRequest?.ToString() ?? "NULL"}");
                 Console.WriteLine($"  @DateIni: {dateIni?.Date.ToString("yyyy-MM-dd") ?? "NULL"}");
                 Console.WriteLine($"  @DateEnd: {dateEnd?.Date.ToString("yyyy-MM-dd") ?? "NULL"}");
+                Console.WriteLine($"  @BranchId: {branchId?.ToString() ?? "NULL"}");
 
                 // Ejecutar el procedimiento almacenado usando DbCommand para mejor control de tipos
                 var allResults = new List<EntryRequestReportDTO>();

@@ -5204,6 +5204,14 @@
             }
           },
           {
+            "name": "branchId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
             "name": "pageNumber",
             "in": "query",
             "schema": {
@@ -5851,6 +5859,35 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/EntryRequest/process-assembly-comp": {
+      "post": {
+        "tags": [
+          "EntryRequest"
+        ],
+        "parameters": [
+          {
+            "name": "IdEntryReq",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "companyCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -8639,6 +8676,14 @@
             "in": "query",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "idEntryReq",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -18589,6 +18634,126 @@
         },
         "additionalProperties": false
       },
+      "EquipmentSchedulingOrderInfoDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "service": {
+            "type": "string",
+            "nullable": true
+          },
+          "idOrderType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deliveryPriority": {
+            "type": "string",
+            "nullable": true
+          },
+          "idCustomer": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "applicant": {
+            "type": "string",
+            "nullable": true
+          },
+          "deliveryDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "orderObs": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "deliveryAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "purchaseOrder": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EquipmentSchedulingRelatedOrderDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEntryReq": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "idEquipment": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateIni": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateLoadState": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "traceState": {
+            "type": "string",
+            "nullable": true
+          },
+          "isComponent": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "sInformation": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "equipmentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "equipmentCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderInfo": {
+            "$ref": "#/components/schemas/EquipmentSchedulingOrderInfoDTO"
+          }
+        },
+        "additionalProperties": false
+      },
       "EquipmentSchedulingValidationRequestDTO": {
         "required": [
           "dateEnd",
@@ -18608,6 +18773,11 @@
           "dateEnd": {
             "type": "string",
             "format": "date-time"
+          },
+          "idEntryReq": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -18637,6 +18807,13 @@
           "validatedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "relatedOrders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EquipmentSchedulingRelatedOrderDTO"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

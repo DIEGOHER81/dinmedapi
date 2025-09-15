@@ -3323,6 +3323,27 @@
   },
   {
     "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
+    "Method": "ProcessAssemblyComp",
+    "RelativePath": "api/EntryRequest/process-assembly-comp",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "IdEntryReq",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyCode",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DimmedAPI.Controllers.EntryRequestController",
     "Method": "GetRemisionesEquipo",
     "RelativePath": "api/EntryRequest/remisiones",
     "HttpMethod": "GET",
@@ -3373,6 +3394,11 @@
       {
         "Name": "dateEnd",
         "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "branchId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {
@@ -5326,6 +5352,11 @@
       {
         "Name": "dateEnd",
         "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "idEntryReq",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       }
     ],

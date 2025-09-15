@@ -1,0 +1,20 @@
+### ProcessAssemblyComp API Examples
+
+### 1. Procesar ensamble de componentes - Caso exitoso
+POST {{baseUrl}}/api/EntryRequest/process-assembly-comp?IdEntryReq=123&companyCode=COMP001
+
+### 2. Procesar ensamble de componentes - Sin companyCode
+POST {{baseUrl}}/api/EntryRequest/process-assembly-comp?IdEntryReq=123
+
+### 3. Procesar ensamble de componentes - IdEntryReq inválido
+POST {{baseUrl}}/api/EntryRequest/process-assembly-comp?IdEntryReq=0&companyCode=COMP001
+
+### 4. Procesar ensamble de componentes - EntryRequest no encontrado
+POST {{baseUrl}}/api/EntryRequest/process-assembly-comp?IdEntryReq=99999&companyCode=COMP001
+
+### 5. Procesar ensamble de componentes - Diferente compañía
+POST {{baseUrl}}/api/EntryRequest/process-assembly-comp?IdEntryReq=456&companyCode=COMP002
+
+### Variables de entorno (configurar en tu archivo .http o en el IDE)
+# @baseUrl = https://localhost:7001
+# @baseUrl = https://api.dimmed.com

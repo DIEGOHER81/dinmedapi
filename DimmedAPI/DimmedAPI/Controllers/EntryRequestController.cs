@@ -4376,5 +4376,109 @@ namespace DimmedAPI.Controllers
                 return $"ERROR: {ex.Message}";
             }
         }
+
+        /// <summary>
+        /// Enviar pedido de ensamble de componentes adicionales a BC
+        /// </summary>
+        /// <param name="IdEntryReq">Id del registro</param>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <returns>JsonResult Response</returns>
+        [HttpPost("process-assembly-comp")]
+        public async Task<ActionResult<object>> ProcessAssemblyComp([FromQuery] int IdEntryReq, [FromQuery] string companyCode)
+        {
+            try
+            {
+                var response = new
+                {
+                    IsSuccess = true,
+                    Result = (object)null,
+                    Message = "Registro guardado en el sistema."
+                };
+
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    response = new
+                    {
+                        IsSuccess = false,
+                        Result = (object)null,
+                        Message = "El código de compañía es requerido"
+                    };
+                    return BadRequest(response);
+                }
+
+                if (IdEntryReq == 0)
+                {
+                    response = new
+                    {
+                        IsSuccess = false,
+                        Result = (object)null,
+                        Message = "Favor revisar que toda la información este correcta."
+                    };
+                    return BadRequest(response);
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                
+                // Crear un bcConn con el contexto específico de la compañía
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var entryReqBO = new BO.EntryRequestBO(companyContext, bcConn);
+
+                // Obtener el EntryRequest
+                EntryRequests entry = await entryReqBO.GetByIdAsync(IdEntryReq);
+                if (entry == null)
+                {
+                    response = new
+                    {
+                        IsSuccess = false,
+                        Result = (object)null,
+                        Message = "EntryRequest no encontrado"
+                    };
+                    return NotFound(response);
+                }
+
+                // Procesar el ensamble
+                string resultMessage = await entryReqBO.sendAssemblyBC(entry);
+                
+                if (resultMessage == "PEDIDO REGISTRADO")
+                {
+                    entry.AssemblyComponents = true;
+                    await entryReqBO.UpdateAsync(entry);
+                    response = new
+                    {
+                        IsSuccess = true,
+                        Result = (object)null,
+                        Message = resultMessage
+                    };
+                }
+                else
+                {
+                    response = new
+                    {
+                        IsSuccess = false,
+                        Result = (object)null,
+                        Message = resultMessage
+                    };
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"=== ERROR en ProcessAssemblyComp ===");
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                Console.WriteLine("=== FIN ERROR ===");
+
+                var errorResponse = new
+                {
+                    IsSuccess = false,
+                    Result = (object)null,
+                    Message = ex.Message
+                };
+
+                return StatusCode(500, errorResponse);
+            }
+        }
     }
 }

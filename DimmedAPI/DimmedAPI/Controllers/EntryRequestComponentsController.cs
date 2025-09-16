@@ -261,6 +261,46 @@ namespace DimmedAPI.Controllers
         }
 
         /// <summary>
+        /// Obtiene componentes por EntryRequest ID con información del equipo
+        /// </summary>
+        /// <param name="companyCode">Código de la compañía</param>
+        /// <param name="idEntryReq">ID del EntryRequest</param>
+        /// <returns>Lista de componentes del EntryRequest con información del equipo</returns>
+        [HttpGet("por-entryrequest-con-equipo")]
+        [OutputCache(Tags = [cacheTag], Duration = 300)] // Cache por 5 minutos
+        public async Task<IActionResult> GetByEntryRequestWithEquipment(
+            [FromQuery] string companyCode,
+            [FromQuery] int idEntryReq)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(companyCode))
+                {
+                    return BadRequest("El código de compañía es requerido");
+                }
+
+                // Obtener el contexto de la base de datos específica de la compañía
+                using var companyContext = await _dynamicConnectionService.GetCompanyDbContextAsync(companyCode);
+                
+                // Crear un EntryRequestComponentsBO con el contexto específico de la compañía
+                var bcConn = await _dynamicBCConnectionService.GetBCConnectionAsync(companyCode);
+                var componentsBO = new EntryRequestComponentsBO(companyContext, bcConn);
+                
+                var componentes = await componentsBO.GetComponentsByEntryRequestWithEquipmentAsync(idEntryReq);
+                return Ok(componentes);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                var detalle = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return BadRequest(new { mensaje = "Error al obtener componentes por EntryRequest con información del equipo", detalle });
+            }
+        }
+
+        /// <summary>
         /// Obtiene estadísticas de sincronización
         /// </summary>
         /// <param name="companyCode">Código de la compañía</param>

@@ -1,5 +1,6 @@
 using DimmedAPI.Entidades;
 using DimmedAPI.BO;
+using DimmedAPI.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -318,6 +319,75 @@ namespace DimmedAPI.BO
             catch (Exception ex)
             {
                 throw new Exception($"Error al obtener estadísticas: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene componentes por EntryRequest ID con información del equipo
+        /// </summary>
+        /// <param name="idEntryReq">ID del EntryRequest</param>
+        /// <returns>Lista de componentes del EntryRequest con información del equipo</returns>
+        public async Task<List<EntryRequestComponentsWithEquipmentDTO>> GetComponentsByEntryRequestWithEquipmentAsync(int idEntryReq)
+        {
+            try
+            {
+                var componentes = await _context.EntryRequestComponents
+                    .Where(c => c.IdEntryReq == idEntryReq)
+                    .ToListAsync();
+
+                var resultado = new List<EntryRequestComponentsWithEquipmentDTO>();
+
+                foreach (var componente in componentes)
+                {
+                    var dto = new EntryRequestComponentsWithEquipmentDTO
+                    {
+                        Id = componente.Id,
+                        ItemNo = componente.ItemNo,
+                        ItemName = componente.ItemName,
+                        Warehouse = componente.Warehouse,
+                        Quantity = componente.Quantity,
+                        IdEntryReq = componente.IdEntryReq,
+                        SystemId = componente.SystemId,
+                        QuantityConsumed = componente.QuantityConsumed,
+                        Branch = componente.Branch,
+                        Lot = componente.Lot,
+                        UnitPrice = componente.UnitPrice,
+                        Status = componente.status,
+                        AssemblyNo = componente.AssemblyNo,
+                        TaxCode = componente.TaxCode,
+                        ShortDesc = componente.shortDesc,
+                        LocationCodeStock = componente.locationCodeStock,
+                        Name = componente.Name,
+                        UserIdTraceState = componente.UserIdTraceState,
+                        Invima = componente.Invima,
+                        ExpirationDate = componente.ExpirationDate,
+                        TraceState = componente.TraceState,
+                        RSFechaVencimiento = componente.RSFechaVencimiento,
+                        RSClasifRegistro = componente.RSClasifRegistro
+                    };
+
+                    // Buscar información del equipo si AssemblyNo no está vacío
+                    if (!string.IsNullOrEmpty(componente.AssemblyNo))
+                    {
+                        var equipo = await _context.Equipment
+                            .FirstOrDefaultAsync(e => e.Code == componente.AssemblyNo);
+
+                        if (equipo != null)
+                        {
+                            dto.EquipmentName = equipo.Name;
+                            dto.EquipmentDescription = equipo.Description;
+                            dto.EquipmentStatus = equipo.Status;
+                        }
+                    }
+
+                    resultado.Add(dto);
+                }
+
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener componentes por EntryRequest con información del equipo: {ex.Message}", ex);
             }
         }
 
